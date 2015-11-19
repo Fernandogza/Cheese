@@ -121,7 +121,7 @@ def p_type(p):
             | STRING
             | VOID'''
     global seenType
-    variableTypes = { 'int' : int, 'double' : float, 'string' : str, 'void' : str }
+    variableTypes = { 'int' : int, 'double' : float, 'string' : str, 'void' : 'void' }
     seenType = variableTypes[p[1]]
 
 def p_variable_assignment(p):
@@ -356,14 +356,77 @@ def p_cst_expression4(p):
     '''cst_expression4 : COMMA cst_expression3
                        | empty'''
 
-def p_while_statement(p):
-    '''while_statement : WHILE '(' superexpression ')' block_statement'''
+def p_loop_statement(p):
+    '''loop_statement : loophead block_statement seen_loop_block'''
+    global instructions
+    pendingJump = instructions.popJumpStack()
+    instructions.setQuadrupleResult(pendingJump, instructions.nextInstruction)
 
-def p_for_statement(p):
-    '''for_statement  : FOR '(' for_statement2 for_statement3
-       for_statement2 : variable_assignment
-                      | empty
-       for_statement3 : SEMICOLON superexpression SEMICOLON variable_assignment ')' block_statement'''
+def p_loophead(p):
+    '''loophead : FOR '(' variable_assignment seen_assignment1 SEMICOLON superexpression seen_for_exp SEMICOLON variable_assignment seen_assignment2 ')'
+                | WHILE '(' seen_while_LPAR superexpression seen_while_exp ')' '''
+
+def p_seen_assignment1(p):
+    '''seen_assignment1 : '''
+    global instructions
+    instructions.pushJumpStack(instructions.nextInstruction)
+
+def p_seen_for_exp(p):
+    '''seen_for_exp : '''
+    global instructions
+    condition = instructions.popOperand()
+
+    if condition.Type is bool:
+        pendingJump = instructions.popJumpStack()
+        instructions.generateQuadruple('GTF', condition, 0, 0)
+        instructions.pushJumpStack(instructions.nextInstruction - 1)
+        #Pending: exit jump address
+
+        instructions.generateQuadruple('GTO', 0, 0, 0)
+        instructions.pushJumpStack(instructions.nextInstruction)
+        instructions.pushJumpStack(instructions.nextInstruction - 1)
+        #Pending: loop start jump address
+
+        instructions.pushJumpStack(pendingJump)
+    else:
+        print ("ERROR: Expected type bool, but found {}!".format(condition.Type))
+        raise SystemExit
+
+def p_seen_assignment2(p):
+    '''seen_assignment2 : '''
+    global instructions
+    pendingJump = instructions.popJumpStack()
+    instructions.generateQuadruple('GTO', 0, 0, pendingJump)
+    #After assigning, jump to condition evaluation
+
+    pendingJump = instructions.popJumpStack()
+    instructions.setQuadrupleResult(pendingJump, instructions.nextInstruction)
+    #Loop start jump address is right after assigning, where the loop header ends.
+
+def p_seen_while_LPAR(p):
+    '''seen_while_LPAR : '''
+    global instructions
+    instructions.pushJumpStack(instructions.nextInstruction)
+
+def p_seen_while_exp(p):
+    '''seen_while_exp : '''
+    global instructions
+    condition = instructions.popOperand()
+
+    if condition.Type is bool:
+        pendingJump = instructions.popJumpStack()
+        instructions.generateQuadruple('GTF', condition, 0, 0)
+        instructions.pushJumpStack(instructions.nextInstruction - 1)
+        instructions.pushJumpStack(pendingJump)
+    else:
+        print ("ERROR: Expected type bool, but found {}!".format(condition.Type))
+        raise SystemExit
+
+def p_seen_loop_block(p):
+    '''seen_loop_block  :'''
+    global instructions
+    pendingJump = instructions.popJumpStack()
+    instructions.generateQuadruple("GTO", 0, 0, pendingJump)
 
 def p_if_statement(p):
     '''if_statement  : IF '(' superexpression ')' seen_condition block_statement seen_condition_block if_statement2'''
@@ -401,41 +464,147 @@ def p_block_statement(p):
                         | empty'''
 
 def p_read_statement(p):
-    '''read_statement : SCAN '(' type COMMA ID ')' SEMICOLON'''
+    '''read_statement : SCAN '(' ID ')' SEMICOLON'''
+    global instructions
+    name = p[3]
+    variable = currentDirectory.get_variable(name);
+    if variable:
+        instructions.generateQuadruple('RED', op1, 0, 0);
+    else:
+        print ("ERROR: Variable \"{}\" undeclared!".format(name))
+        raise SystemExit
 
 def p_print_statement(p):
     '''print_statement  : PRINT '(' superexpression ')' SEMICOLON'''
+    global instructions
+    op1 = instructions.popOperand()
+    instructions.generateQuadruple('PRT', op1, 0, 0);
 
 def p_geometry_statement(p):
-    '''geometry_statement : MOVE '(' superexpression ')'
-                          | ROTATE '(' superexpression ')'
-                          | ARC '(' superexpression COMMA superexpression ')'
-                          | HOME '(' ')'
-                          | PDOWN '(' ')'
-                          | PUP '(' ')'
-                          | SETP '(' superexpression COMMA superexpression ')'
-                          | PCOLOR '(' superexpression COMMA superexpression COMMA superexpression ')'
-                          | PSIZE '(' superexpression ')'
-                          | PCLEAR '(' ')' '''
+    '''geometry_statement : move
+                          | rotate
+                          | arc
+                          | home
+                          | pdown
+                          | pup
+                          | setp
+                          | pcolor
+                          | psize
+                          | pclear '''
+
+def p_move(p):
+    '''move : MOVE '(' superexpression ')' '''
+    global instructions
+    op1 = instructions.popOperand()
+    if op1.Type is int or op1.Type is float:
+        instructions.generateQuadruple('MVT', op1, 0, 0)
+    else:
+        lineNum = p.lineno(1)
+        print ("ERROR: Expected type int or double, but found {} in line!".format(op1.Type, lineNum))
+        raise SystemExit
+
+def p_rotate(p):
+    '''rotate : ROTATE '(' superexpression ')' '''
+    global instructions
+    op1 = instructions.popOperand()
+    if op1.Type is int:
+        instructions.generateQuadruple('ROT', op1, 0, 0)
+    else:
+        lineNum = p.lineno(1)
+        print ("ERROR: Expected type int, but found {} in line!".format(op1.Type, lineNum))
+        raise SystemExit
+
+def p_arc(p):
+    '''arc : ARC '(' superexpression COMMA superexpression ')' '''
+    global instructions
+    op2 = instructions.popOperand()
+    op1 = instructions.popOperand()
+    if op1.Type is int and op2.Type is int:
+        instructions.generateQuadruple('ARC', op1, op2, 0)
+    else:
+        lineNum = p.lineno(1)
+        print ("ERROR: Expected type int, but found {} and {} in line {}!".format(op1.Type, op2.Type, lineNum))
+        raise SystemExit
+
+def p_home(p):
+    '''home : HOME '(' ')' '''
+    global instructions
+    instructions.generateQuadruple('HOM', 0, 0, 0)
+
+def p_pdown(p):
+    '''pdown : PDOWN '(' ')' '''
+    global instructions
+    instructions.generateQuadruple('PDO', 0, 0, 0)
+
+def p_pup(p):
+    '''pup : PUP '(' ')' '''
+    global instructions
+    instructions.generateQuadruple('PUP', 0, 0, 0)
+
+def p_setp(p):
+    '''setp : SETP '(' superexpression COMMA superexpression ')' '''
+    global instructions
+    op2 = instructions.popOperand()
+    op1 = instructions.popOperand()
+    if op1.Type is int and op2.Type is int or op1.Type is int and op2.Type is float or op1.Type is float and op2.Type is int or op1.Type is float and op2.Type is float:
+        instructions.generateQuadruple('SET', op1, op2, 0)
+    else:
+        lineNum = p.lineno(1)
+        print ("ERROR: Expected type int or double, but found {} and {} in line{}!".format(op1.Type, op2.Type, lineNum))
+        raise SystemExit
+
+def p_pcolor(p):
+    '''pcolor : PCOLOR '(' superexpression COMMA superexpression COMMA superexpression ')' '''
+    global instructions
+    op3 = instructions.popOperand()
+    op2 = instructions.popOperand()
+    op1 = instructions.popOperand()
+    if op1.Type is int and op2.Type is int and op3.Type is int:
+        instructions.generateQuadruple('PCO', op1, op2, op3)
+    else:
+        lineNum = p.lineno(1)
+        print ("ERROR: Expected type int, but found {}, {} and {} in line{}!".format(op1.Type, op2.Type, op3.Type, lineNum))
+        raise SystemExit
+
+def p_psize(p):
+    '''psize : PSIZE '(' superexpression ')' '''
+    global instructions
+    op1 = instructions.popOperand()
+    if op1.Type is int:
+        instructions.generateQuadruple('PSZ', op1, 0, 0)
+    else:
+        lineNum = p.lineno(1)
+        print ("ERROR: Expected type int, but found {} in line{}!".format(op1.Type, lineNum))
+        raise SystemExit
+
+def p_pclear(p):
+    '''pclear : PCLEAR '(' ')' '''
+    global instructions
+    instructions.generateQuadruple('PCL', 0, 0, 0)
 
 def p_statement(p):
     '''statement : variable_declaration
                  | variable_assignment
                  | superexpression SEMICOLON
                  | if_statement
-                 | for_statement
-                 | while_statement
-                 | RETURN superexpression SEMICOLON
+                 | loop_statement
+                 | return
                  | print_statement
                  | read_statement
-                 | void_method_caller
                  | geometry_statement SEMICOLON'''
 
-def p_void_method_caller(p):
-    '''void_method_caller  : ID '(' void_method_caller2
-       void_method_caller2 : superexpression void_method_caller3
-       void_method_caller3 : COMMA void_method_caller2
-                           | ')' SEMICOLON'''
+def p_return(p):
+    '''return : RETURN superexpression SEMICOLON'''
+    global currentDirectory, instructions
+    if currentDirectory.Type is not 'void':
+        var = instructions.popOperand()
+        compatibleType = getResultingType('=', currentDirectory.Type, var.Type)
+
+        if compatibleType:
+            instructions.generateQuadruple('RET',var,0,0)
+        else:
+            print ("ERROR: Incompatible return types! Received {}, expected {}!".format(var.Type, currentDirectory.Type))
+            raise SystemExit
 
 def p_empty(p):
     'empty :'
@@ -443,7 +612,7 @@ def p_empty(p):
 
 def p_error(p):
    if p:
-       print("Syntax error at '%s'" % p.value)
+       print("Syntax error at '{}' in line {}".format(p.value, p.lineno))
    global instructions, currentDirectory
    # print (currentDirectory)
    print (instructions)

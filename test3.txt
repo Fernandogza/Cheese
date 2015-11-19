@@ -45,7 +45,7 @@ func void helloWorld() {
 func void flake(double length, int levels) {
   if (levels == 0) {
     move(length);
-    return;
+    return 1;
   }
   else {
     length = length / 3.0;

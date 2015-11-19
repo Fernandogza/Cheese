@@ -1,0 +1,3919 @@
+Created by PLY version 3.8 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> program2 program3 main_ahead main_method
+Rule 2     main_ahead -> <empty>
+Rule 3     program2 -> variable_declaration program2
+Rule 4     program2 -> empty
+Rule 5     program3 -> method_declaration program3
+Rule 6     program3 -> empty
+Rule 7     variable_declaration -> type variable_declaration2
+Rule 8     variable_declaration2 -> variable_declarator variable_declaration3
+Rule 9     variable_declaration3 -> COMMA variable_declaration2
+Rule 10    variable_declaration3 -> SEMICOLON
+Rule 11    variable_declarator -> ID seen_id variable_declarator2 variable_declarator3
+Rule 12    seen_id -> <empty>
+Rule 13    variable_declarator2 -> LSQUARE CSTINT RSQUARE
+Rule 14    variable_declarator2 -> empty
+Rule 15    variable_declarator3 -> = superexpression
+Rule 16    variable_declarator3 -> empty
+Rule 17    method_declaration -> FUNC type ID seen_function_id ( method_declaration2 method_declaration3
+Rule 18    seen_function_id -> <empty>
+Rule 19    method_declaration2 -> parameter_list
+Rule 20    method_declaration2 -> empty
+Rule 21    method_declaration3 -> ) seen_method_start block_statement
+Rule 22    seen_method_start -> <empty>
+Rule 23    parameter_list -> parameter parameter_list2
+Rule 24    parameter_list2 -> COMMA parameter_list
+Rule 25    parameter_list2 -> empty
+Rule 26    parameter -> type ID
+Rule 27    main_method -> MAIN CHEESE ( ) block_statement
+Rule 28    type -> INT
+Rule 29    type -> DOUBLE
+Rule 30    type -> STRING
+Rule 31    type -> VOID
+Rule 32    variable_assignment -> ID = superexpression SEMICOLON
+Rule 33    superexpression -> expression superexpression2
+Rule 34    superexpression2 -> andor superexpression
+Rule 35    superexpression2 -> empty
+Rule 36    andor -> AND
+Rule 37    andor -> OR
+Rule 38    expression -> numeric_expression compare
+Rule 39    compare -> compare_symbols numeric_expression seen_comp
+Rule 40    compare -> empty
+Rule 41    compare_symbols -> CEQ
+Rule 42    compare_symbols -> CGT
+Rule 43    compare_symbols -> CGE
+Rule 44    compare_symbols -> CLT
+Rule 45    compare_symbols -> CLE
+Rule 46    compare_symbols -> CNE
+Rule 47    seen_comp -> <empty>
+Rule 48    numeric_expression -> term seen_term numeric_expression2
+Rule 49    seen_term -> <empty>
+Rule 50    numeric_expression2 -> arithOp numeric_expression
+Rule 51    numeric_expression2 -> empty
+Rule 52    arithOp -> +
+Rule 53    arithOp -> -
+Rule 54    term -> factor term2
+Rule 55    term2 -> geomOp term
+Rule 56    term2 -> empty
+Rule 57    geomOp -> *
+Rule 58    geomOp -> /
+Rule 59    factor -> cst_expression
+Rule 60    factor -> ( seen_lpar superexpression ) seen_rpar
+Rule 61    seen_lpar -> <empty>
+Rule 62    seen_rpar -> <empty>
+Rule 63    cst_expression -> CSTDOUBLE
+Rule 64    cst_expression -> CSTINT
+Rule 65    cst_expression -> CSTSTRING
+Rule 66    cst_expression -> ID seen_id_or_func cst_expression2
+Rule 67    seen_id_or_func -> <empty>
+Rule 68    cst_expression2 -> LSQUARE superexpression RSQUARE
+Rule 69    cst_expression2 -> ( cst_expression3 )
+Rule 70    cst_expression2 -> empty
+Rule 71    cst_expression3 -> superexpression cst_expression4
+Rule 72    cst_expression4 -> COMMA cst_expression3
+Rule 73    cst_expression4 -> empty
+Rule 74    loop_statement -> loophead block_statement seen_loop_block
+Rule 75    loophead -> FOR ( variable_assignment seen_assignment1 SEMICOLON superexpression seen_for_exp SEMICOLON variable_assignment seen_assignment2 )
+Rule 76    loophead -> WHILE ( seen_while_LPAR superexpression seen_while_exp )
+Rule 77    seen_assignment1 -> <empty>
+Rule 78    seen_for_exp -> <empty>
+Rule 79    seen_assignment2 -> <empty>
+Rule 80    seen_while_LPAR -> <empty>
+Rule 81    seen_while_exp -> <empty>
+Rule 82    seen_loop_block -> <empty>
+Rule 83    if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2
+Rule 84    seen_condition -> <empty>
+Rule 85    seen_condition_block -> <empty>
+Rule 86    if_statement2 -> ELSE block_statement
+Rule 87    if_statement2 -> empty
+Rule 88    block_statement -> LBRACKET block_statement2 RBRACKET
+Rule 89    block_statement2 -> statement block_statement2
+Rule 90    block_statement2 -> empty
+Rule 91    read_statement -> SCAN ( ID ) SEMICOLON
+Rule 92    print_statement -> PRINT ( superexpression ) SEMICOLON
+Rule 93    geometry_statement -> move
+Rule 94    geometry_statement -> rotate
+Rule 95    geometry_statement -> arc
+Rule 96    geometry_statement -> home
+Rule 97    geometry_statement -> pdown
+Rule 98    geometry_statement -> pup
+Rule 99    geometry_statement -> setp
+Rule 100   geometry_statement -> pcolor
+Rule 101   geometry_statement -> psize
+Rule 102   geometry_statement -> pclear
+Rule 103   move -> MOVE ( superexpression )
+Rule 104   rotate -> ROTATE ( superexpression )
+Rule 105   arc -> ARC ( superexpression COMMA superexpression )
+Rule 106   home -> HOME ( )
+Rule 107   pdown -> PDOWN ( )
+Rule 108   pup -> PUP ( )
+Rule 109   setp -> SETP ( superexpression COMMA superexpression )
+Rule 110   pcolor -> PCOLOR ( superexpression COMMA superexpression COMMA superexpression )
+Rule 111   psize -> PSIZE ( superexpression )
+Rule 112   pclear -> PCLEAR ( )
+Rule 113   statement -> variable_declaration
+Rule 114   statement -> variable_assignment
+Rule 115   statement -> superexpression SEMICOLON
+Rule 116   statement -> if_statement
+Rule 117   statement -> loop_statement
+Rule 118   statement -> return
+Rule 119   statement -> print_statement
+Rule 120   statement -> read_statement
+Rule 121   statement -> geometry_statement SEMICOLON
+Rule 122   return -> RETURN superexpression SEMICOLON
+Rule 123   empty -> <empty>
+
+Terminals, with rules where they appear
+
+(                    : 17 27 60 69 75 76 83 91 92 103 104 105 106 107 108 109 110 111 112
+)                    : 21 27 60 69 75 76 83 91 92 103 104 105 106 107 108 109 110 111 112
+*                    : 57
++                    : 52
+-                    : 53
+/                    : 58
+=                    : 15 32
+AND                  : 36
+ARC                  : 105
+CEQ                  : 41
+CGE                  : 43
+CGT                  : 42
+CHEESE               : 27
+CLE                  : 45
+CLT                  : 44
+CNE                  : 46
+COMMA                : 9 24 72 105 109 110 110
+CSTDOUBLE            : 63
+CSTINT               : 13 64
+CSTSTRING            : 65
+DOUBLE               : 29
+ELSE                 : 86
+FOR                  : 75
+FUNC                 : 17
+HOME                 : 106
+ID                   : 11 17 26 32 66 91
+IF                   : 83
+INT                  : 28
+LBRACKET             : 88
+LSQUARE              : 13 68
+MAIN                 : 27
+MOVE                 : 103
+OR                   : 37
+PCLEAR               : 112
+PCOLOR               : 110
+PDOWN                : 107
+PRINT                : 92
+PSIZE                : 111
+PUP                  : 108
+RBRACKET             : 88
+RETURN               : 122
+ROTATE               : 104
+RSQUARE              : 13 68
+SCAN                 : 91
+SEMICOLON            : 10 32 75 75 91 92 115 121 122
+SETP                 : 109
+STRING               : 30
+VOID                 : 31
+WHILE                : 76
+error                : 
+
+Nonterminals, with rules where they appear
+
+andor                : 34
+arc                  : 95
+arithOp              : 50
+block_statement      : 21 27 74 83 86
+block_statement2     : 88 89
+compare              : 38
+compare_symbols      : 39
+cst_expression       : 59
+cst_expression2      : 66
+cst_expression3      : 69 72
+cst_expression4      : 71
+empty                : 4 6 14 16 20 25 35 40 51 56 70 73 87 90
+expression           : 33
+factor               : 54
+geomOp               : 55
+geometry_statement   : 121
+home                 : 96
+if_statement         : 116
+if_statement2        : 83
+loop_statement       : 117
+loophead             : 74
+main_ahead           : 1
+main_method          : 1
+method_declaration   : 5
+method_declaration2  : 17
+method_declaration3  : 17
+move                 : 93
+numeric_expression   : 38 39 50
+numeric_expression2  : 48
+parameter            : 23
+parameter_list       : 19 24
+parameter_list2      : 23
+pclear               : 102
+pcolor               : 100
+pdown                : 97
+print_statement      : 119
+program              : 0
+program2             : 1 3
+program3             : 1 5
+psize                : 101
+pup                  : 98
+read_statement       : 120
+return               : 118
+rotate               : 94
+seen_assignment1     : 75
+seen_assignment2     : 75
+seen_comp            : 39
+seen_condition       : 83
+seen_condition_block : 83
+seen_for_exp         : 75
+seen_function_id     : 17
+seen_id              : 11
+seen_id_or_func      : 66
+seen_loop_block      : 74
+seen_lpar            : 60
+seen_method_start    : 21
+seen_rpar            : 60
+seen_term            : 48
+seen_while_LPAR      : 76
+seen_while_exp       : 76
+setp                 : 99
+statement            : 89
+superexpression      : 15 32 34 60 68 71 75 76 83 92 103 104 105 105 109 109 110 110 110 111 115 122
+superexpression2     : 33
+term                 : 48 55
+term2                : 54
+type                 : 7 17 26
+variable_assignment  : 75 75 114
+variable_declaration : 3 113
+variable_declaration2 : 7 9
+variable_declaration3 : 8
+variable_declarator  : 8
+variable_declarator2 : 11
+variable_declarator3 : 11
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . program2 program3 main_ahead main_method
+    (3) program2 -> . variable_declaration program2
+    (4) program2 -> . empty
+    (7) variable_declaration -> . type variable_declaration2
+    (123) empty -> .
+    (28) type -> . INT
+    (29) type -> . DOUBLE
+    (30) type -> . STRING
+    (31) type -> . VOID
+
+    FUNC            reduce using rule 123 (empty -> .)
+    MAIN            reduce using rule 123 (empty -> .)
+    INT             shift and go to state 6
+    DOUBLE          shift and go to state 8
+    STRING          shift and go to state 1
+    VOID            shift and go to state 3
+
+    variable_declaration           shift and go to state 5
+    type                           shift and go to state 4
+    program                        shift and go to state 7
+    empty                          shift and go to state 9
+    program2                       shift and go to state 2
+
+state 1
+
+    (30) type -> STRING .
+
+    ID              reduce using rule 30 (type -> STRING .)
+
+
+state 2
+
+    (1) program -> program2 . program3 main_ahead main_method
+    (5) program3 -> . method_declaration program3
+    (6) program3 -> . empty
+    (17) method_declaration -> . FUNC type ID seen_function_id ( method_declaration2 method_declaration3
+    (123) empty -> .
+
+    FUNC            shift and go to state 11
+    MAIN            reduce using rule 123 (empty -> .)
+
+    program3                       shift and go to state 10
+    empty                          shift and go to state 12
+    method_declaration             shift and go to state 13
+
+state 3
+
+    (31) type -> VOID .
+
+    ID              reduce using rule 31 (type -> VOID .)
+
+
+state 4
+
+    (7) variable_declaration -> type . variable_declaration2
+    (8) variable_declaration2 -> . variable_declarator variable_declaration3
+    (11) variable_declarator -> . ID seen_id variable_declarator2 variable_declarator3
+
+    ID              shift and go to state 15
+
+    variable_declaration2          shift and go to state 14
+    variable_declarator            shift and go to state 16
+
+state 5
+
+    (3) program2 -> variable_declaration . program2
+    (3) program2 -> . variable_declaration program2
+    (4) program2 -> . empty
+    (7) variable_declaration -> . type variable_declaration2
+    (123) empty -> .
+    (28) type -> . INT
+    (29) type -> . DOUBLE
+    (30) type -> . STRING
+    (31) type -> . VOID
+
+    FUNC            reduce using rule 123 (empty -> .)
+    MAIN            reduce using rule 123 (empty -> .)
+    INT             shift and go to state 6
+    DOUBLE          shift and go to state 8
+    STRING          shift and go to state 1
+    VOID            shift and go to state 3
+
+    variable_declaration           shift and go to state 5
+    empty                          shift and go to state 9
+    type                           shift and go to state 4
+    program2                       shift and go to state 17
+
+state 6
+
+    (28) type -> INT .
+
+    ID              reduce using rule 28 (type -> INT .)
+
+
+state 7
+
+    (0) S' -> program .
+
+
+
+state 8
+
+    (29) type -> DOUBLE .
+
+    ID              reduce using rule 29 (type -> DOUBLE .)
+
+
+state 9
+
+    (4) program2 -> empty .
+
+    FUNC            reduce using rule 4 (program2 -> empty .)
+    MAIN            reduce using rule 4 (program2 -> empty .)
+
+
+state 10
+
+    (1) program -> program2 program3 . main_ahead main_method
+    (2) main_ahead -> .
+
+    MAIN            reduce using rule 2 (main_ahead -> .)
+
+    main_ahead                     shift and go to state 18
+
+state 11
+
+    (17) method_declaration -> FUNC . type ID seen_function_id ( method_declaration2 method_declaration3
+    (28) type -> . INT
+    (29) type -> . DOUBLE
+    (30) type -> . STRING
+    (31) type -> . VOID
+
+    INT             shift and go to state 6
+    DOUBLE          shift and go to state 8
+    STRING          shift and go to state 1
+    VOID            shift and go to state 3
+
+    type                           shift and go to state 19
+
+state 12
+
+    (6) program3 -> empty .
+
+    MAIN            reduce using rule 6 (program3 -> empty .)
+
+
+state 13
+
+    (5) program3 -> method_declaration . program3
+    (5) program3 -> . method_declaration program3
+    (6) program3 -> . empty
+    (17) method_declaration -> . FUNC type ID seen_function_id ( method_declaration2 method_declaration3
+    (123) empty -> .
+
+    FUNC            shift and go to state 11
+    MAIN            reduce using rule 123 (empty -> .)
+
+    method_declaration             shift and go to state 13
+    program3                       shift and go to state 20
+    empty                          shift and go to state 12
+
+state 14
+
+    (7) variable_declaration -> type variable_declaration2 .
+
+    INT             reduce using rule 7 (variable_declaration -> type variable_declaration2 .)
+    DOUBLE          reduce using rule 7 (variable_declaration -> type variable_declaration2 .)
+    STRING          reduce using rule 7 (variable_declaration -> type variable_declaration2 .)
+    VOID            reduce using rule 7 (variable_declaration -> type variable_declaration2 .)
+    FUNC            reduce using rule 7 (variable_declaration -> type variable_declaration2 .)
+    MAIN            reduce using rule 7 (variable_declaration -> type variable_declaration2 .)
+    ID              reduce using rule 7 (variable_declaration -> type variable_declaration2 .)
+    IF              reduce using rule 7 (variable_declaration -> type variable_declaration2 .)
+    RETURN          reduce using rule 7 (variable_declaration -> type variable_declaration2 .)
+    PRINT           reduce using rule 7 (variable_declaration -> type variable_declaration2 .)
+    SCAN            reduce using rule 7 (variable_declaration -> type variable_declaration2 .)
+    FOR             reduce using rule 7 (variable_declaration -> type variable_declaration2 .)
+    WHILE           reduce using rule 7 (variable_declaration -> type variable_declaration2 .)
+    MOVE            reduce using rule 7 (variable_declaration -> type variable_declaration2 .)
+    ROTATE          reduce using rule 7 (variable_declaration -> type variable_declaration2 .)
+    ARC             reduce using rule 7 (variable_declaration -> type variable_declaration2 .)
+    HOME            reduce using rule 7 (variable_declaration -> type variable_declaration2 .)
+    PDOWN           reduce using rule 7 (variable_declaration -> type variable_declaration2 .)
+    PUP             reduce using rule 7 (variable_declaration -> type variable_declaration2 .)
+    SETP            reduce using rule 7 (variable_declaration -> type variable_declaration2 .)
+    PCOLOR          reduce using rule 7 (variable_declaration -> type variable_declaration2 .)
+    PSIZE           reduce using rule 7 (variable_declaration -> type variable_declaration2 .)
+    PCLEAR          reduce using rule 7 (variable_declaration -> type variable_declaration2 .)
+    (               reduce using rule 7 (variable_declaration -> type variable_declaration2 .)
+    CSTDOUBLE       reduce using rule 7 (variable_declaration -> type variable_declaration2 .)
+    CSTINT          reduce using rule 7 (variable_declaration -> type variable_declaration2 .)
+    CSTSTRING       reduce using rule 7 (variable_declaration -> type variable_declaration2 .)
+    RBRACKET        reduce using rule 7 (variable_declaration -> type variable_declaration2 .)
+
+
+state 15
+
+    (11) variable_declarator -> ID . seen_id variable_declarator2 variable_declarator3
+    (12) seen_id -> .
+
+    LSQUARE         reduce using rule 12 (seen_id -> .)
+    =               reduce using rule 12 (seen_id -> .)
+    COMMA           reduce using rule 12 (seen_id -> .)
+    SEMICOLON       reduce using rule 12 (seen_id -> .)
+
+    seen_id                        shift and go to state 21
+
+state 16
+
+    (8) variable_declaration2 -> variable_declarator . variable_declaration3
+    (9) variable_declaration3 -> . COMMA variable_declaration2
+    (10) variable_declaration3 -> . SEMICOLON
+
+    COMMA           shift and go to state 22
+    SEMICOLON       shift and go to state 24
+
+    variable_declaration3          shift and go to state 23
+
+state 17
+
+    (3) program2 -> variable_declaration program2 .
+
+    FUNC            reduce using rule 3 (program2 -> variable_declaration program2 .)
+    MAIN            reduce using rule 3 (program2 -> variable_declaration program2 .)
+
+
+state 18
+
+    (1) program -> program2 program3 main_ahead . main_method
+    (27) main_method -> . MAIN CHEESE ( ) block_statement
+
+    MAIN            shift and go to state 26
+
+    main_method                    shift and go to state 25
+
+state 19
+
+    (17) method_declaration -> FUNC type . ID seen_function_id ( method_declaration2 method_declaration3
+
+    ID              shift and go to state 27
+
+
+state 20
+
+    (5) program3 -> method_declaration program3 .
+
+    MAIN            reduce using rule 5 (program3 -> method_declaration program3 .)
+
+
+state 21
+
+    (11) variable_declarator -> ID seen_id . variable_declarator2 variable_declarator3
+    (13) variable_declarator2 -> . LSQUARE CSTINT RSQUARE
+    (14) variable_declarator2 -> . empty
+    (123) empty -> .
+
+    LSQUARE         shift and go to state 28
+    =               reduce using rule 123 (empty -> .)
+    COMMA           reduce using rule 123 (empty -> .)
+    SEMICOLON       reduce using rule 123 (empty -> .)
+
+    empty                          shift and go to state 30
+    variable_declarator2           shift and go to state 29
+
+state 22
+
+    (9) variable_declaration3 -> COMMA . variable_declaration2
+    (8) variable_declaration2 -> . variable_declarator variable_declaration3
+    (11) variable_declarator -> . ID seen_id variable_declarator2 variable_declarator3
+
+    ID              shift and go to state 15
+
+    variable_declarator            shift and go to state 16
+    variable_declaration2          shift and go to state 31
+
+state 23
+
+    (8) variable_declaration2 -> variable_declarator variable_declaration3 .
+
+    INT             reduce using rule 8 (variable_declaration2 -> variable_declarator variable_declaration3 .)
+    DOUBLE          reduce using rule 8 (variable_declaration2 -> variable_declarator variable_declaration3 .)
+    STRING          reduce using rule 8 (variable_declaration2 -> variable_declarator variable_declaration3 .)
+    VOID            reduce using rule 8 (variable_declaration2 -> variable_declarator variable_declaration3 .)
+    FUNC            reduce using rule 8 (variable_declaration2 -> variable_declarator variable_declaration3 .)
+    MAIN            reduce using rule 8 (variable_declaration2 -> variable_declarator variable_declaration3 .)
+    ID              reduce using rule 8 (variable_declaration2 -> variable_declarator variable_declaration3 .)
+    IF              reduce using rule 8 (variable_declaration2 -> variable_declarator variable_declaration3 .)
+    RETURN          reduce using rule 8 (variable_declaration2 -> variable_declarator variable_declaration3 .)
+    PRINT           reduce using rule 8 (variable_declaration2 -> variable_declarator variable_declaration3 .)
+    SCAN            reduce using rule 8 (variable_declaration2 -> variable_declarator variable_declaration3 .)
+    FOR             reduce using rule 8 (variable_declaration2 -> variable_declarator variable_declaration3 .)
+    WHILE           reduce using rule 8 (variable_declaration2 -> variable_declarator variable_declaration3 .)
+    MOVE            reduce using rule 8 (variable_declaration2 -> variable_declarator variable_declaration3 .)
+    ROTATE          reduce using rule 8 (variable_declaration2 -> variable_declarator variable_declaration3 .)
+    ARC             reduce using rule 8 (variable_declaration2 -> variable_declarator variable_declaration3 .)
+    HOME            reduce using rule 8 (variable_declaration2 -> variable_declarator variable_declaration3 .)
+    PDOWN           reduce using rule 8 (variable_declaration2 -> variable_declarator variable_declaration3 .)
+    PUP             reduce using rule 8 (variable_declaration2 -> variable_declarator variable_declaration3 .)
+    SETP            reduce using rule 8 (variable_declaration2 -> variable_declarator variable_declaration3 .)
+    PCOLOR          reduce using rule 8 (variable_declaration2 -> variable_declarator variable_declaration3 .)
+    PSIZE           reduce using rule 8 (variable_declaration2 -> variable_declarator variable_declaration3 .)
+    PCLEAR          reduce using rule 8 (variable_declaration2 -> variable_declarator variable_declaration3 .)
+    (               reduce using rule 8 (variable_declaration2 -> variable_declarator variable_declaration3 .)
+    CSTDOUBLE       reduce using rule 8 (variable_declaration2 -> variable_declarator variable_declaration3 .)
+    CSTINT          reduce using rule 8 (variable_declaration2 -> variable_declarator variable_declaration3 .)
+    CSTSTRING       reduce using rule 8 (variable_declaration2 -> variable_declarator variable_declaration3 .)
+    RBRACKET        reduce using rule 8 (variable_declaration2 -> variable_declarator variable_declaration3 .)
+
+
+state 24
+
+    (10) variable_declaration3 -> SEMICOLON .
+
+    INT             reduce using rule 10 (variable_declaration3 -> SEMICOLON .)
+    DOUBLE          reduce using rule 10 (variable_declaration3 -> SEMICOLON .)
+    STRING          reduce using rule 10 (variable_declaration3 -> SEMICOLON .)
+    VOID            reduce using rule 10 (variable_declaration3 -> SEMICOLON .)
+    FUNC            reduce using rule 10 (variable_declaration3 -> SEMICOLON .)
+    MAIN            reduce using rule 10 (variable_declaration3 -> SEMICOLON .)
+    ID              reduce using rule 10 (variable_declaration3 -> SEMICOLON .)
+    IF              reduce using rule 10 (variable_declaration3 -> SEMICOLON .)
+    RETURN          reduce using rule 10 (variable_declaration3 -> SEMICOLON .)
+    PRINT           reduce using rule 10 (variable_declaration3 -> SEMICOLON .)
+    SCAN            reduce using rule 10 (variable_declaration3 -> SEMICOLON .)
+    FOR             reduce using rule 10 (variable_declaration3 -> SEMICOLON .)
+    WHILE           reduce using rule 10 (variable_declaration3 -> SEMICOLON .)
+    MOVE            reduce using rule 10 (variable_declaration3 -> SEMICOLON .)
+    ROTATE          reduce using rule 10 (variable_declaration3 -> SEMICOLON .)
+    ARC             reduce using rule 10 (variable_declaration3 -> SEMICOLON .)
+    HOME            reduce using rule 10 (variable_declaration3 -> SEMICOLON .)
+    PDOWN           reduce using rule 10 (variable_declaration3 -> SEMICOLON .)
+    PUP             reduce using rule 10 (variable_declaration3 -> SEMICOLON .)
+    SETP            reduce using rule 10 (variable_declaration3 -> SEMICOLON .)
+    PCOLOR          reduce using rule 10 (variable_declaration3 -> SEMICOLON .)
+    PSIZE           reduce using rule 10 (variable_declaration3 -> SEMICOLON .)
+    PCLEAR          reduce using rule 10 (variable_declaration3 -> SEMICOLON .)
+    (               reduce using rule 10 (variable_declaration3 -> SEMICOLON .)
+    CSTDOUBLE       reduce using rule 10 (variable_declaration3 -> SEMICOLON .)
+    CSTINT          reduce using rule 10 (variable_declaration3 -> SEMICOLON .)
+    CSTSTRING       reduce using rule 10 (variable_declaration3 -> SEMICOLON .)
+    RBRACKET        reduce using rule 10 (variable_declaration3 -> SEMICOLON .)
+
+
+state 25
+
+    (1) program -> program2 program3 main_ahead main_method .
+
+    $end            reduce using rule 1 (program -> program2 program3 main_ahead main_method .)
+
+
+state 26
+
+    (27) main_method -> MAIN . CHEESE ( ) block_statement
+
+    CHEESE          shift and go to state 32
+
+
+state 27
+
+    (17) method_declaration -> FUNC type ID . seen_function_id ( method_declaration2 method_declaration3
+    (18) seen_function_id -> .
+
+    (               reduce using rule 18 (seen_function_id -> .)
+
+    seen_function_id               shift and go to state 33
+
+state 28
+
+    (13) variable_declarator2 -> LSQUARE . CSTINT RSQUARE
+
+    CSTINT          shift and go to state 34
+
+
+state 29
+
+    (11) variable_declarator -> ID seen_id variable_declarator2 . variable_declarator3
+    (15) variable_declarator3 -> . = superexpression
+    (16) variable_declarator3 -> . empty
+    (123) empty -> .
+
+    =               shift and go to state 35
+    COMMA           reduce using rule 123 (empty -> .)
+    SEMICOLON       reduce using rule 123 (empty -> .)
+
+    empty                          shift and go to state 37
+    variable_declarator3           shift and go to state 36
+
+state 30
+
+    (14) variable_declarator2 -> empty .
+
+    =               reduce using rule 14 (variable_declarator2 -> empty .)
+    COMMA           reduce using rule 14 (variable_declarator2 -> empty .)
+    SEMICOLON       reduce using rule 14 (variable_declarator2 -> empty .)
+
+
+state 31
+
+    (9) variable_declaration3 -> COMMA variable_declaration2 .
+
+    INT             reduce using rule 9 (variable_declaration3 -> COMMA variable_declaration2 .)
+    DOUBLE          reduce using rule 9 (variable_declaration3 -> COMMA variable_declaration2 .)
+    STRING          reduce using rule 9 (variable_declaration3 -> COMMA variable_declaration2 .)
+    VOID            reduce using rule 9 (variable_declaration3 -> COMMA variable_declaration2 .)
+    FUNC            reduce using rule 9 (variable_declaration3 -> COMMA variable_declaration2 .)
+    MAIN            reduce using rule 9 (variable_declaration3 -> COMMA variable_declaration2 .)
+    ID              reduce using rule 9 (variable_declaration3 -> COMMA variable_declaration2 .)
+    IF              reduce using rule 9 (variable_declaration3 -> COMMA variable_declaration2 .)
+    RETURN          reduce using rule 9 (variable_declaration3 -> COMMA variable_declaration2 .)
+    PRINT           reduce using rule 9 (variable_declaration3 -> COMMA variable_declaration2 .)
+    SCAN            reduce using rule 9 (variable_declaration3 -> COMMA variable_declaration2 .)
+    FOR             reduce using rule 9 (variable_declaration3 -> COMMA variable_declaration2 .)
+    WHILE           reduce using rule 9 (variable_declaration3 -> COMMA variable_declaration2 .)
+    MOVE            reduce using rule 9 (variable_declaration3 -> COMMA variable_declaration2 .)
+    ROTATE          reduce using rule 9 (variable_declaration3 -> COMMA variable_declaration2 .)
+    ARC             reduce using rule 9 (variable_declaration3 -> COMMA variable_declaration2 .)
+    HOME            reduce using rule 9 (variable_declaration3 -> COMMA variable_declaration2 .)
+    PDOWN           reduce using rule 9 (variable_declaration3 -> COMMA variable_declaration2 .)
+    PUP             reduce using rule 9 (variable_declaration3 -> COMMA variable_declaration2 .)
+    SETP            reduce using rule 9 (variable_declaration3 -> COMMA variable_declaration2 .)
+    PCOLOR          reduce using rule 9 (variable_declaration3 -> COMMA variable_declaration2 .)
+    PSIZE           reduce using rule 9 (variable_declaration3 -> COMMA variable_declaration2 .)
+    PCLEAR          reduce using rule 9 (variable_declaration3 -> COMMA variable_declaration2 .)
+    (               reduce using rule 9 (variable_declaration3 -> COMMA variable_declaration2 .)
+    CSTDOUBLE       reduce using rule 9 (variable_declaration3 -> COMMA variable_declaration2 .)
+    CSTINT          reduce using rule 9 (variable_declaration3 -> COMMA variable_declaration2 .)
+    CSTSTRING       reduce using rule 9 (variable_declaration3 -> COMMA variable_declaration2 .)
+    RBRACKET        reduce using rule 9 (variable_declaration3 -> COMMA variable_declaration2 .)
+
+
+state 32
+
+    (27) main_method -> MAIN CHEESE . ( ) block_statement
+
+    (               shift and go to state 38
+
+
+state 33
+
+    (17) method_declaration -> FUNC type ID seen_function_id . ( method_declaration2 method_declaration3
+
+    (               shift and go to state 39
+
+
+state 34
+
+    (13) variable_declarator2 -> LSQUARE CSTINT . RSQUARE
+
+    RSQUARE         shift and go to state 40
+
+
+state 35
+
+    (15) variable_declarator3 -> = . superexpression
+    (33) superexpression -> . expression superexpression2
+    (38) expression -> . numeric_expression compare
+    (48) numeric_expression -> . term seen_term numeric_expression2
+    (54) term -> . factor term2
+    (59) factor -> . cst_expression
+    (60) factor -> . ( seen_lpar superexpression ) seen_rpar
+    (63) cst_expression -> . CSTDOUBLE
+    (64) cst_expression -> . CSTINT
+    (65) cst_expression -> . CSTSTRING
+    (66) cst_expression -> . ID seen_id_or_func cst_expression2
+
+    (               shift and go to state 51
+    CSTDOUBLE       shift and go to state 45
+    CSTINT          shift and go to state 47
+    CSTSTRING       shift and go to state 44
+    ID              shift and go to state 43
+
+    numeric_expression             shift and go to state 46
+    factor                         shift and go to state 41
+    term                           shift and go to state 48
+    cst_expression                 shift and go to state 42
+    superexpression                shift and go to state 49
+    expression                     shift and go to state 50
+
+state 36
+
+    (11) variable_declarator -> ID seen_id variable_declarator2 variable_declarator3 .
+
+    COMMA           reduce using rule 11 (variable_declarator -> ID seen_id variable_declarator2 variable_declarator3 .)
+    SEMICOLON       reduce using rule 11 (variable_declarator -> ID seen_id variable_declarator2 variable_declarator3 .)
+
+
+state 37
+
+    (16) variable_declarator3 -> empty .
+
+    COMMA           reduce using rule 16 (variable_declarator3 -> empty .)
+    SEMICOLON       reduce using rule 16 (variable_declarator3 -> empty .)
+
+
+state 38
+
+    (27) main_method -> MAIN CHEESE ( . ) block_statement
+
+    )               shift and go to state 52
+
+
+state 39
+
+    (17) method_declaration -> FUNC type ID seen_function_id ( . method_declaration2 method_declaration3
+    (19) method_declaration2 -> . parameter_list
+    (20) method_declaration2 -> . empty
+    (23) parameter_list -> . parameter parameter_list2
+    (123) empty -> .
+    (26) parameter -> . type ID
+    (28) type -> . INT
+    (29) type -> . DOUBLE
+    (30) type -> . STRING
+    (31) type -> . VOID
+
+    )               reduce using rule 123 (empty -> .)
+    INT             shift and go to state 6
+    DOUBLE          shift and go to state 8
+    STRING          shift and go to state 1
+    VOID            shift and go to state 3
+
+    method_declaration2            shift and go to state 56
+    parameter                      shift and go to state 53
+    empty                          shift and go to state 55
+    parameter_list                 shift and go to state 54
+    type                           shift and go to state 57
+
+state 40
+
+    (13) variable_declarator2 -> LSQUARE CSTINT RSQUARE .
+
+    =               reduce using rule 13 (variable_declarator2 -> LSQUARE CSTINT RSQUARE .)
+    COMMA           reduce using rule 13 (variable_declarator2 -> LSQUARE CSTINT RSQUARE .)
+    SEMICOLON       reduce using rule 13 (variable_declarator2 -> LSQUARE CSTINT RSQUARE .)
+
+
+state 41
+
+    (54) term -> factor . term2
+    (55) term2 -> . geomOp term
+    (56) term2 -> . empty
+    (57) geomOp -> . *
+    (58) geomOp -> . /
+    (123) empty -> .
+
+    *               shift and go to state 59
+    /               shift and go to state 61
+    +               reduce using rule 123 (empty -> .)
+    -               reduce using rule 123 (empty -> .)
+    CEQ             reduce using rule 123 (empty -> .)
+    CGT             reduce using rule 123 (empty -> .)
+    CGE             reduce using rule 123 (empty -> .)
+    CLT             reduce using rule 123 (empty -> .)
+    CLE             reduce using rule 123 (empty -> .)
+    CNE             reduce using rule 123 (empty -> .)
+    AND             reduce using rule 123 (empty -> .)
+    OR              reduce using rule 123 (empty -> .)
+    COMMA           reduce using rule 123 (empty -> .)
+    SEMICOLON       reduce using rule 123 (empty -> .)
+    )               reduce using rule 123 (empty -> .)
+    RSQUARE         reduce using rule 123 (empty -> .)
+
+    term2                          shift and go to state 58
+    geomOp                         shift and go to state 60
+    empty                          shift and go to state 62
+
+state 42
+
+    (59) factor -> cst_expression .
+
+    *               reduce using rule 59 (factor -> cst_expression .)
+    /               reduce using rule 59 (factor -> cst_expression .)
+    +               reduce using rule 59 (factor -> cst_expression .)
+    -               reduce using rule 59 (factor -> cst_expression .)
+    CEQ             reduce using rule 59 (factor -> cst_expression .)
+    CGT             reduce using rule 59 (factor -> cst_expression .)
+    CGE             reduce using rule 59 (factor -> cst_expression .)
+    CLT             reduce using rule 59 (factor -> cst_expression .)
+    CLE             reduce using rule 59 (factor -> cst_expression .)
+    CNE             reduce using rule 59 (factor -> cst_expression .)
+    AND             reduce using rule 59 (factor -> cst_expression .)
+    OR              reduce using rule 59 (factor -> cst_expression .)
+    )               reduce using rule 59 (factor -> cst_expression .)
+    SEMICOLON       reduce using rule 59 (factor -> cst_expression .)
+    COMMA           reduce using rule 59 (factor -> cst_expression .)
+    RSQUARE         reduce using rule 59 (factor -> cst_expression .)
+
+
+state 43
+
+    (66) cst_expression -> ID . seen_id_or_func cst_expression2
+    (67) seen_id_or_func -> .
+
+    LSQUARE         reduce using rule 67 (seen_id_or_func -> .)
+    (               reduce using rule 67 (seen_id_or_func -> .)
+    *               reduce using rule 67 (seen_id_or_func -> .)
+    /               reduce using rule 67 (seen_id_or_func -> .)
+    +               reduce using rule 67 (seen_id_or_func -> .)
+    -               reduce using rule 67 (seen_id_or_func -> .)
+    CEQ             reduce using rule 67 (seen_id_or_func -> .)
+    CGT             reduce using rule 67 (seen_id_or_func -> .)
+    CGE             reduce using rule 67 (seen_id_or_func -> .)
+    CLT             reduce using rule 67 (seen_id_or_func -> .)
+    CLE             reduce using rule 67 (seen_id_or_func -> .)
+    CNE             reduce using rule 67 (seen_id_or_func -> .)
+    AND             reduce using rule 67 (seen_id_or_func -> .)
+    OR              reduce using rule 67 (seen_id_or_func -> .)
+    COMMA           reduce using rule 67 (seen_id_or_func -> .)
+    SEMICOLON       reduce using rule 67 (seen_id_or_func -> .)
+    )               reduce using rule 67 (seen_id_or_func -> .)
+    RSQUARE         reduce using rule 67 (seen_id_or_func -> .)
+
+    seen_id_or_func                shift and go to state 63
+
+state 44
+
+    (65) cst_expression -> CSTSTRING .
+
+    *               reduce using rule 65 (cst_expression -> CSTSTRING .)
+    /               reduce using rule 65 (cst_expression -> CSTSTRING .)
+    +               reduce using rule 65 (cst_expression -> CSTSTRING .)
+    -               reduce using rule 65 (cst_expression -> CSTSTRING .)
+    CEQ             reduce using rule 65 (cst_expression -> CSTSTRING .)
+    CGT             reduce using rule 65 (cst_expression -> CSTSTRING .)
+    CGE             reduce using rule 65 (cst_expression -> CSTSTRING .)
+    CLT             reduce using rule 65 (cst_expression -> CSTSTRING .)
+    CLE             reduce using rule 65 (cst_expression -> CSTSTRING .)
+    CNE             reduce using rule 65 (cst_expression -> CSTSTRING .)
+    AND             reduce using rule 65 (cst_expression -> CSTSTRING .)
+    OR              reduce using rule 65 (cst_expression -> CSTSTRING .)
+    COMMA           reduce using rule 65 (cst_expression -> CSTSTRING .)
+    SEMICOLON       reduce using rule 65 (cst_expression -> CSTSTRING .)
+    )               reduce using rule 65 (cst_expression -> CSTSTRING .)
+    RSQUARE         reduce using rule 65 (cst_expression -> CSTSTRING .)
+
+
+state 45
+
+    (63) cst_expression -> CSTDOUBLE .
+
+    *               reduce using rule 63 (cst_expression -> CSTDOUBLE .)
+    /               reduce using rule 63 (cst_expression -> CSTDOUBLE .)
+    +               reduce using rule 63 (cst_expression -> CSTDOUBLE .)
+    -               reduce using rule 63 (cst_expression -> CSTDOUBLE .)
+    CEQ             reduce using rule 63 (cst_expression -> CSTDOUBLE .)
+    CGT             reduce using rule 63 (cst_expression -> CSTDOUBLE .)
+    CGE             reduce using rule 63 (cst_expression -> CSTDOUBLE .)
+    CLT             reduce using rule 63 (cst_expression -> CSTDOUBLE .)
+    CLE             reduce using rule 63 (cst_expression -> CSTDOUBLE .)
+    CNE             reduce using rule 63 (cst_expression -> CSTDOUBLE .)
+    AND             reduce using rule 63 (cst_expression -> CSTDOUBLE .)
+    OR              reduce using rule 63 (cst_expression -> CSTDOUBLE .)
+    COMMA           reduce using rule 63 (cst_expression -> CSTDOUBLE .)
+    SEMICOLON       reduce using rule 63 (cst_expression -> CSTDOUBLE .)
+    )               reduce using rule 63 (cst_expression -> CSTDOUBLE .)
+    RSQUARE         reduce using rule 63 (cst_expression -> CSTDOUBLE .)
+
+
+state 46
+
+    (38) expression -> numeric_expression . compare
+    (39) compare -> . compare_symbols numeric_expression seen_comp
+    (40) compare -> . empty
+    (41) compare_symbols -> . CEQ
+    (42) compare_symbols -> . CGT
+    (43) compare_symbols -> . CGE
+    (44) compare_symbols -> . CLT
+    (45) compare_symbols -> . CLE
+    (46) compare_symbols -> . CNE
+    (123) empty -> .
+
+    CEQ             shift and go to state 70
+    CGT             shift and go to state 67
+    CGE             shift and go to state 71
+    CLT             shift and go to state 65
+    CLE             shift and go to state 64
+    CNE             shift and go to state 68
+    AND             reduce using rule 123 (empty -> .)
+    OR              reduce using rule 123 (empty -> .)
+    COMMA           reduce using rule 123 (empty -> .)
+    SEMICOLON       reduce using rule 123 (empty -> .)
+    )               reduce using rule 123 (empty -> .)
+    RSQUARE         reduce using rule 123 (empty -> .)
+
+    compare_symbols                shift and go to state 69
+    compare                        shift and go to state 66
+    empty                          shift and go to state 72
+
+state 47
+
+    (64) cst_expression -> CSTINT .
+
+    *               reduce using rule 64 (cst_expression -> CSTINT .)
+    /               reduce using rule 64 (cst_expression -> CSTINT .)
+    +               reduce using rule 64 (cst_expression -> CSTINT .)
+    -               reduce using rule 64 (cst_expression -> CSTINT .)
+    CEQ             reduce using rule 64 (cst_expression -> CSTINT .)
+    CGT             reduce using rule 64 (cst_expression -> CSTINT .)
+    CGE             reduce using rule 64 (cst_expression -> CSTINT .)
+    CLT             reduce using rule 64 (cst_expression -> CSTINT .)
+    CLE             reduce using rule 64 (cst_expression -> CSTINT .)
+    CNE             reduce using rule 64 (cst_expression -> CSTINT .)
+    AND             reduce using rule 64 (cst_expression -> CSTINT .)
+    OR              reduce using rule 64 (cst_expression -> CSTINT .)
+    COMMA           reduce using rule 64 (cst_expression -> CSTINT .)
+    SEMICOLON       reduce using rule 64 (cst_expression -> CSTINT .)
+    )               reduce using rule 64 (cst_expression -> CSTINT .)
+    RSQUARE         reduce using rule 64 (cst_expression -> CSTINT .)
+
+
+state 48
+
+    (48) numeric_expression -> term . seen_term numeric_expression2
+    (49) seen_term -> .
+
+    +               reduce using rule 49 (seen_term -> .)
+    -               reduce using rule 49 (seen_term -> .)
+    CEQ             reduce using rule 49 (seen_term -> .)
+    CGT             reduce using rule 49 (seen_term -> .)
+    CGE             reduce using rule 49 (seen_term -> .)
+    CLT             reduce using rule 49 (seen_term -> .)
+    CLE             reduce using rule 49 (seen_term -> .)
+    CNE             reduce using rule 49 (seen_term -> .)
+    AND             reduce using rule 49 (seen_term -> .)
+    OR              reduce using rule 49 (seen_term -> .)
+    COMMA           reduce using rule 49 (seen_term -> .)
+    SEMICOLON       reduce using rule 49 (seen_term -> .)
+    )               reduce using rule 49 (seen_term -> .)
+    RSQUARE         reduce using rule 49 (seen_term -> .)
+
+    seen_term                      shift and go to state 73
+
+state 49
+
+    (15) variable_declarator3 -> = superexpression .
+
+    COMMA           reduce using rule 15 (variable_declarator3 -> = superexpression .)
+    SEMICOLON       reduce using rule 15 (variable_declarator3 -> = superexpression .)
+
+
+state 50
+
+    (33) superexpression -> expression . superexpression2
+    (34) superexpression2 -> . andor superexpression
+    (35) superexpression2 -> . empty
+    (36) andor -> . AND
+    (37) andor -> . OR
+    (123) empty -> .
+
+    AND             shift and go to state 75
+    OR              shift and go to state 74
+    COMMA           reduce using rule 123 (empty -> .)
+    SEMICOLON       reduce using rule 123 (empty -> .)
+    )               reduce using rule 123 (empty -> .)
+    RSQUARE         reduce using rule 123 (empty -> .)
+
+    superexpression2               shift and go to state 77
+    andor                          shift and go to state 76
+    empty                          shift and go to state 78
+
+state 51
+
+    (60) factor -> ( . seen_lpar superexpression ) seen_rpar
+    (61) seen_lpar -> .
+
+    (               reduce using rule 61 (seen_lpar -> .)
+    CSTDOUBLE       reduce using rule 61 (seen_lpar -> .)
+    CSTINT          reduce using rule 61 (seen_lpar -> .)
+    CSTSTRING       reduce using rule 61 (seen_lpar -> .)
+    ID              reduce using rule 61 (seen_lpar -> .)
+
+    seen_lpar                      shift and go to state 79
+
+state 52
+
+    (27) main_method -> MAIN CHEESE ( ) . block_statement
+    (88) block_statement -> . LBRACKET block_statement2 RBRACKET
+
+    LBRACKET        shift and go to state 81
+
+    block_statement                shift and go to state 80
+
+state 53
+
+    (23) parameter_list -> parameter . parameter_list2
+    (24) parameter_list2 -> . COMMA parameter_list
+    (25) parameter_list2 -> . empty
+    (123) empty -> .
+
+    COMMA           shift and go to state 82
+    )               reduce using rule 123 (empty -> .)
+
+    parameter_list2                shift and go to state 83
+    empty                          shift and go to state 84
+
+state 54
+
+    (19) method_declaration2 -> parameter_list .
+
+    )               reduce using rule 19 (method_declaration2 -> parameter_list .)
+
+
+state 55
+
+    (20) method_declaration2 -> empty .
+
+    )               reduce using rule 20 (method_declaration2 -> empty .)
+
+
+state 56
+
+    (17) method_declaration -> FUNC type ID seen_function_id ( method_declaration2 . method_declaration3
+    (21) method_declaration3 -> . ) seen_method_start block_statement
+
+    )               shift and go to state 86
+
+    method_declaration3            shift and go to state 85
+
+state 57
+
+    (26) parameter -> type . ID
+
+    ID              shift and go to state 87
+
+
+state 58
+
+    (54) term -> factor term2 .
+
+    +               reduce using rule 54 (term -> factor term2 .)
+    -               reduce using rule 54 (term -> factor term2 .)
+    CEQ             reduce using rule 54 (term -> factor term2 .)
+    CGT             reduce using rule 54 (term -> factor term2 .)
+    CGE             reduce using rule 54 (term -> factor term2 .)
+    CLT             reduce using rule 54 (term -> factor term2 .)
+    CLE             reduce using rule 54 (term -> factor term2 .)
+    CNE             reduce using rule 54 (term -> factor term2 .)
+    AND             reduce using rule 54 (term -> factor term2 .)
+    OR              reduce using rule 54 (term -> factor term2 .)
+    )               reduce using rule 54 (term -> factor term2 .)
+    COMMA           reduce using rule 54 (term -> factor term2 .)
+    SEMICOLON       reduce using rule 54 (term -> factor term2 .)
+    RSQUARE         reduce using rule 54 (term -> factor term2 .)
+
+
+state 59
+
+    (57) geomOp -> * .
+
+    (               reduce using rule 57 (geomOp -> * .)
+    CSTDOUBLE       reduce using rule 57 (geomOp -> * .)
+    CSTINT          reduce using rule 57 (geomOp -> * .)
+    CSTSTRING       reduce using rule 57 (geomOp -> * .)
+    ID              reduce using rule 57 (geomOp -> * .)
+
+
+state 60
+
+    (55) term2 -> geomOp . term
+    (54) term -> . factor term2
+    (59) factor -> . cst_expression
+    (60) factor -> . ( seen_lpar superexpression ) seen_rpar
+    (63) cst_expression -> . CSTDOUBLE
+    (64) cst_expression -> . CSTINT
+    (65) cst_expression -> . CSTSTRING
+    (66) cst_expression -> . ID seen_id_or_func cst_expression2
+
+    (               shift and go to state 51
+    CSTDOUBLE       shift and go to state 45
+    CSTINT          shift and go to state 47
+    CSTSTRING       shift and go to state 44
+    ID              shift and go to state 43
+
+    factor                         shift and go to state 41
+    term                           shift and go to state 88
+    cst_expression                 shift and go to state 42
+
+state 61
+
+    (58) geomOp -> / .
+
+    (               reduce using rule 58 (geomOp -> / .)
+    CSTDOUBLE       reduce using rule 58 (geomOp -> / .)
+    CSTINT          reduce using rule 58 (geomOp -> / .)
+    CSTSTRING       reduce using rule 58 (geomOp -> / .)
+    ID              reduce using rule 58 (geomOp -> / .)
+
+
+state 62
+
+    (56) term2 -> empty .
+
+    +               reduce using rule 56 (term2 -> empty .)
+    -               reduce using rule 56 (term2 -> empty .)
+    CEQ             reduce using rule 56 (term2 -> empty .)
+    CGT             reduce using rule 56 (term2 -> empty .)
+    CGE             reduce using rule 56 (term2 -> empty .)
+    CLT             reduce using rule 56 (term2 -> empty .)
+    CLE             reduce using rule 56 (term2 -> empty .)
+    CNE             reduce using rule 56 (term2 -> empty .)
+    AND             reduce using rule 56 (term2 -> empty .)
+    OR              reduce using rule 56 (term2 -> empty .)
+    COMMA           reduce using rule 56 (term2 -> empty .)
+    SEMICOLON       reduce using rule 56 (term2 -> empty .)
+    )               reduce using rule 56 (term2 -> empty .)
+    RSQUARE         reduce using rule 56 (term2 -> empty .)
+
+
+state 63
+
+    (66) cst_expression -> ID seen_id_or_func . cst_expression2
+    (68) cst_expression2 -> . LSQUARE superexpression RSQUARE
+    (69) cst_expression2 -> . ( cst_expression3 )
+    (70) cst_expression2 -> . empty
+    (123) empty -> .
+
+    LSQUARE         shift and go to state 89
+    (               shift and go to state 91
+    *               reduce using rule 123 (empty -> .)
+    /               reduce using rule 123 (empty -> .)
+    +               reduce using rule 123 (empty -> .)
+    -               reduce using rule 123 (empty -> .)
+    CEQ             reduce using rule 123 (empty -> .)
+    CGT             reduce using rule 123 (empty -> .)
+    CGE             reduce using rule 123 (empty -> .)
+    CLT             reduce using rule 123 (empty -> .)
+    CLE             reduce using rule 123 (empty -> .)
+    CNE             reduce using rule 123 (empty -> .)
+    AND             reduce using rule 123 (empty -> .)
+    OR              reduce using rule 123 (empty -> .)
+    COMMA           reduce using rule 123 (empty -> .)
+    SEMICOLON       reduce using rule 123 (empty -> .)
+    )               reduce using rule 123 (empty -> .)
+    RSQUARE         reduce using rule 123 (empty -> .)
+
+    empty                          shift and go to state 90
+    cst_expression2                shift and go to state 92
+
+state 64
+
+    (45) compare_symbols -> CLE .
+
+    (               reduce using rule 45 (compare_symbols -> CLE .)
+    CSTDOUBLE       reduce using rule 45 (compare_symbols -> CLE .)
+    CSTINT          reduce using rule 45 (compare_symbols -> CLE .)
+    CSTSTRING       reduce using rule 45 (compare_symbols -> CLE .)
+    ID              reduce using rule 45 (compare_symbols -> CLE .)
+
+
+state 65
+
+    (44) compare_symbols -> CLT .
+
+    (               reduce using rule 44 (compare_symbols -> CLT .)
+    CSTDOUBLE       reduce using rule 44 (compare_symbols -> CLT .)
+    CSTINT          reduce using rule 44 (compare_symbols -> CLT .)
+    CSTSTRING       reduce using rule 44 (compare_symbols -> CLT .)
+    ID              reduce using rule 44 (compare_symbols -> CLT .)
+
+
+state 66
+
+    (38) expression -> numeric_expression compare .
+
+    AND             reduce using rule 38 (expression -> numeric_expression compare .)
+    OR              reduce using rule 38 (expression -> numeric_expression compare .)
+    )               reduce using rule 38 (expression -> numeric_expression compare .)
+    SEMICOLON       reduce using rule 38 (expression -> numeric_expression compare .)
+    COMMA           reduce using rule 38 (expression -> numeric_expression compare .)
+    RSQUARE         reduce using rule 38 (expression -> numeric_expression compare .)
+
+
+state 67
+
+    (42) compare_symbols -> CGT .
+
+    (               reduce using rule 42 (compare_symbols -> CGT .)
+    CSTDOUBLE       reduce using rule 42 (compare_symbols -> CGT .)
+    CSTINT          reduce using rule 42 (compare_symbols -> CGT .)
+    CSTSTRING       reduce using rule 42 (compare_symbols -> CGT .)
+    ID              reduce using rule 42 (compare_symbols -> CGT .)
+
+
+state 68
+
+    (46) compare_symbols -> CNE .
+
+    (               reduce using rule 46 (compare_symbols -> CNE .)
+    CSTDOUBLE       reduce using rule 46 (compare_symbols -> CNE .)
+    CSTINT          reduce using rule 46 (compare_symbols -> CNE .)
+    CSTSTRING       reduce using rule 46 (compare_symbols -> CNE .)
+    ID              reduce using rule 46 (compare_symbols -> CNE .)
+
+
+state 69
+
+    (39) compare -> compare_symbols . numeric_expression seen_comp
+    (48) numeric_expression -> . term seen_term numeric_expression2
+    (54) term -> . factor term2
+    (59) factor -> . cst_expression
+    (60) factor -> . ( seen_lpar superexpression ) seen_rpar
+    (63) cst_expression -> . CSTDOUBLE
+    (64) cst_expression -> . CSTINT
+    (65) cst_expression -> . CSTSTRING
+    (66) cst_expression -> . ID seen_id_or_func cst_expression2
+
+    (               shift and go to state 51
+    CSTDOUBLE       shift and go to state 45
+    CSTINT          shift and go to state 47
+    CSTSTRING       shift and go to state 44
+    ID              shift and go to state 43
+
+    numeric_expression             shift and go to state 93
+    factor                         shift and go to state 41
+    term                           shift and go to state 48
+    cst_expression                 shift and go to state 42
+
+state 70
+
+    (41) compare_symbols -> CEQ .
+
+    (               reduce using rule 41 (compare_symbols -> CEQ .)
+    CSTDOUBLE       reduce using rule 41 (compare_symbols -> CEQ .)
+    CSTINT          reduce using rule 41 (compare_symbols -> CEQ .)
+    CSTSTRING       reduce using rule 41 (compare_symbols -> CEQ .)
+    ID              reduce using rule 41 (compare_symbols -> CEQ .)
+
+
+state 71
+
+    (43) compare_symbols -> CGE .
+
+    (               reduce using rule 43 (compare_symbols -> CGE .)
+    CSTDOUBLE       reduce using rule 43 (compare_symbols -> CGE .)
+    CSTINT          reduce using rule 43 (compare_symbols -> CGE .)
+    CSTSTRING       reduce using rule 43 (compare_symbols -> CGE .)
+    ID              reduce using rule 43 (compare_symbols -> CGE .)
+
+
+state 72
+
+    (40) compare -> empty .
+
+    AND             reduce using rule 40 (compare -> empty .)
+    OR              reduce using rule 40 (compare -> empty .)
+    COMMA           reduce using rule 40 (compare -> empty .)
+    SEMICOLON       reduce using rule 40 (compare -> empty .)
+    )               reduce using rule 40 (compare -> empty .)
+    RSQUARE         reduce using rule 40 (compare -> empty .)
+
+
+state 73
+
+    (48) numeric_expression -> term seen_term . numeric_expression2
+    (50) numeric_expression2 -> . arithOp numeric_expression
+    (51) numeric_expression2 -> . empty
+    (52) arithOp -> . +
+    (53) arithOp -> . -
+    (123) empty -> .
+
+    +               shift and go to state 95
+    -               shift and go to state 97
+    CEQ             reduce using rule 123 (empty -> .)
+    CGT             reduce using rule 123 (empty -> .)
+    CGE             reduce using rule 123 (empty -> .)
+    CLT             reduce using rule 123 (empty -> .)
+    CLE             reduce using rule 123 (empty -> .)
+    CNE             reduce using rule 123 (empty -> .)
+    AND             reduce using rule 123 (empty -> .)
+    OR              reduce using rule 123 (empty -> .)
+    COMMA           reduce using rule 123 (empty -> .)
+    SEMICOLON       reduce using rule 123 (empty -> .)
+    )               reduce using rule 123 (empty -> .)
+    RSQUARE         reduce using rule 123 (empty -> .)
+
+    arithOp                        shift and go to state 94
+    numeric_expression2            shift and go to state 96
+    empty                          shift and go to state 98
+
+state 74
+
+    (37) andor -> OR .
+
+    (               reduce using rule 37 (andor -> OR .)
+    CSTDOUBLE       reduce using rule 37 (andor -> OR .)
+    CSTINT          reduce using rule 37 (andor -> OR .)
+    CSTSTRING       reduce using rule 37 (andor -> OR .)
+    ID              reduce using rule 37 (andor -> OR .)
+
+
+state 75
+
+    (36) andor -> AND .
+
+    (               reduce using rule 36 (andor -> AND .)
+    CSTDOUBLE       reduce using rule 36 (andor -> AND .)
+    CSTINT          reduce using rule 36 (andor -> AND .)
+    CSTSTRING       reduce using rule 36 (andor -> AND .)
+    ID              reduce using rule 36 (andor -> AND .)
+
+
+state 76
+
+    (34) superexpression2 -> andor . superexpression
+    (33) superexpression -> . expression superexpression2
+    (38) expression -> . numeric_expression compare
+    (48) numeric_expression -> . term seen_term numeric_expression2
+    (54) term -> . factor term2
+    (59) factor -> . cst_expression
+    (60) factor -> . ( seen_lpar superexpression ) seen_rpar
+    (63) cst_expression -> . CSTDOUBLE
+    (64) cst_expression -> . CSTINT
+    (65) cst_expression -> . CSTSTRING
+    (66) cst_expression -> . ID seen_id_or_func cst_expression2
+
+    (               shift and go to state 51
+    CSTDOUBLE       shift and go to state 45
+    CSTINT          shift and go to state 47
+    CSTSTRING       shift and go to state 44
+    ID              shift and go to state 43
+
+    numeric_expression             shift and go to state 46
+    factor                         shift and go to state 41
+    term                           shift and go to state 48
+    cst_expression                 shift and go to state 42
+    superexpression                shift and go to state 99
+    expression                     shift and go to state 50
+
+state 77
+
+    (33) superexpression -> expression superexpression2 .
+
+    COMMA           reduce using rule 33 (superexpression -> expression superexpression2 .)
+    RSQUARE         reduce using rule 33 (superexpression -> expression superexpression2 .)
+    SEMICOLON       reduce using rule 33 (superexpression -> expression superexpression2 .)
+    )               reduce using rule 33 (superexpression -> expression superexpression2 .)
+
+
+state 78
+
+    (35) superexpression2 -> empty .
+
+    COMMA           reduce using rule 35 (superexpression2 -> empty .)
+    SEMICOLON       reduce using rule 35 (superexpression2 -> empty .)
+    )               reduce using rule 35 (superexpression2 -> empty .)
+    RSQUARE         reduce using rule 35 (superexpression2 -> empty .)
+
+
+state 79
+
+    (60) factor -> ( seen_lpar . superexpression ) seen_rpar
+    (33) superexpression -> . expression superexpression2
+    (38) expression -> . numeric_expression compare
+    (48) numeric_expression -> . term seen_term numeric_expression2
+    (54) term -> . factor term2
+    (59) factor -> . cst_expression
+    (60) factor -> . ( seen_lpar superexpression ) seen_rpar
+    (63) cst_expression -> . CSTDOUBLE
+    (64) cst_expression -> . CSTINT
+    (65) cst_expression -> . CSTSTRING
+    (66) cst_expression -> . ID seen_id_or_func cst_expression2
+
+    (               shift and go to state 51
+    CSTDOUBLE       shift and go to state 45
+    CSTINT          shift and go to state 47
+    CSTSTRING       shift and go to state 44
+    ID              shift and go to state 43
+
+    numeric_expression             shift and go to state 46
+    factor                         shift and go to state 41
+    term                           shift and go to state 48
+    cst_expression                 shift and go to state 42
+    superexpression                shift and go to state 100
+    expression                     shift and go to state 50
+
+state 80
+
+    (27) main_method -> MAIN CHEESE ( ) block_statement .
+
+    $end            reduce using rule 27 (main_method -> MAIN CHEESE ( ) block_statement .)
+
+
+state 81
+
+    (88) block_statement -> LBRACKET . block_statement2 RBRACKET
+    (89) block_statement2 -> . statement block_statement2
+    (90) block_statement2 -> . empty
+    (113) statement -> . variable_declaration
+    (114) statement -> . variable_assignment
+    (115) statement -> . superexpression SEMICOLON
+    (116) statement -> . if_statement
+    (117) statement -> . loop_statement
+    (118) statement -> . return
+    (119) statement -> . print_statement
+    (120) statement -> . read_statement
+    (121) statement -> . geometry_statement SEMICOLON
+    (123) empty -> .
+    (7) variable_declaration -> . type variable_declaration2
+    (32) variable_assignment -> . ID = superexpression SEMICOLON
+    (33) superexpression -> . expression superexpression2
+    (83) if_statement -> . IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2
+    (74) loop_statement -> . loophead block_statement seen_loop_block
+    (122) return -> . RETURN superexpression SEMICOLON
+    (92) print_statement -> . PRINT ( superexpression ) SEMICOLON
+    (91) read_statement -> . SCAN ( ID ) SEMICOLON
+    (93) geometry_statement -> . move
+    (94) geometry_statement -> . rotate
+    (95) geometry_statement -> . arc
+    (96) geometry_statement -> . home
+    (97) geometry_statement -> . pdown
+    (98) geometry_statement -> . pup
+    (99) geometry_statement -> . setp
+    (100) geometry_statement -> . pcolor
+    (101) geometry_statement -> . psize
+    (102) geometry_statement -> . pclear
+    (28) type -> . INT
+    (29) type -> . DOUBLE
+    (30) type -> . STRING
+    (31) type -> . VOID
+    (38) expression -> . numeric_expression compare
+    (75) loophead -> . FOR ( variable_assignment seen_assignment1 SEMICOLON superexpression seen_for_exp SEMICOLON variable_assignment seen_assignment2 )
+    (76) loophead -> . WHILE ( seen_while_LPAR superexpression seen_while_exp )
+    (103) move -> . MOVE ( superexpression )
+    (104) rotate -> . ROTATE ( superexpression )
+    (105) arc -> . ARC ( superexpression COMMA superexpression )
+    (106) home -> . HOME ( )
+    (107) pdown -> . PDOWN ( )
+    (108) pup -> . PUP ( )
+    (109) setp -> . SETP ( superexpression COMMA superexpression )
+    (110) pcolor -> . PCOLOR ( superexpression COMMA superexpression COMMA superexpression )
+    (111) psize -> . PSIZE ( superexpression )
+    (112) pclear -> . PCLEAR ( )
+    (48) numeric_expression -> . term seen_term numeric_expression2
+    (54) term -> . factor term2
+    (59) factor -> . cst_expression
+    (60) factor -> . ( seen_lpar superexpression ) seen_rpar
+    (63) cst_expression -> . CSTDOUBLE
+    (64) cst_expression -> . CSTINT
+    (65) cst_expression -> . CSTSTRING
+    (66) cst_expression -> . ID seen_id_or_func cst_expression2
+
+    RBRACKET        reduce using rule 123 (empty -> .)
+    ID              shift and go to state 127
+    IF              shift and go to state 120
+    RETURN          shift and go to state 137
+    PRINT           shift and go to state 126
+    SCAN            shift and go to state 140
+    INT             shift and go to state 6
+    DOUBLE          shift and go to state 8
+    STRING          shift and go to state 1
+    VOID            shift and go to state 3
+    FOR             shift and go to state 118
+    WHILE           shift and go to state 135
+    MOVE            shift and go to state 114
+    ROTATE          shift and go to state 117
+    ARC             shift and go to state 121
+    HOME            shift and go to state 106
+    PDOWN           shift and go to state 103
+    PUP             shift and go to state 115
+    SETP            shift and go to state 113
+    PCOLOR          shift and go to state 102
+    PSIZE           shift and go to state 107
+    PCLEAR          shift and go to state 112
+    (               shift and go to state 51
+    CSTDOUBLE       shift and go to state 45
+    CSTINT          shift and go to state 47
+    CSTSTRING       shift and go to state 44
+
+    pup                            shift and go to state 101
+    cst_expression                 shift and go to state 42
+    type                           shift and go to state 4
+    variable_declaration           shift and go to state 104
+    loophead                       shift and go to state 105
+    rotate                         shift and go to state 131
+    home                           shift and go to state 110
+    pdown                          shift and go to state 111
+    term                           shift and go to state 48
+    block_statement2               shift and go to state 119
+    read_statement                 shift and go to state 109
+    if_statement                   shift and go to state 136
+    pclear                         shift and go to state 122
+    loop_statement                 shift and go to state 133
+    pcolor                         shift and go to state 123
+    setp                           shift and go to state 124
+    arc                            shift and go to state 125
+    factor                         shift and go to state 41
+    empty                          shift and go to state 128
+    move                           shift and go to state 129
+    expression                     shift and go to state 50
+    print_statement                shift and go to state 130
+    statement                      shift and go to state 132
+    return                         shift and go to state 134
+    numeric_expression             shift and go to state 46
+    superexpression                shift and go to state 108
+    variable_assignment            shift and go to state 138
+    psize                          shift and go to state 116
+    geometry_statement             shift and go to state 139
+
+state 82
+
+    (24) parameter_list2 -> COMMA . parameter_list
+    (23) parameter_list -> . parameter parameter_list2
+    (26) parameter -> . type ID
+    (28) type -> . INT
+    (29) type -> . DOUBLE
+    (30) type -> . STRING
+    (31) type -> . VOID
+
+    INT             shift and go to state 6
+    DOUBLE          shift and go to state 8
+    STRING          shift and go to state 1
+    VOID            shift and go to state 3
+
+    parameter                      shift and go to state 53
+    parameter_list                 shift and go to state 141
+    type                           shift and go to state 57
+
+state 83
+
+    (23) parameter_list -> parameter parameter_list2 .
+
+    )               reduce using rule 23 (parameter_list -> parameter parameter_list2 .)
+
+
+state 84
+
+    (25) parameter_list2 -> empty .
+
+    )               reduce using rule 25 (parameter_list2 -> empty .)
+
+
+state 85
+
+    (17) method_declaration -> FUNC type ID seen_function_id ( method_declaration2 method_declaration3 .
+
+    FUNC            reduce using rule 17 (method_declaration -> FUNC type ID seen_function_id ( method_declaration2 method_declaration3 .)
+    MAIN            reduce using rule 17 (method_declaration -> FUNC type ID seen_function_id ( method_declaration2 method_declaration3 .)
+
+
+state 86
+
+    (21) method_declaration3 -> ) . seen_method_start block_statement
+    (22) seen_method_start -> .
+
+    LBRACKET        reduce using rule 22 (seen_method_start -> .)
+
+    seen_method_start              shift and go to state 142
+
+state 87
+
+    (26) parameter -> type ID .
+
+    COMMA           reduce using rule 26 (parameter -> type ID .)
+    )               reduce using rule 26 (parameter -> type ID .)
+
+
+state 88
+
+    (55) term2 -> geomOp term .
+
+    +               reduce using rule 55 (term2 -> geomOp term .)
+    -               reduce using rule 55 (term2 -> geomOp term .)
+    CEQ             reduce using rule 55 (term2 -> geomOp term .)
+    CGT             reduce using rule 55 (term2 -> geomOp term .)
+    CGE             reduce using rule 55 (term2 -> geomOp term .)
+    CLT             reduce using rule 55 (term2 -> geomOp term .)
+    CLE             reduce using rule 55 (term2 -> geomOp term .)
+    CNE             reduce using rule 55 (term2 -> geomOp term .)
+    AND             reduce using rule 55 (term2 -> geomOp term .)
+    OR              reduce using rule 55 (term2 -> geomOp term .)
+    COMMA           reduce using rule 55 (term2 -> geomOp term .)
+    SEMICOLON       reduce using rule 55 (term2 -> geomOp term .)
+    )               reduce using rule 55 (term2 -> geomOp term .)
+    RSQUARE         reduce using rule 55 (term2 -> geomOp term .)
+
+
+state 89
+
+    (68) cst_expression2 -> LSQUARE . superexpression RSQUARE
+    (33) superexpression -> . expression superexpression2
+    (38) expression -> . numeric_expression compare
+    (48) numeric_expression -> . term seen_term numeric_expression2
+    (54) term -> . factor term2
+    (59) factor -> . cst_expression
+    (60) factor -> . ( seen_lpar superexpression ) seen_rpar
+    (63) cst_expression -> . CSTDOUBLE
+    (64) cst_expression -> . CSTINT
+    (65) cst_expression -> . CSTSTRING
+    (66) cst_expression -> . ID seen_id_or_func cst_expression2
+
+    (               shift and go to state 51
+    CSTDOUBLE       shift and go to state 45
+    CSTINT          shift and go to state 47
+    CSTSTRING       shift and go to state 44
+    ID              shift and go to state 43
+
+    numeric_expression             shift and go to state 46
+    factor                         shift and go to state 41
+    term                           shift and go to state 48
+    cst_expression                 shift and go to state 42
+    superexpression                shift and go to state 143
+    expression                     shift and go to state 50
+
+state 90
+
+    (70) cst_expression2 -> empty .
+
+    *               reduce using rule 70 (cst_expression2 -> empty .)
+    /               reduce using rule 70 (cst_expression2 -> empty .)
+    +               reduce using rule 70 (cst_expression2 -> empty .)
+    -               reduce using rule 70 (cst_expression2 -> empty .)
+    CEQ             reduce using rule 70 (cst_expression2 -> empty .)
+    CGT             reduce using rule 70 (cst_expression2 -> empty .)
+    CGE             reduce using rule 70 (cst_expression2 -> empty .)
+    CLT             reduce using rule 70 (cst_expression2 -> empty .)
+    CLE             reduce using rule 70 (cst_expression2 -> empty .)
+    CNE             reduce using rule 70 (cst_expression2 -> empty .)
+    AND             reduce using rule 70 (cst_expression2 -> empty .)
+    OR              reduce using rule 70 (cst_expression2 -> empty .)
+    COMMA           reduce using rule 70 (cst_expression2 -> empty .)
+    SEMICOLON       reduce using rule 70 (cst_expression2 -> empty .)
+    )               reduce using rule 70 (cst_expression2 -> empty .)
+    RSQUARE         reduce using rule 70 (cst_expression2 -> empty .)
+
+
+state 91
+
+    (69) cst_expression2 -> ( . cst_expression3 )
+    (71) cst_expression3 -> . superexpression cst_expression4
+    (33) superexpression -> . expression superexpression2
+    (38) expression -> . numeric_expression compare
+    (48) numeric_expression -> . term seen_term numeric_expression2
+    (54) term -> . factor term2
+    (59) factor -> . cst_expression
+    (60) factor -> . ( seen_lpar superexpression ) seen_rpar
+    (63) cst_expression -> . CSTDOUBLE
+    (64) cst_expression -> . CSTINT
+    (65) cst_expression -> . CSTSTRING
+    (66) cst_expression -> . ID seen_id_or_func cst_expression2
+
+    (               shift and go to state 51
+    CSTDOUBLE       shift and go to state 45
+    CSTINT          shift and go to state 47
+    CSTSTRING       shift and go to state 44
+    ID              shift and go to state 43
+
+    numeric_expression             shift and go to state 46
+    factor                         shift and go to state 41
+    expression                     shift and go to state 50
+    cst_expression                 shift and go to state 42
+    superexpression                shift and go to state 145
+    cst_expression3                shift and go to state 144
+    term                           shift and go to state 48
+
+state 92
+
+    (66) cst_expression -> ID seen_id_or_func cst_expression2 .
+
+    *               reduce using rule 66 (cst_expression -> ID seen_id_or_func cst_expression2 .)
+    /               reduce using rule 66 (cst_expression -> ID seen_id_or_func cst_expression2 .)
+    +               reduce using rule 66 (cst_expression -> ID seen_id_or_func cst_expression2 .)
+    -               reduce using rule 66 (cst_expression -> ID seen_id_or_func cst_expression2 .)
+    CEQ             reduce using rule 66 (cst_expression -> ID seen_id_or_func cst_expression2 .)
+    CGT             reduce using rule 66 (cst_expression -> ID seen_id_or_func cst_expression2 .)
+    CGE             reduce using rule 66 (cst_expression -> ID seen_id_or_func cst_expression2 .)
+    CLT             reduce using rule 66 (cst_expression -> ID seen_id_or_func cst_expression2 .)
+    CLE             reduce using rule 66 (cst_expression -> ID seen_id_or_func cst_expression2 .)
+    CNE             reduce using rule 66 (cst_expression -> ID seen_id_or_func cst_expression2 .)
+    AND             reduce using rule 66 (cst_expression -> ID seen_id_or_func cst_expression2 .)
+    OR              reduce using rule 66 (cst_expression -> ID seen_id_or_func cst_expression2 .)
+    COMMA           reduce using rule 66 (cst_expression -> ID seen_id_or_func cst_expression2 .)
+    SEMICOLON       reduce using rule 66 (cst_expression -> ID seen_id_or_func cst_expression2 .)
+    )               reduce using rule 66 (cst_expression -> ID seen_id_or_func cst_expression2 .)
+    RSQUARE         reduce using rule 66 (cst_expression -> ID seen_id_or_func cst_expression2 .)
+
+
+state 93
+
+    (39) compare -> compare_symbols numeric_expression . seen_comp
+    (47) seen_comp -> .
+
+    AND             reduce using rule 47 (seen_comp -> .)
+    OR              reduce using rule 47 (seen_comp -> .)
+    COMMA           reduce using rule 47 (seen_comp -> .)
+    SEMICOLON       reduce using rule 47 (seen_comp -> .)
+    )               reduce using rule 47 (seen_comp -> .)
+    RSQUARE         reduce using rule 47 (seen_comp -> .)
+
+    seen_comp                      shift and go to state 146
+
+state 94
+
+    (50) numeric_expression2 -> arithOp . numeric_expression
+    (48) numeric_expression -> . term seen_term numeric_expression2
+    (54) term -> . factor term2
+    (59) factor -> . cst_expression
+    (60) factor -> . ( seen_lpar superexpression ) seen_rpar
+    (63) cst_expression -> . CSTDOUBLE
+    (64) cst_expression -> . CSTINT
+    (65) cst_expression -> . CSTSTRING
+    (66) cst_expression -> . ID seen_id_or_func cst_expression2
+
+    (               shift and go to state 51
+    CSTDOUBLE       shift and go to state 45
+    CSTINT          shift and go to state 47
+    CSTSTRING       shift and go to state 44
+    ID              shift and go to state 43
+
+    numeric_expression             shift and go to state 147
+    factor                         shift and go to state 41
+    term                           shift and go to state 48
+    cst_expression                 shift and go to state 42
+
+state 95
+
+    (52) arithOp -> + .
+
+    (               reduce using rule 52 (arithOp -> + .)
+    CSTDOUBLE       reduce using rule 52 (arithOp -> + .)
+    CSTINT          reduce using rule 52 (arithOp -> + .)
+    CSTSTRING       reduce using rule 52 (arithOp -> + .)
+    ID              reduce using rule 52 (arithOp -> + .)
+
+
+state 96
+
+    (48) numeric_expression -> term seen_term numeric_expression2 .
+
+    CEQ             reduce using rule 48 (numeric_expression -> term seen_term numeric_expression2 .)
+    CGT             reduce using rule 48 (numeric_expression -> term seen_term numeric_expression2 .)
+    CGE             reduce using rule 48 (numeric_expression -> term seen_term numeric_expression2 .)
+    CLT             reduce using rule 48 (numeric_expression -> term seen_term numeric_expression2 .)
+    CLE             reduce using rule 48 (numeric_expression -> term seen_term numeric_expression2 .)
+    CNE             reduce using rule 48 (numeric_expression -> term seen_term numeric_expression2 .)
+    AND             reduce using rule 48 (numeric_expression -> term seen_term numeric_expression2 .)
+    OR              reduce using rule 48 (numeric_expression -> term seen_term numeric_expression2 .)
+    )               reduce using rule 48 (numeric_expression -> term seen_term numeric_expression2 .)
+    COMMA           reduce using rule 48 (numeric_expression -> term seen_term numeric_expression2 .)
+    SEMICOLON       reduce using rule 48 (numeric_expression -> term seen_term numeric_expression2 .)
+    RSQUARE         reduce using rule 48 (numeric_expression -> term seen_term numeric_expression2 .)
+
+
+state 97
+
+    (53) arithOp -> - .
+
+    (               reduce using rule 53 (arithOp -> - .)
+    CSTDOUBLE       reduce using rule 53 (arithOp -> - .)
+    CSTINT          reduce using rule 53 (arithOp -> - .)
+    CSTSTRING       reduce using rule 53 (arithOp -> - .)
+    ID              reduce using rule 53 (arithOp -> - .)
+
+
+state 98
+
+    (51) numeric_expression2 -> empty .
+
+    CEQ             reduce using rule 51 (numeric_expression2 -> empty .)
+    CGT             reduce using rule 51 (numeric_expression2 -> empty .)
+    CGE             reduce using rule 51 (numeric_expression2 -> empty .)
+    CLT             reduce using rule 51 (numeric_expression2 -> empty .)
+    CLE             reduce using rule 51 (numeric_expression2 -> empty .)
+    CNE             reduce using rule 51 (numeric_expression2 -> empty .)
+    AND             reduce using rule 51 (numeric_expression2 -> empty .)
+    OR              reduce using rule 51 (numeric_expression2 -> empty .)
+    COMMA           reduce using rule 51 (numeric_expression2 -> empty .)
+    SEMICOLON       reduce using rule 51 (numeric_expression2 -> empty .)
+    )               reduce using rule 51 (numeric_expression2 -> empty .)
+    RSQUARE         reduce using rule 51 (numeric_expression2 -> empty .)
+
+
+state 99
+
+    (34) superexpression2 -> andor superexpression .
+
+    COMMA           reduce using rule 34 (superexpression2 -> andor superexpression .)
+    SEMICOLON       reduce using rule 34 (superexpression2 -> andor superexpression .)
+    )               reduce using rule 34 (superexpression2 -> andor superexpression .)
+    RSQUARE         reduce using rule 34 (superexpression2 -> andor superexpression .)
+
+
+state 100
+
+    (60) factor -> ( seen_lpar superexpression . ) seen_rpar
+
+    )               shift and go to state 148
+
+
+state 101
+
+    (98) geometry_statement -> pup .
+
+    SEMICOLON       reduce using rule 98 (geometry_statement -> pup .)
+
+
+state 102
+
+    (110) pcolor -> PCOLOR . ( superexpression COMMA superexpression COMMA superexpression )
+
+    (               shift and go to state 149
+
+
+state 103
+
+    (107) pdown -> PDOWN . ( )
+
+    (               shift and go to state 150
+
+
+state 104
+
+    (113) statement -> variable_declaration .
+
+    ID              reduce using rule 113 (statement -> variable_declaration .)
+    IF              reduce using rule 113 (statement -> variable_declaration .)
+    RETURN          reduce using rule 113 (statement -> variable_declaration .)
+    PRINT           reduce using rule 113 (statement -> variable_declaration .)
+    SCAN            reduce using rule 113 (statement -> variable_declaration .)
+    INT             reduce using rule 113 (statement -> variable_declaration .)
+    DOUBLE          reduce using rule 113 (statement -> variable_declaration .)
+    STRING          reduce using rule 113 (statement -> variable_declaration .)
+    VOID            reduce using rule 113 (statement -> variable_declaration .)
+    FOR             reduce using rule 113 (statement -> variable_declaration .)
+    WHILE           reduce using rule 113 (statement -> variable_declaration .)
+    MOVE            reduce using rule 113 (statement -> variable_declaration .)
+    ROTATE          reduce using rule 113 (statement -> variable_declaration .)
+    ARC             reduce using rule 113 (statement -> variable_declaration .)
+    HOME            reduce using rule 113 (statement -> variable_declaration .)
+    PDOWN           reduce using rule 113 (statement -> variable_declaration .)
+    PUP             reduce using rule 113 (statement -> variable_declaration .)
+    SETP            reduce using rule 113 (statement -> variable_declaration .)
+    PCOLOR          reduce using rule 113 (statement -> variable_declaration .)
+    PSIZE           reduce using rule 113 (statement -> variable_declaration .)
+    PCLEAR          reduce using rule 113 (statement -> variable_declaration .)
+    (               reduce using rule 113 (statement -> variable_declaration .)
+    CSTDOUBLE       reduce using rule 113 (statement -> variable_declaration .)
+    CSTINT          reduce using rule 113 (statement -> variable_declaration .)
+    CSTSTRING       reduce using rule 113 (statement -> variable_declaration .)
+    RBRACKET        reduce using rule 113 (statement -> variable_declaration .)
+
+
+state 105
+
+    (74) loop_statement -> loophead . block_statement seen_loop_block
+    (88) block_statement -> . LBRACKET block_statement2 RBRACKET
+
+    LBRACKET        shift and go to state 81
+
+    block_statement                shift and go to state 151
+
+state 106
+
+    (106) home -> HOME . ( )
+
+    (               shift and go to state 152
+
+
+state 107
+
+    (111) psize -> PSIZE . ( superexpression )
+
+    (               shift and go to state 153
+
+
+state 108
+
+    (115) statement -> superexpression . SEMICOLON
+
+    SEMICOLON       shift and go to state 154
+
+
+state 109
+
+    (120) statement -> read_statement .
+
+    ID              reduce using rule 120 (statement -> read_statement .)
+    IF              reduce using rule 120 (statement -> read_statement .)
+    RETURN          reduce using rule 120 (statement -> read_statement .)
+    PRINT           reduce using rule 120 (statement -> read_statement .)
+    SCAN            reduce using rule 120 (statement -> read_statement .)
+    INT             reduce using rule 120 (statement -> read_statement .)
+    DOUBLE          reduce using rule 120 (statement -> read_statement .)
+    STRING          reduce using rule 120 (statement -> read_statement .)
+    VOID            reduce using rule 120 (statement -> read_statement .)
+    FOR             reduce using rule 120 (statement -> read_statement .)
+    WHILE           reduce using rule 120 (statement -> read_statement .)
+    MOVE            reduce using rule 120 (statement -> read_statement .)
+    ROTATE          reduce using rule 120 (statement -> read_statement .)
+    ARC             reduce using rule 120 (statement -> read_statement .)
+    HOME            reduce using rule 120 (statement -> read_statement .)
+    PDOWN           reduce using rule 120 (statement -> read_statement .)
+    PUP             reduce using rule 120 (statement -> read_statement .)
+    SETP            reduce using rule 120 (statement -> read_statement .)
+    PCOLOR          reduce using rule 120 (statement -> read_statement .)
+    PSIZE           reduce using rule 120 (statement -> read_statement .)
+    PCLEAR          reduce using rule 120 (statement -> read_statement .)
+    (               reduce using rule 120 (statement -> read_statement .)
+    CSTDOUBLE       reduce using rule 120 (statement -> read_statement .)
+    CSTINT          reduce using rule 120 (statement -> read_statement .)
+    CSTSTRING       reduce using rule 120 (statement -> read_statement .)
+    RBRACKET        reduce using rule 120 (statement -> read_statement .)
+
+
+state 110
+
+    (96) geometry_statement -> home .
+
+    SEMICOLON       reduce using rule 96 (geometry_statement -> home .)
+
+
+state 111
+
+    (97) geometry_statement -> pdown .
+
+    SEMICOLON       reduce using rule 97 (geometry_statement -> pdown .)
+
+
+state 112
+
+    (112) pclear -> PCLEAR . ( )
+
+    (               shift and go to state 155
+
+
+state 113
+
+    (109) setp -> SETP . ( superexpression COMMA superexpression )
+
+    (               shift and go to state 156
+
+
+state 114
+
+    (103) move -> MOVE . ( superexpression )
+
+    (               shift and go to state 157
+
+
+state 115
+
+    (108) pup -> PUP . ( )
+
+    (               shift and go to state 158
+
+
+state 116
+
+    (101) geometry_statement -> psize .
+
+    SEMICOLON       reduce using rule 101 (geometry_statement -> psize .)
+
+
+state 117
+
+    (104) rotate -> ROTATE . ( superexpression )
+
+    (               shift and go to state 159
+
+
+state 118
+
+    (75) loophead -> FOR . ( variable_assignment seen_assignment1 SEMICOLON superexpression seen_for_exp SEMICOLON variable_assignment seen_assignment2 )
+
+    (               shift and go to state 160
+
+
+state 119
+
+    (88) block_statement -> LBRACKET block_statement2 . RBRACKET
+
+    RBRACKET        shift and go to state 161
+
+
+state 120
+
+    (83) if_statement -> IF . ( superexpression ) seen_condition block_statement seen_condition_block if_statement2
+
+    (               shift and go to state 162
+
+
+state 121
+
+    (105) arc -> ARC . ( superexpression COMMA superexpression )
+
+    (               shift and go to state 163
+
+
+state 122
+
+    (102) geometry_statement -> pclear .
+
+    SEMICOLON       reduce using rule 102 (geometry_statement -> pclear .)
+
+
+state 123
+
+    (100) geometry_statement -> pcolor .
+
+    SEMICOLON       reduce using rule 100 (geometry_statement -> pcolor .)
+
+
+state 124
+
+    (99) geometry_statement -> setp .
+
+    SEMICOLON       reduce using rule 99 (geometry_statement -> setp .)
+
+
+state 125
+
+    (95) geometry_statement -> arc .
+
+    SEMICOLON       reduce using rule 95 (geometry_statement -> arc .)
+
+
+state 126
+
+    (92) print_statement -> PRINT . ( superexpression ) SEMICOLON
+
+    (               shift and go to state 164
+
+
+state 127
+
+    (32) variable_assignment -> ID . = superexpression SEMICOLON
+    (66) cst_expression -> ID . seen_id_or_func cst_expression2
+    (67) seen_id_or_func -> .
+
+    =               shift and go to state 165
+    LSQUARE         reduce using rule 67 (seen_id_or_func -> .)
+    (               reduce using rule 67 (seen_id_or_func -> .)
+    *               reduce using rule 67 (seen_id_or_func -> .)
+    /               reduce using rule 67 (seen_id_or_func -> .)
+    +               reduce using rule 67 (seen_id_or_func -> .)
+    -               reduce using rule 67 (seen_id_or_func -> .)
+    CEQ             reduce using rule 67 (seen_id_or_func -> .)
+    CGT             reduce using rule 67 (seen_id_or_func -> .)
+    CGE             reduce using rule 67 (seen_id_or_func -> .)
+    CLT             reduce using rule 67 (seen_id_or_func -> .)
+    CLE             reduce using rule 67 (seen_id_or_func -> .)
+    CNE             reduce using rule 67 (seen_id_or_func -> .)
+    AND             reduce using rule 67 (seen_id_or_func -> .)
+    OR              reduce using rule 67 (seen_id_or_func -> .)
+    SEMICOLON       reduce using rule 67 (seen_id_or_func -> .)
+
+    seen_id_or_func                shift and go to state 63
+
+state 128
+
+    (90) block_statement2 -> empty .
+
+    RBRACKET        reduce using rule 90 (block_statement2 -> empty .)
+
+
+state 129
+
+    (93) geometry_statement -> move .
+
+    SEMICOLON       reduce using rule 93 (geometry_statement -> move .)
+
+
+state 130
+
+    (119) statement -> print_statement .
+
+    ID              reduce using rule 119 (statement -> print_statement .)
+    IF              reduce using rule 119 (statement -> print_statement .)
+    RETURN          reduce using rule 119 (statement -> print_statement .)
+    PRINT           reduce using rule 119 (statement -> print_statement .)
+    SCAN            reduce using rule 119 (statement -> print_statement .)
+    INT             reduce using rule 119 (statement -> print_statement .)
+    DOUBLE          reduce using rule 119 (statement -> print_statement .)
+    STRING          reduce using rule 119 (statement -> print_statement .)
+    VOID            reduce using rule 119 (statement -> print_statement .)
+    FOR             reduce using rule 119 (statement -> print_statement .)
+    WHILE           reduce using rule 119 (statement -> print_statement .)
+    MOVE            reduce using rule 119 (statement -> print_statement .)
+    ROTATE          reduce using rule 119 (statement -> print_statement .)
+    ARC             reduce using rule 119 (statement -> print_statement .)
+    HOME            reduce using rule 119 (statement -> print_statement .)
+    PDOWN           reduce using rule 119 (statement -> print_statement .)
+    PUP             reduce using rule 119 (statement -> print_statement .)
+    SETP            reduce using rule 119 (statement -> print_statement .)
+    PCOLOR          reduce using rule 119 (statement -> print_statement .)
+    PSIZE           reduce using rule 119 (statement -> print_statement .)
+    PCLEAR          reduce using rule 119 (statement -> print_statement .)
+    (               reduce using rule 119 (statement -> print_statement .)
+    CSTDOUBLE       reduce using rule 119 (statement -> print_statement .)
+    CSTINT          reduce using rule 119 (statement -> print_statement .)
+    CSTSTRING       reduce using rule 119 (statement -> print_statement .)
+    RBRACKET        reduce using rule 119 (statement -> print_statement .)
+
+
+state 131
+
+    (94) geometry_statement -> rotate .
+
+    SEMICOLON       reduce using rule 94 (geometry_statement -> rotate .)
+
+
+state 132
+
+    (89) block_statement2 -> statement . block_statement2
+    (89) block_statement2 -> . statement block_statement2
+    (90) block_statement2 -> . empty
+    (113) statement -> . variable_declaration
+    (114) statement -> . variable_assignment
+    (115) statement -> . superexpression SEMICOLON
+    (116) statement -> . if_statement
+    (117) statement -> . loop_statement
+    (118) statement -> . return
+    (119) statement -> . print_statement
+    (120) statement -> . read_statement
+    (121) statement -> . geometry_statement SEMICOLON
+    (123) empty -> .
+    (7) variable_declaration -> . type variable_declaration2
+    (32) variable_assignment -> . ID = superexpression SEMICOLON
+    (33) superexpression -> . expression superexpression2
+    (83) if_statement -> . IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2
+    (74) loop_statement -> . loophead block_statement seen_loop_block
+    (122) return -> . RETURN superexpression SEMICOLON
+    (92) print_statement -> . PRINT ( superexpression ) SEMICOLON
+    (91) read_statement -> . SCAN ( ID ) SEMICOLON
+    (93) geometry_statement -> . move
+    (94) geometry_statement -> . rotate
+    (95) geometry_statement -> . arc
+    (96) geometry_statement -> . home
+    (97) geometry_statement -> . pdown
+    (98) geometry_statement -> . pup
+    (99) geometry_statement -> . setp
+    (100) geometry_statement -> . pcolor
+    (101) geometry_statement -> . psize
+    (102) geometry_statement -> . pclear
+    (28) type -> . INT
+    (29) type -> . DOUBLE
+    (30) type -> . STRING
+    (31) type -> . VOID
+    (38) expression -> . numeric_expression compare
+    (75) loophead -> . FOR ( variable_assignment seen_assignment1 SEMICOLON superexpression seen_for_exp SEMICOLON variable_assignment seen_assignment2 )
+    (76) loophead -> . WHILE ( seen_while_LPAR superexpression seen_while_exp )
+    (103) move -> . MOVE ( superexpression )
+    (104) rotate -> . ROTATE ( superexpression )
+    (105) arc -> . ARC ( superexpression COMMA superexpression )
+    (106) home -> . HOME ( )
+    (107) pdown -> . PDOWN ( )
+    (108) pup -> . PUP ( )
+    (109) setp -> . SETP ( superexpression COMMA superexpression )
+    (110) pcolor -> . PCOLOR ( superexpression COMMA superexpression COMMA superexpression )
+    (111) psize -> . PSIZE ( superexpression )
+    (112) pclear -> . PCLEAR ( )
+    (48) numeric_expression -> . term seen_term numeric_expression2
+    (54) term -> . factor term2
+    (59) factor -> . cst_expression
+    (60) factor -> . ( seen_lpar superexpression ) seen_rpar
+    (63) cst_expression -> . CSTDOUBLE
+    (64) cst_expression -> . CSTINT
+    (65) cst_expression -> . CSTSTRING
+    (66) cst_expression -> . ID seen_id_or_func cst_expression2
+
+    RBRACKET        reduce using rule 123 (empty -> .)
+    ID              shift and go to state 127
+    IF              shift and go to state 120
+    RETURN          shift and go to state 137
+    PRINT           shift and go to state 126
+    SCAN            shift and go to state 140
+    INT             shift and go to state 6
+    DOUBLE          shift and go to state 8
+    STRING          shift and go to state 1
+    VOID            shift and go to state 3
+    FOR             shift and go to state 118
+    WHILE           shift and go to state 135
+    MOVE            shift and go to state 114
+    ROTATE          shift and go to state 117
+    ARC             shift and go to state 121
+    HOME            shift and go to state 106
+    PDOWN           shift and go to state 103
+    PUP             shift and go to state 115
+    SETP            shift and go to state 113
+    PCOLOR          shift and go to state 102
+    PSIZE           shift and go to state 107
+    PCLEAR          shift and go to state 112
+    (               shift and go to state 51
+    CSTDOUBLE       shift and go to state 45
+    CSTINT          shift and go to state 47
+    CSTSTRING       shift and go to state 44
+
+    pup                            shift and go to state 101
+    cst_expression                 shift and go to state 42
+    type                           shift and go to state 4
+    variable_declaration           shift and go to state 104
+    loophead                       shift and go to state 105
+    rotate                         shift and go to state 131
+    home                           shift and go to state 110
+    pdown                          shift and go to state 111
+    term                           shift and go to state 48
+    block_statement2               shift and go to state 166
+    read_statement                 shift and go to state 109
+    if_statement                   shift and go to state 136
+    pclear                         shift and go to state 122
+    loop_statement                 shift and go to state 133
+    pcolor                         shift and go to state 123
+    setp                           shift and go to state 124
+    arc                            shift and go to state 125
+    factor                         shift and go to state 41
+    empty                          shift and go to state 128
+    move                           shift and go to state 129
+    expression                     shift and go to state 50
+    print_statement                shift and go to state 130
+    statement                      shift and go to state 132
+    return                         shift and go to state 134
+    numeric_expression             shift and go to state 46
+    superexpression                shift and go to state 108
+    variable_assignment            shift and go to state 138
+    psize                          shift and go to state 116
+    geometry_statement             shift and go to state 139
+
+state 133
+
+    (117) statement -> loop_statement .
+
+    ID              reduce using rule 117 (statement -> loop_statement .)
+    IF              reduce using rule 117 (statement -> loop_statement .)
+    RETURN          reduce using rule 117 (statement -> loop_statement .)
+    PRINT           reduce using rule 117 (statement -> loop_statement .)
+    SCAN            reduce using rule 117 (statement -> loop_statement .)
+    INT             reduce using rule 117 (statement -> loop_statement .)
+    DOUBLE          reduce using rule 117 (statement -> loop_statement .)
+    STRING          reduce using rule 117 (statement -> loop_statement .)
+    VOID            reduce using rule 117 (statement -> loop_statement .)
+    FOR             reduce using rule 117 (statement -> loop_statement .)
+    WHILE           reduce using rule 117 (statement -> loop_statement .)
+    MOVE            reduce using rule 117 (statement -> loop_statement .)
+    ROTATE          reduce using rule 117 (statement -> loop_statement .)
+    ARC             reduce using rule 117 (statement -> loop_statement .)
+    HOME            reduce using rule 117 (statement -> loop_statement .)
+    PDOWN           reduce using rule 117 (statement -> loop_statement .)
+    PUP             reduce using rule 117 (statement -> loop_statement .)
+    SETP            reduce using rule 117 (statement -> loop_statement .)
+    PCOLOR          reduce using rule 117 (statement -> loop_statement .)
+    PSIZE           reduce using rule 117 (statement -> loop_statement .)
+    PCLEAR          reduce using rule 117 (statement -> loop_statement .)
+    (               reduce using rule 117 (statement -> loop_statement .)
+    CSTDOUBLE       reduce using rule 117 (statement -> loop_statement .)
+    CSTINT          reduce using rule 117 (statement -> loop_statement .)
+    CSTSTRING       reduce using rule 117 (statement -> loop_statement .)
+    RBRACKET        reduce using rule 117 (statement -> loop_statement .)
+
+
+state 134
+
+    (118) statement -> return .
+
+    ID              reduce using rule 118 (statement -> return .)
+    IF              reduce using rule 118 (statement -> return .)
+    RETURN          reduce using rule 118 (statement -> return .)
+    PRINT           reduce using rule 118 (statement -> return .)
+    SCAN            reduce using rule 118 (statement -> return .)
+    INT             reduce using rule 118 (statement -> return .)
+    DOUBLE          reduce using rule 118 (statement -> return .)
+    STRING          reduce using rule 118 (statement -> return .)
+    VOID            reduce using rule 118 (statement -> return .)
+    FOR             reduce using rule 118 (statement -> return .)
+    WHILE           reduce using rule 118 (statement -> return .)
+    MOVE            reduce using rule 118 (statement -> return .)
+    ROTATE          reduce using rule 118 (statement -> return .)
+    ARC             reduce using rule 118 (statement -> return .)
+    HOME            reduce using rule 118 (statement -> return .)
+    PDOWN           reduce using rule 118 (statement -> return .)
+    PUP             reduce using rule 118 (statement -> return .)
+    SETP            reduce using rule 118 (statement -> return .)
+    PCOLOR          reduce using rule 118 (statement -> return .)
+    PSIZE           reduce using rule 118 (statement -> return .)
+    PCLEAR          reduce using rule 118 (statement -> return .)
+    (               reduce using rule 118 (statement -> return .)
+    CSTDOUBLE       reduce using rule 118 (statement -> return .)
+    CSTINT          reduce using rule 118 (statement -> return .)
+    CSTSTRING       reduce using rule 118 (statement -> return .)
+    RBRACKET        reduce using rule 118 (statement -> return .)
+
+
+state 135
+
+    (76) loophead -> WHILE . ( seen_while_LPAR superexpression seen_while_exp )
+
+    (               shift and go to state 167
+
+
+state 136
+
+    (116) statement -> if_statement .
+
+    ID              reduce using rule 116 (statement -> if_statement .)
+    IF              reduce using rule 116 (statement -> if_statement .)
+    RETURN          reduce using rule 116 (statement -> if_statement .)
+    PRINT           reduce using rule 116 (statement -> if_statement .)
+    SCAN            reduce using rule 116 (statement -> if_statement .)
+    INT             reduce using rule 116 (statement -> if_statement .)
+    DOUBLE          reduce using rule 116 (statement -> if_statement .)
+    STRING          reduce using rule 116 (statement -> if_statement .)
+    VOID            reduce using rule 116 (statement -> if_statement .)
+    FOR             reduce using rule 116 (statement -> if_statement .)
+    WHILE           reduce using rule 116 (statement -> if_statement .)
+    MOVE            reduce using rule 116 (statement -> if_statement .)
+    ROTATE          reduce using rule 116 (statement -> if_statement .)
+    ARC             reduce using rule 116 (statement -> if_statement .)
+    HOME            reduce using rule 116 (statement -> if_statement .)
+    PDOWN           reduce using rule 116 (statement -> if_statement .)
+    PUP             reduce using rule 116 (statement -> if_statement .)
+    SETP            reduce using rule 116 (statement -> if_statement .)
+    PCOLOR          reduce using rule 116 (statement -> if_statement .)
+    PSIZE           reduce using rule 116 (statement -> if_statement .)
+    PCLEAR          reduce using rule 116 (statement -> if_statement .)
+    (               reduce using rule 116 (statement -> if_statement .)
+    CSTDOUBLE       reduce using rule 116 (statement -> if_statement .)
+    CSTINT          reduce using rule 116 (statement -> if_statement .)
+    CSTSTRING       reduce using rule 116 (statement -> if_statement .)
+    RBRACKET        reduce using rule 116 (statement -> if_statement .)
+
+
+state 137
+
+    (122) return -> RETURN . superexpression SEMICOLON
+    (33) superexpression -> . expression superexpression2
+    (38) expression -> . numeric_expression compare
+    (48) numeric_expression -> . term seen_term numeric_expression2
+    (54) term -> . factor term2
+    (59) factor -> . cst_expression
+    (60) factor -> . ( seen_lpar superexpression ) seen_rpar
+    (63) cst_expression -> . CSTDOUBLE
+    (64) cst_expression -> . CSTINT
+    (65) cst_expression -> . CSTSTRING
+    (66) cst_expression -> . ID seen_id_or_func cst_expression2
+
+    (               shift and go to state 51
+    CSTDOUBLE       shift and go to state 45
+    CSTINT          shift and go to state 47
+    CSTSTRING       shift and go to state 44
+    ID              shift and go to state 43
+
+    numeric_expression             shift and go to state 46
+    factor                         shift and go to state 41
+    term                           shift and go to state 48
+    cst_expression                 shift and go to state 42
+    superexpression                shift and go to state 168
+    expression                     shift and go to state 50
+
+state 138
+
+    (114) statement -> variable_assignment .
+
+    ID              reduce using rule 114 (statement -> variable_assignment .)
+    IF              reduce using rule 114 (statement -> variable_assignment .)
+    RETURN          reduce using rule 114 (statement -> variable_assignment .)
+    PRINT           reduce using rule 114 (statement -> variable_assignment .)
+    SCAN            reduce using rule 114 (statement -> variable_assignment .)
+    INT             reduce using rule 114 (statement -> variable_assignment .)
+    DOUBLE          reduce using rule 114 (statement -> variable_assignment .)
+    STRING          reduce using rule 114 (statement -> variable_assignment .)
+    VOID            reduce using rule 114 (statement -> variable_assignment .)
+    FOR             reduce using rule 114 (statement -> variable_assignment .)
+    WHILE           reduce using rule 114 (statement -> variable_assignment .)
+    MOVE            reduce using rule 114 (statement -> variable_assignment .)
+    ROTATE          reduce using rule 114 (statement -> variable_assignment .)
+    ARC             reduce using rule 114 (statement -> variable_assignment .)
+    HOME            reduce using rule 114 (statement -> variable_assignment .)
+    PDOWN           reduce using rule 114 (statement -> variable_assignment .)
+    PUP             reduce using rule 114 (statement -> variable_assignment .)
+    SETP            reduce using rule 114 (statement -> variable_assignment .)
+    PCOLOR          reduce using rule 114 (statement -> variable_assignment .)
+    PSIZE           reduce using rule 114 (statement -> variable_assignment .)
+    PCLEAR          reduce using rule 114 (statement -> variable_assignment .)
+    (               reduce using rule 114 (statement -> variable_assignment .)
+    CSTDOUBLE       reduce using rule 114 (statement -> variable_assignment .)
+    CSTINT          reduce using rule 114 (statement -> variable_assignment .)
+    CSTSTRING       reduce using rule 114 (statement -> variable_assignment .)
+    RBRACKET        reduce using rule 114 (statement -> variable_assignment .)
+
+
+state 139
+
+    (121) statement -> geometry_statement . SEMICOLON
+
+    SEMICOLON       shift and go to state 169
+
+
+state 140
+
+    (91) read_statement -> SCAN . ( ID ) SEMICOLON
+
+    (               shift and go to state 170
+
+
+state 141
+
+    (24) parameter_list2 -> COMMA parameter_list .
+
+    )               reduce using rule 24 (parameter_list2 -> COMMA parameter_list .)
+
+
+state 142
+
+    (21) method_declaration3 -> ) seen_method_start . block_statement
+    (88) block_statement -> . LBRACKET block_statement2 RBRACKET
+
+    LBRACKET        shift and go to state 81
+
+    block_statement                shift and go to state 171
+
+state 143
+
+    (68) cst_expression2 -> LSQUARE superexpression . RSQUARE
+
+    RSQUARE         shift and go to state 172
+
+
+state 144
+
+    (69) cst_expression2 -> ( cst_expression3 . )
+
+    )               shift and go to state 173
+
+
+state 145
+
+    (71) cst_expression3 -> superexpression . cst_expression4
+    (72) cst_expression4 -> . COMMA cst_expression3
+    (73) cst_expression4 -> . empty
+    (123) empty -> .
+
+    COMMA           shift and go to state 174
+    )               reduce using rule 123 (empty -> .)
+
+    empty                          shift and go to state 175
+    cst_expression4                shift and go to state 176
+
+state 146
+
+    (39) compare -> compare_symbols numeric_expression seen_comp .
+
+    AND             reduce using rule 39 (compare -> compare_symbols numeric_expression seen_comp .)
+    OR              reduce using rule 39 (compare -> compare_symbols numeric_expression seen_comp .)
+    COMMA           reduce using rule 39 (compare -> compare_symbols numeric_expression seen_comp .)
+    SEMICOLON       reduce using rule 39 (compare -> compare_symbols numeric_expression seen_comp .)
+    )               reduce using rule 39 (compare -> compare_symbols numeric_expression seen_comp .)
+    RSQUARE         reduce using rule 39 (compare -> compare_symbols numeric_expression seen_comp .)
+
+
+state 147
+
+    (50) numeric_expression2 -> arithOp numeric_expression .
+
+    CEQ             reduce using rule 50 (numeric_expression2 -> arithOp numeric_expression .)
+    CGT             reduce using rule 50 (numeric_expression2 -> arithOp numeric_expression .)
+    CGE             reduce using rule 50 (numeric_expression2 -> arithOp numeric_expression .)
+    CLT             reduce using rule 50 (numeric_expression2 -> arithOp numeric_expression .)
+    CLE             reduce using rule 50 (numeric_expression2 -> arithOp numeric_expression .)
+    CNE             reduce using rule 50 (numeric_expression2 -> arithOp numeric_expression .)
+    AND             reduce using rule 50 (numeric_expression2 -> arithOp numeric_expression .)
+    OR              reduce using rule 50 (numeric_expression2 -> arithOp numeric_expression .)
+    COMMA           reduce using rule 50 (numeric_expression2 -> arithOp numeric_expression .)
+    SEMICOLON       reduce using rule 50 (numeric_expression2 -> arithOp numeric_expression .)
+    )               reduce using rule 50 (numeric_expression2 -> arithOp numeric_expression .)
+    RSQUARE         reduce using rule 50 (numeric_expression2 -> arithOp numeric_expression .)
+
+
+state 148
+
+    (60) factor -> ( seen_lpar superexpression ) . seen_rpar
+    (62) seen_rpar -> .
+
+    *               reduce using rule 62 (seen_rpar -> .)
+    /               reduce using rule 62 (seen_rpar -> .)
+    +               reduce using rule 62 (seen_rpar -> .)
+    -               reduce using rule 62 (seen_rpar -> .)
+    CEQ             reduce using rule 62 (seen_rpar -> .)
+    CGT             reduce using rule 62 (seen_rpar -> .)
+    CGE             reduce using rule 62 (seen_rpar -> .)
+    CLT             reduce using rule 62 (seen_rpar -> .)
+    CLE             reduce using rule 62 (seen_rpar -> .)
+    CNE             reduce using rule 62 (seen_rpar -> .)
+    AND             reduce using rule 62 (seen_rpar -> .)
+    OR              reduce using rule 62 (seen_rpar -> .)
+    COMMA           reduce using rule 62 (seen_rpar -> .)
+    SEMICOLON       reduce using rule 62 (seen_rpar -> .)
+    )               reduce using rule 62 (seen_rpar -> .)
+    RSQUARE         reduce using rule 62 (seen_rpar -> .)
+
+    seen_rpar                      shift and go to state 177
+
+state 149
+
+    (110) pcolor -> PCOLOR ( . superexpression COMMA superexpression COMMA superexpression )
+    (33) superexpression -> . expression superexpression2
+    (38) expression -> . numeric_expression compare
+    (48) numeric_expression -> . term seen_term numeric_expression2
+    (54) term -> . factor term2
+    (59) factor -> . cst_expression
+    (60) factor -> . ( seen_lpar superexpression ) seen_rpar
+    (63) cst_expression -> . CSTDOUBLE
+    (64) cst_expression -> . CSTINT
+    (65) cst_expression -> . CSTSTRING
+    (66) cst_expression -> . ID seen_id_or_func cst_expression2
+
+    (               shift and go to state 51
+    CSTDOUBLE       shift and go to state 45
+    CSTINT          shift and go to state 47
+    CSTSTRING       shift and go to state 44
+    ID              shift and go to state 43
+
+    numeric_expression             shift and go to state 46
+    factor                         shift and go to state 41
+    term                           shift and go to state 48
+    cst_expression                 shift and go to state 42
+    superexpression                shift and go to state 178
+    expression                     shift and go to state 50
+
+state 150
+
+    (107) pdown -> PDOWN ( . )
+
+    )               shift and go to state 179
+
+
+state 151
+
+    (74) loop_statement -> loophead block_statement . seen_loop_block
+    (82) seen_loop_block -> .
+
+    ID              reduce using rule 82 (seen_loop_block -> .)
+    IF              reduce using rule 82 (seen_loop_block -> .)
+    RETURN          reduce using rule 82 (seen_loop_block -> .)
+    PRINT           reduce using rule 82 (seen_loop_block -> .)
+    SCAN            reduce using rule 82 (seen_loop_block -> .)
+    INT             reduce using rule 82 (seen_loop_block -> .)
+    DOUBLE          reduce using rule 82 (seen_loop_block -> .)
+    STRING          reduce using rule 82 (seen_loop_block -> .)
+    VOID            reduce using rule 82 (seen_loop_block -> .)
+    FOR             reduce using rule 82 (seen_loop_block -> .)
+    WHILE           reduce using rule 82 (seen_loop_block -> .)
+    MOVE            reduce using rule 82 (seen_loop_block -> .)
+    ROTATE          reduce using rule 82 (seen_loop_block -> .)
+    ARC             reduce using rule 82 (seen_loop_block -> .)
+    HOME            reduce using rule 82 (seen_loop_block -> .)
+    PDOWN           reduce using rule 82 (seen_loop_block -> .)
+    PUP             reduce using rule 82 (seen_loop_block -> .)
+    SETP            reduce using rule 82 (seen_loop_block -> .)
+    PCOLOR          reduce using rule 82 (seen_loop_block -> .)
+    PSIZE           reduce using rule 82 (seen_loop_block -> .)
+    PCLEAR          reduce using rule 82 (seen_loop_block -> .)
+    (               reduce using rule 82 (seen_loop_block -> .)
+    CSTDOUBLE       reduce using rule 82 (seen_loop_block -> .)
+    CSTINT          reduce using rule 82 (seen_loop_block -> .)
+    CSTSTRING       reduce using rule 82 (seen_loop_block -> .)
+    RBRACKET        reduce using rule 82 (seen_loop_block -> .)
+
+    seen_loop_block                shift and go to state 180
+
+state 152
+
+    (106) home -> HOME ( . )
+
+    )               shift and go to state 181
+
+
+state 153
+
+    (111) psize -> PSIZE ( . superexpression )
+    (33) superexpression -> . expression superexpression2
+    (38) expression -> . numeric_expression compare
+    (48) numeric_expression -> . term seen_term numeric_expression2
+    (54) term -> . factor term2
+    (59) factor -> . cst_expression
+    (60) factor -> . ( seen_lpar superexpression ) seen_rpar
+    (63) cst_expression -> . CSTDOUBLE
+    (64) cst_expression -> . CSTINT
+    (65) cst_expression -> . CSTSTRING
+    (66) cst_expression -> . ID seen_id_or_func cst_expression2
+
+    (               shift and go to state 51
+    CSTDOUBLE       shift and go to state 45
+    CSTINT          shift and go to state 47
+    CSTSTRING       shift and go to state 44
+    ID              shift and go to state 43
+
+    numeric_expression             shift and go to state 46
+    factor                         shift and go to state 41
+    term                           shift and go to state 48
+    cst_expression                 shift and go to state 42
+    superexpression                shift and go to state 182
+    expression                     shift and go to state 50
+
+state 154
+
+    (115) statement -> superexpression SEMICOLON .
+
+    ID              reduce using rule 115 (statement -> superexpression SEMICOLON .)
+    IF              reduce using rule 115 (statement -> superexpression SEMICOLON .)
+    RETURN          reduce using rule 115 (statement -> superexpression SEMICOLON .)
+    PRINT           reduce using rule 115 (statement -> superexpression SEMICOLON .)
+    SCAN            reduce using rule 115 (statement -> superexpression SEMICOLON .)
+    INT             reduce using rule 115 (statement -> superexpression SEMICOLON .)
+    DOUBLE          reduce using rule 115 (statement -> superexpression SEMICOLON .)
+    STRING          reduce using rule 115 (statement -> superexpression SEMICOLON .)
+    VOID            reduce using rule 115 (statement -> superexpression SEMICOLON .)
+    FOR             reduce using rule 115 (statement -> superexpression SEMICOLON .)
+    WHILE           reduce using rule 115 (statement -> superexpression SEMICOLON .)
+    MOVE            reduce using rule 115 (statement -> superexpression SEMICOLON .)
+    ROTATE          reduce using rule 115 (statement -> superexpression SEMICOLON .)
+    ARC             reduce using rule 115 (statement -> superexpression SEMICOLON .)
+    HOME            reduce using rule 115 (statement -> superexpression SEMICOLON .)
+    PDOWN           reduce using rule 115 (statement -> superexpression SEMICOLON .)
+    PUP             reduce using rule 115 (statement -> superexpression SEMICOLON .)
+    SETP            reduce using rule 115 (statement -> superexpression SEMICOLON .)
+    PCOLOR          reduce using rule 115 (statement -> superexpression SEMICOLON .)
+    PSIZE           reduce using rule 115 (statement -> superexpression SEMICOLON .)
+    PCLEAR          reduce using rule 115 (statement -> superexpression SEMICOLON .)
+    (               reduce using rule 115 (statement -> superexpression SEMICOLON .)
+    CSTDOUBLE       reduce using rule 115 (statement -> superexpression SEMICOLON .)
+    CSTINT          reduce using rule 115 (statement -> superexpression SEMICOLON .)
+    CSTSTRING       reduce using rule 115 (statement -> superexpression SEMICOLON .)
+    RBRACKET        reduce using rule 115 (statement -> superexpression SEMICOLON .)
+
+
+state 155
+
+    (112) pclear -> PCLEAR ( . )
+
+    )               shift and go to state 183
+
+
+state 156
+
+    (109) setp -> SETP ( . superexpression COMMA superexpression )
+    (33) superexpression -> . expression superexpression2
+    (38) expression -> . numeric_expression compare
+    (48) numeric_expression -> . term seen_term numeric_expression2
+    (54) term -> . factor term2
+    (59) factor -> . cst_expression
+    (60) factor -> . ( seen_lpar superexpression ) seen_rpar
+    (63) cst_expression -> . CSTDOUBLE
+    (64) cst_expression -> . CSTINT
+    (65) cst_expression -> . CSTSTRING
+    (66) cst_expression -> . ID seen_id_or_func cst_expression2
+
+    (               shift and go to state 51
+    CSTDOUBLE       shift and go to state 45
+    CSTINT          shift and go to state 47
+    CSTSTRING       shift and go to state 44
+    ID              shift and go to state 43
+
+    numeric_expression             shift and go to state 46
+    factor                         shift and go to state 41
+    term                           shift and go to state 48
+    cst_expression                 shift and go to state 42
+    superexpression                shift and go to state 184
+    expression                     shift and go to state 50
+
+state 157
+
+    (103) move -> MOVE ( . superexpression )
+    (33) superexpression -> . expression superexpression2
+    (38) expression -> . numeric_expression compare
+    (48) numeric_expression -> . term seen_term numeric_expression2
+    (54) term -> . factor term2
+    (59) factor -> . cst_expression
+    (60) factor -> . ( seen_lpar superexpression ) seen_rpar
+    (63) cst_expression -> . CSTDOUBLE
+    (64) cst_expression -> . CSTINT
+    (65) cst_expression -> . CSTSTRING
+    (66) cst_expression -> . ID seen_id_or_func cst_expression2
+
+    (               shift and go to state 51
+    CSTDOUBLE       shift and go to state 45
+    CSTINT          shift and go to state 47
+    CSTSTRING       shift and go to state 44
+    ID              shift and go to state 43
+
+    numeric_expression             shift and go to state 46
+    factor                         shift and go to state 41
+    term                           shift and go to state 48
+    cst_expression                 shift and go to state 42
+    superexpression                shift and go to state 185
+    expression                     shift and go to state 50
+
+state 158
+
+    (108) pup -> PUP ( . )
+
+    )               shift and go to state 186
+
+
+state 159
+
+    (104) rotate -> ROTATE ( . superexpression )
+    (33) superexpression -> . expression superexpression2
+    (38) expression -> . numeric_expression compare
+    (48) numeric_expression -> . term seen_term numeric_expression2
+    (54) term -> . factor term2
+    (59) factor -> . cst_expression
+    (60) factor -> . ( seen_lpar superexpression ) seen_rpar
+    (63) cst_expression -> . CSTDOUBLE
+    (64) cst_expression -> . CSTINT
+    (65) cst_expression -> . CSTSTRING
+    (66) cst_expression -> . ID seen_id_or_func cst_expression2
+
+    (               shift and go to state 51
+    CSTDOUBLE       shift and go to state 45
+    CSTINT          shift and go to state 47
+    CSTSTRING       shift and go to state 44
+    ID              shift and go to state 43
+
+    numeric_expression             shift and go to state 46
+    factor                         shift and go to state 41
+    term                           shift and go to state 48
+    cst_expression                 shift and go to state 42
+    superexpression                shift and go to state 187
+    expression                     shift and go to state 50
+
+state 160
+
+    (75) loophead -> FOR ( . variable_assignment seen_assignment1 SEMICOLON superexpression seen_for_exp SEMICOLON variable_assignment seen_assignment2 )
+    (32) variable_assignment -> . ID = superexpression SEMICOLON
+
+    ID              shift and go to state 189
+
+    variable_assignment            shift and go to state 188
+
+state 161
+
+    (88) block_statement -> LBRACKET block_statement2 RBRACKET .
+
+    FUNC            reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    MAIN            reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    $end            reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    ID              reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    IF              reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    RETURN          reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    PRINT           reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    SCAN            reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    INT             reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    DOUBLE          reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    STRING          reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    VOID            reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    FOR             reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    WHILE           reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    MOVE            reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    ROTATE          reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    ARC             reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    HOME            reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    PDOWN           reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    PUP             reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    SETP            reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    PCOLOR          reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    PSIZE           reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    PCLEAR          reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    (               reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    CSTDOUBLE       reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    CSTINT          reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    CSTSTRING       reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    RBRACKET        reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+    ELSE            reduce using rule 88 (block_statement -> LBRACKET block_statement2 RBRACKET .)
+
+
+state 162
+
+    (83) if_statement -> IF ( . superexpression ) seen_condition block_statement seen_condition_block if_statement2
+    (33) superexpression -> . expression superexpression2
+    (38) expression -> . numeric_expression compare
+    (48) numeric_expression -> . term seen_term numeric_expression2
+    (54) term -> . factor term2
+    (59) factor -> . cst_expression
+    (60) factor -> . ( seen_lpar superexpression ) seen_rpar
+    (63) cst_expression -> . CSTDOUBLE
+    (64) cst_expression -> . CSTINT
+    (65) cst_expression -> . CSTSTRING
+    (66) cst_expression -> . ID seen_id_or_func cst_expression2
+
+    (               shift and go to state 51
+    CSTDOUBLE       shift and go to state 45
+    CSTINT          shift and go to state 47
+    CSTSTRING       shift and go to state 44
+    ID              shift and go to state 43
+
+    numeric_expression             shift and go to state 46
+    factor                         shift and go to state 41
+    expression                     shift and go to state 50
+    cst_expression                 shift and go to state 42
+    superexpression                shift and go to state 190
+    term                           shift and go to state 48
+
+state 163
+
+    (105) arc -> ARC ( . superexpression COMMA superexpression )
+    (33) superexpression -> . expression superexpression2
+    (38) expression -> . numeric_expression compare
+    (48) numeric_expression -> . term seen_term numeric_expression2
+    (54) term -> . factor term2
+    (59) factor -> . cst_expression
+    (60) factor -> . ( seen_lpar superexpression ) seen_rpar
+    (63) cst_expression -> . CSTDOUBLE
+    (64) cst_expression -> . CSTINT
+    (65) cst_expression -> . CSTSTRING
+    (66) cst_expression -> . ID seen_id_or_func cst_expression2
+
+    (               shift and go to state 51
+    CSTDOUBLE       shift and go to state 45
+    CSTINT          shift and go to state 47
+    CSTSTRING       shift and go to state 44
+    ID              shift and go to state 43
+
+    numeric_expression             shift and go to state 46
+    factor                         shift and go to state 41
+    term                           shift and go to state 48
+    cst_expression                 shift and go to state 42
+    superexpression                shift and go to state 191
+    expression                     shift and go to state 50
+
+state 164
+
+    (92) print_statement -> PRINT ( . superexpression ) SEMICOLON
+    (33) superexpression -> . expression superexpression2
+    (38) expression -> . numeric_expression compare
+    (48) numeric_expression -> . term seen_term numeric_expression2
+    (54) term -> . factor term2
+    (59) factor -> . cst_expression
+    (60) factor -> . ( seen_lpar superexpression ) seen_rpar
+    (63) cst_expression -> . CSTDOUBLE
+    (64) cst_expression -> . CSTINT
+    (65) cst_expression -> . CSTSTRING
+    (66) cst_expression -> . ID seen_id_or_func cst_expression2
+
+    (               shift and go to state 51
+    CSTDOUBLE       shift and go to state 45
+    CSTINT          shift and go to state 47
+    CSTSTRING       shift and go to state 44
+    ID              shift and go to state 43
+
+    numeric_expression             shift and go to state 46
+    factor                         shift and go to state 41
+    term                           shift and go to state 48
+    cst_expression                 shift and go to state 42
+    superexpression                shift and go to state 192
+    expression                     shift and go to state 50
+
+state 165
+
+    (32) variable_assignment -> ID = . superexpression SEMICOLON
+    (33) superexpression -> . expression superexpression2
+    (38) expression -> . numeric_expression compare
+    (48) numeric_expression -> . term seen_term numeric_expression2
+    (54) term -> . factor term2
+    (59) factor -> . cst_expression
+    (60) factor -> . ( seen_lpar superexpression ) seen_rpar
+    (63) cst_expression -> . CSTDOUBLE
+    (64) cst_expression -> . CSTINT
+    (65) cst_expression -> . CSTSTRING
+    (66) cst_expression -> . ID seen_id_or_func cst_expression2
+
+    (               shift and go to state 51
+    CSTDOUBLE       shift and go to state 45
+    CSTINT          shift and go to state 47
+    CSTSTRING       shift and go to state 44
+    ID              shift and go to state 43
+
+    numeric_expression             shift and go to state 46
+    factor                         shift and go to state 41
+    term                           shift and go to state 48
+    cst_expression                 shift and go to state 42
+    superexpression                shift and go to state 193
+    expression                     shift and go to state 50
+
+state 166
+
+    (89) block_statement2 -> statement block_statement2 .
+
+    RBRACKET        reduce using rule 89 (block_statement2 -> statement block_statement2 .)
+
+
+state 167
+
+    (76) loophead -> WHILE ( . seen_while_LPAR superexpression seen_while_exp )
+    (80) seen_while_LPAR -> .
+
+    (               reduce using rule 80 (seen_while_LPAR -> .)
+    CSTDOUBLE       reduce using rule 80 (seen_while_LPAR -> .)
+    CSTINT          reduce using rule 80 (seen_while_LPAR -> .)
+    CSTSTRING       reduce using rule 80 (seen_while_LPAR -> .)
+    ID              reduce using rule 80 (seen_while_LPAR -> .)
+
+    seen_while_LPAR                shift and go to state 194
+
+state 168
+
+    (122) return -> RETURN superexpression . SEMICOLON
+
+    SEMICOLON       shift and go to state 195
+
+
+state 169
+
+    (121) statement -> geometry_statement SEMICOLON .
+
+    ID              reduce using rule 121 (statement -> geometry_statement SEMICOLON .)
+    IF              reduce using rule 121 (statement -> geometry_statement SEMICOLON .)
+    RETURN          reduce using rule 121 (statement -> geometry_statement SEMICOLON .)
+    PRINT           reduce using rule 121 (statement -> geometry_statement SEMICOLON .)
+    SCAN            reduce using rule 121 (statement -> geometry_statement SEMICOLON .)
+    INT             reduce using rule 121 (statement -> geometry_statement SEMICOLON .)
+    DOUBLE          reduce using rule 121 (statement -> geometry_statement SEMICOLON .)
+    STRING          reduce using rule 121 (statement -> geometry_statement SEMICOLON .)
+    VOID            reduce using rule 121 (statement -> geometry_statement SEMICOLON .)
+    FOR             reduce using rule 121 (statement -> geometry_statement SEMICOLON .)
+    WHILE           reduce using rule 121 (statement -> geometry_statement SEMICOLON .)
+    MOVE            reduce using rule 121 (statement -> geometry_statement SEMICOLON .)
+    ROTATE          reduce using rule 121 (statement -> geometry_statement SEMICOLON .)
+    ARC             reduce using rule 121 (statement -> geometry_statement SEMICOLON .)
+    HOME            reduce using rule 121 (statement -> geometry_statement SEMICOLON .)
+    PDOWN           reduce using rule 121 (statement -> geometry_statement SEMICOLON .)
+    PUP             reduce using rule 121 (statement -> geometry_statement SEMICOLON .)
+    SETP            reduce using rule 121 (statement -> geometry_statement SEMICOLON .)
+    PCOLOR          reduce using rule 121 (statement -> geometry_statement SEMICOLON .)
+    PSIZE           reduce using rule 121 (statement -> geometry_statement SEMICOLON .)
+    PCLEAR          reduce using rule 121 (statement -> geometry_statement SEMICOLON .)
+    (               reduce using rule 121 (statement -> geometry_statement SEMICOLON .)
+    CSTDOUBLE       reduce using rule 121 (statement -> geometry_statement SEMICOLON .)
+    CSTINT          reduce using rule 121 (statement -> geometry_statement SEMICOLON .)
+    CSTSTRING       reduce using rule 121 (statement -> geometry_statement SEMICOLON .)
+    RBRACKET        reduce using rule 121 (statement -> geometry_statement SEMICOLON .)
+
+
+state 170
+
+    (91) read_statement -> SCAN ( . ID ) SEMICOLON
+
+    ID              shift and go to state 196
+
+
+state 171
+
+    (21) method_declaration3 -> ) seen_method_start block_statement .
+
+    FUNC            reduce using rule 21 (method_declaration3 -> ) seen_method_start block_statement .)
+    MAIN            reduce using rule 21 (method_declaration3 -> ) seen_method_start block_statement .)
+
+
+state 172
+
+    (68) cst_expression2 -> LSQUARE superexpression RSQUARE .
+
+    *               reduce using rule 68 (cst_expression2 -> LSQUARE superexpression RSQUARE .)
+    /               reduce using rule 68 (cst_expression2 -> LSQUARE superexpression RSQUARE .)
+    +               reduce using rule 68 (cst_expression2 -> LSQUARE superexpression RSQUARE .)
+    -               reduce using rule 68 (cst_expression2 -> LSQUARE superexpression RSQUARE .)
+    CEQ             reduce using rule 68 (cst_expression2 -> LSQUARE superexpression RSQUARE .)
+    CGT             reduce using rule 68 (cst_expression2 -> LSQUARE superexpression RSQUARE .)
+    CGE             reduce using rule 68 (cst_expression2 -> LSQUARE superexpression RSQUARE .)
+    CLT             reduce using rule 68 (cst_expression2 -> LSQUARE superexpression RSQUARE .)
+    CLE             reduce using rule 68 (cst_expression2 -> LSQUARE superexpression RSQUARE .)
+    CNE             reduce using rule 68 (cst_expression2 -> LSQUARE superexpression RSQUARE .)
+    AND             reduce using rule 68 (cst_expression2 -> LSQUARE superexpression RSQUARE .)
+    OR              reduce using rule 68 (cst_expression2 -> LSQUARE superexpression RSQUARE .)
+    COMMA           reduce using rule 68 (cst_expression2 -> LSQUARE superexpression RSQUARE .)
+    SEMICOLON       reduce using rule 68 (cst_expression2 -> LSQUARE superexpression RSQUARE .)
+    )               reduce using rule 68 (cst_expression2 -> LSQUARE superexpression RSQUARE .)
+    RSQUARE         reduce using rule 68 (cst_expression2 -> LSQUARE superexpression RSQUARE .)
+
+
+state 173
+
+    (69) cst_expression2 -> ( cst_expression3 ) .
+
+    *               reduce using rule 69 (cst_expression2 -> ( cst_expression3 ) .)
+    /               reduce using rule 69 (cst_expression2 -> ( cst_expression3 ) .)
+    +               reduce using rule 69 (cst_expression2 -> ( cst_expression3 ) .)
+    -               reduce using rule 69 (cst_expression2 -> ( cst_expression3 ) .)
+    CEQ             reduce using rule 69 (cst_expression2 -> ( cst_expression3 ) .)
+    CGT             reduce using rule 69 (cst_expression2 -> ( cst_expression3 ) .)
+    CGE             reduce using rule 69 (cst_expression2 -> ( cst_expression3 ) .)
+    CLT             reduce using rule 69 (cst_expression2 -> ( cst_expression3 ) .)
+    CLE             reduce using rule 69 (cst_expression2 -> ( cst_expression3 ) .)
+    CNE             reduce using rule 69 (cst_expression2 -> ( cst_expression3 ) .)
+    AND             reduce using rule 69 (cst_expression2 -> ( cst_expression3 ) .)
+    OR              reduce using rule 69 (cst_expression2 -> ( cst_expression3 ) .)
+    COMMA           reduce using rule 69 (cst_expression2 -> ( cst_expression3 ) .)
+    SEMICOLON       reduce using rule 69 (cst_expression2 -> ( cst_expression3 ) .)
+    )               reduce using rule 69 (cst_expression2 -> ( cst_expression3 ) .)
+    RSQUARE         reduce using rule 69 (cst_expression2 -> ( cst_expression3 ) .)
+
+
+state 174
+
+    (72) cst_expression4 -> COMMA . cst_expression3
+    (71) cst_expression3 -> . superexpression cst_expression4
+    (33) superexpression -> . expression superexpression2
+    (38) expression -> . numeric_expression compare
+    (48) numeric_expression -> . term seen_term numeric_expression2
+    (54) term -> . factor term2
+    (59) factor -> . cst_expression
+    (60) factor -> . ( seen_lpar superexpression ) seen_rpar
+    (63) cst_expression -> . CSTDOUBLE
+    (64) cst_expression -> . CSTINT
+    (65) cst_expression -> . CSTSTRING
+    (66) cst_expression -> . ID seen_id_or_func cst_expression2
+
+    (               shift and go to state 51
+    CSTDOUBLE       shift and go to state 45
+    CSTINT          shift and go to state 47
+    CSTSTRING       shift and go to state 44
+    ID              shift and go to state 43
+
+    numeric_expression             shift and go to state 46
+    factor                         shift and go to state 41
+    expression                     shift and go to state 50
+    cst_expression                 shift and go to state 42
+    superexpression                shift and go to state 145
+    cst_expression3                shift and go to state 197
+    term                           shift and go to state 48
+
+state 175
+
+    (73) cst_expression4 -> empty .
+
+    )               reduce using rule 73 (cst_expression4 -> empty .)
+
+
+state 176
+
+    (71) cst_expression3 -> superexpression cst_expression4 .
+
+    )               reduce using rule 71 (cst_expression3 -> superexpression cst_expression4 .)
+
+
+state 177
+
+    (60) factor -> ( seen_lpar superexpression ) seen_rpar .
+
+    *               reduce using rule 60 (factor -> ( seen_lpar superexpression ) seen_rpar .)
+    /               reduce using rule 60 (factor -> ( seen_lpar superexpression ) seen_rpar .)
+    +               reduce using rule 60 (factor -> ( seen_lpar superexpression ) seen_rpar .)
+    -               reduce using rule 60 (factor -> ( seen_lpar superexpression ) seen_rpar .)
+    CEQ             reduce using rule 60 (factor -> ( seen_lpar superexpression ) seen_rpar .)
+    CGT             reduce using rule 60 (factor -> ( seen_lpar superexpression ) seen_rpar .)
+    CGE             reduce using rule 60 (factor -> ( seen_lpar superexpression ) seen_rpar .)
+    CLT             reduce using rule 60 (factor -> ( seen_lpar superexpression ) seen_rpar .)
+    CLE             reduce using rule 60 (factor -> ( seen_lpar superexpression ) seen_rpar .)
+    CNE             reduce using rule 60 (factor -> ( seen_lpar superexpression ) seen_rpar .)
+    AND             reduce using rule 60 (factor -> ( seen_lpar superexpression ) seen_rpar .)
+    OR              reduce using rule 60 (factor -> ( seen_lpar superexpression ) seen_rpar .)
+    )               reduce using rule 60 (factor -> ( seen_lpar superexpression ) seen_rpar .)
+    SEMICOLON       reduce using rule 60 (factor -> ( seen_lpar superexpression ) seen_rpar .)
+    COMMA           reduce using rule 60 (factor -> ( seen_lpar superexpression ) seen_rpar .)
+    RSQUARE         reduce using rule 60 (factor -> ( seen_lpar superexpression ) seen_rpar .)
+
+
+state 178
+
+    (110) pcolor -> PCOLOR ( superexpression . COMMA superexpression COMMA superexpression )
+
+    COMMA           shift and go to state 198
+
+
+state 179
+
+    (107) pdown -> PDOWN ( ) .
+
+    SEMICOLON       reduce using rule 107 (pdown -> PDOWN ( ) .)
+
+
+state 180
+
+    (74) loop_statement -> loophead block_statement seen_loop_block .
+
+    ID              reduce using rule 74 (loop_statement -> loophead block_statement seen_loop_block .)
+    IF              reduce using rule 74 (loop_statement -> loophead block_statement seen_loop_block .)
+    RETURN          reduce using rule 74 (loop_statement -> loophead block_statement seen_loop_block .)
+    PRINT           reduce using rule 74 (loop_statement -> loophead block_statement seen_loop_block .)
+    SCAN            reduce using rule 74 (loop_statement -> loophead block_statement seen_loop_block .)
+    INT             reduce using rule 74 (loop_statement -> loophead block_statement seen_loop_block .)
+    DOUBLE          reduce using rule 74 (loop_statement -> loophead block_statement seen_loop_block .)
+    STRING          reduce using rule 74 (loop_statement -> loophead block_statement seen_loop_block .)
+    VOID            reduce using rule 74 (loop_statement -> loophead block_statement seen_loop_block .)
+    FOR             reduce using rule 74 (loop_statement -> loophead block_statement seen_loop_block .)
+    WHILE           reduce using rule 74 (loop_statement -> loophead block_statement seen_loop_block .)
+    MOVE            reduce using rule 74 (loop_statement -> loophead block_statement seen_loop_block .)
+    ROTATE          reduce using rule 74 (loop_statement -> loophead block_statement seen_loop_block .)
+    ARC             reduce using rule 74 (loop_statement -> loophead block_statement seen_loop_block .)
+    HOME            reduce using rule 74 (loop_statement -> loophead block_statement seen_loop_block .)
+    PDOWN           reduce using rule 74 (loop_statement -> loophead block_statement seen_loop_block .)
+    PUP             reduce using rule 74 (loop_statement -> loophead block_statement seen_loop_block .)
+    SETP            reduce using rule 74 (loop_statement -> loophead block_statement seen_loop_block .)
+    PCOLOR          reduce using rule 74 (loop_statement -> loophead block_statement seen_loop_block .)
+    PSIZE           reduce using rule 74 (loop_statement -> loophead block_statement seen_loop_block .)
+    PCLEAR          reduce using rule 74 (loop_statement -> loophead block_statement seen_loop_block .)
+    (               reduce using rule 74 (loop_statement -> loophead block_statement seen_loop_block .)
+    CSTDOUBLE       reduce using rule 74 (loop_statement -> loophead block_statement seen_loop_block .)
+    CSTINT          reduce using rule 74 (loop_statement -> loophead block_statement seen_loop_block .)
+    CSTSTRING       reduce using rule 74 (loop_statement -> loophead block_statement seen_loop_block .)
+    RBRACKET        reduce using rule 74 (loop_statement -> loophead block_statement seen_loop_block .)
+
+
+state 181
+
+    (106) home -> HOME ( ) .
+
+    SEMICOLON       reduce using rule 106 (home -> HOME ( ) .)
+
+
+state 182
+
+    (111) psize -> PSIZE ( superexpression . )
+
+    )               shift and go to state 199
+
+
+state 183
+
+    (112) pclear -> PCLEAR ( ) .
+
+    SEMICOLON       reduce using rule 112 (pclear -> PCLEAR ( ) .)
+
+
+state 184
+
+    (109) setp -> SETP ( superexpression . COMMA superexpression )
+
+    COMMA           shift and go to state 200
+
+
+state 185
+
+    (103) move -> MOVE ( superexpression . )
+
+    )               shift and go to state 201
+
+
+state 186
+
+    (108) pup -> PUP ( ) .
+
+    SEMICOLON       reduce using rule 108 (pup -> PUP ( ) .)
+
+
+state 187
+
+    (104) rotate -> ROTATE ( superexpression . )
+
+    )               shift and go to state 202
+
+
+state 188
+
+    (75) loophead -> FOR ( variable_assignment . seen_assignment1 SEMICOLON superexpression seen_for_exp SEMICOLON variable_assignment seen_assignment2 )
+    (77) seen_assignment1 -> .
+
+    SEMICOLON       reduce using rule 77 (seen_assignment1 -> .)
+
+    seen_assignment1               shift and go to state 203
+
+state 189
+
+    (32) variable_assignment -> ID . = superexpression SEMICOLON
+
+    =               shift and go to state 165
+
+
+state 190
+
+    (83) if_statement -> IF ( superexpression . ) seen_condition block_statement seen_condition_block if_statement2
+
+    )               shift and go to state 204
+
+
+state 191
+
+    (105) arc -> ARC ( superexpression . COMMA superexpression )
+
+    COMMA           shift and go to state 205
+
+
+state 192
+
+    (92) print_statement -> PRINT ( superexpression . ) SEMICOLON
+
+    )               shift and go to state 206
+
+
+state 193
+
+    (32) variable_assignment -> ID = superexpression . SEMICOLON
+
+    SEMICOLON       shift and go to state 207
+
+
+state 194
+
+    (76) loophead -> WHILE ( seen_while_LPAR . superexpression seen_while_exp )
+    (33) superexpression -> . expression superexpression2
+    (38) expression -> . numeric_expression compare
+    (48) numeric_expression -> . term seen_term numeric_expression2
+    (54) term -> . factor term2
+    (59) factor -> . cst_expression
+    (60) factor -> . ( seen_lpar superexpression ) seen_rpar
+    (63) cst_expression -> . CSTDOUBLE
+    (64) cst_expression -> . CSTINT
+    (65) cst_expression -> . CSTSTRING
+    (66) cst_expression -> . ID seen_id_or_func cst_expression2
+
+    (               shift and go to state 51
+    CSTDOUBLE       shift and go to state 45
+    CSTINT          shift and go to state 47
+    CSTSTRING       shift and go to state 44
+    ID              shift and go to state 43
+
+    numeric_expression             shift and go to state 46
+    factor                         shift and go to state 41
+    cst_expression                 shift and go to state 42
+    superexpression                shift and go to state 208
+    expression                     shift and go to state 50
+    term                           shift and go to state 48
+
+state 195
+
+    (122) return -> RETURN superexpression SEMICOLON .
+
+    ID              reduce using rule 122 (return -> RETURN superexpression SEMICOLON .)
+    IF              reduce using rule 122 (return -> RETURN superexpression SEMICOLON .)
+    RETURN          reduce using rule 122 (return -> RETURN superexpression SEMICOLON .)
+    PRINT           reduce using rule 122 (return -> RETURN superexpression SEMICOLON .)
+    SCAN            reduce using rule 122 (return -> RETURN superexpression SEMICOLON .)
+    INT             reduce using rule 122 (return -> RETURN superexpression SEMICOLON .)
+    DOUBLE          reduce using rule 122 (return -> RETURN superexpression SEMICOLON .)
+    STRING          reduce using rule 122 (return -> RETURN superexpression SEMICOLON .)
+    VOID            reduce using rule 122 (return -> RETURN superexpression SEMICOLON .)
+    FOR             reduce using rule 122 (return -> RETURN superexpression SEMICOLON .)
+    WHILE           reduce using rule 122 (return -> RETURN superexpression SEMICOLON .)
+    MOVE            reduce using rule 122 (return -> RETURN superexpression SEMICOLON .)
+    ROTATE          reduce using rule 122 (return -> RETURN superexpression SEMICOLON .)
+    ARC             reduce using rule 122 (return -> RETURN superexpression SEMICOLON .)
+    HOME            reduce using rule 122 (return -> RETURN superexpression SEMICOLON .)
+    PDOWN           reduce using rule 122 (return -> RETURN superexpression SEMICOLON .)
+    PUP             reduce using rule 122 (return -> RETURN superexpression SEMICOLON .)
+    SETP            reduce using rule 122 (return -> RETURN superexpression SEMICOLON .)
+    PCOLOR          reduce using rule 122 (return -> RETURN superexpression SEMICOLON .)
+    PSIZE           reduce using rule 122 (return -> RETURN superexpression SEMICOLON .)
+    PCLEAR          reduce using rule 122 (return -> RETURN superexpression SEMICOLON .)
+    (               reduce using rule 122 (return -> RETURN superexpression SEMICOLON .)
+    CSTDOUBLE       reduce using rule 122 (return -> RETURN superexpression SEMICOLON .)
+    CSTINT          reduce using rule 122 (return -> RETURN superexpression SEMICOLON .)
+    CSTSTRING       reduce using rule 122 (return -> RETURN superexpression SEMICOLON .)
+    RBRACKET        reduce using rule 122 (return -> RETURN superexpression SEMICOLON .)
+
+
+state 196
+
+    (91) read_statement -> SCAN ( ID . ) SEMICOLON
+
+    )               shift and go to state 209
+
+
+state 197
+
+    (72) cst_expression4 -> COMMA cst_expression3 .
+
+    )               reduce using rule 72 (cst_expression4 -> COMMA cst_expression3 .)
+
+
+state 198
+
+    (110) pcolor -> PCOLOR ( superexpression COMMA . superexpression COMMA superexpression )
+    (33) superexpression -> . expression superexpression2
+    (38) expression -> . numeric_expression compare
+    (48) numeric_expression -> . term seen_term numeric_expression2
+    (54) term -> . factor term2
+    (59) factor -> . cst_expression
+    (60) factor -> . ( seen_lpar superexpression ) seen_rpar
+    (63) cst_expression -> . CSTDOUBLE
+    (64) cst_expression -> . CSTINT
+    (65) cst_expression -> . CSTSTRING
+    (66) cst_expression -> . ID seen_id_or_func cst_expression2
+
+    (               shift and go to state 51
+    CSTDOUBLE       shift and go to state 45
+    CSTINT          shift and go to state 47
+    CSTSTRING       shift and go to state 44
+    ID              shift and go to state 43
+
+    numeric_expression             shift and go to state 46
+    factor                         shift and go to state 41
+    term                           shift and go to state 48
+    cst_expression                 shift and go to state 42
+    superexpression                shift and go to state 210
+    expression                     shift and go to state 50
+
+state 199
+
+    (111) psize -> PSIZE ( superexpression ) .
+
+    SEMICOLON       reduce using rule 111 (psize -> PSIZE ( superexpression ) .)
+
+
+state 200
+
+    (109) setp -> SETP ( superexpression COMMA . superexpression )
+    (33) superexpression -> . expression superexpression2
+    (38) expression -> . numeric_expression compare
+    (48) numeric_expression -> . term seen_term numeric_expression2
+    (54) term -> . factor term2
+    (59) factor -> . cst_expression
+    (60) factor -> . ( seen_lpar superexpression ) seen_rpar
+    (63) cst_expression -> . CSTDOUBLE
+    (64) cst_expression -> . CSTINT
+    (65) cst_expression -> . CSTSTRING
+    (66) cst_expression -> . ID seen_id_or_func cst_expression2
+
+    (               shift and go to state 51
+    CSTDOUBLE       shift and go to state 45
+    CSTINT          shift and go to state 47
+    CSTSTRING       shift and go to state 44
+    ID              shift and go to state 43
+
+    numeric_expression             shift and go to state 46
+    factor                         shift and go to state 41
+    term                           shift and go to state 48
+    cst_expression                 shift and go to state 42
+    superexpression                shift and go to state 211
+    expression                     shift and go to state 50
+
+state 201
+
+    (103) move -> MOVE ( superexpression ) .
+
+    SEMICOLON       reduce using rule 103 (move -> MOVE ( superexpression ) .)
+
+
+state 202
+
+    (104) rotate -> ROTATE ( superexpression ) .
+
+    SEMICOLON       reduce using rule 104 (rotate -> ROTATE ( superexpression ) .)
+
+
+state 203
+
+    (75) loophead -> FOR ( variable_assignment seen_assignment1 . SEMICOLON superexpression seen_for_exp SEMICOLON variable_assignment seen_assignment2 )
+
+    SEMICOLON       shift and go to state 212
+
+
+state 204
+
+    (83) if_statement -> IF ( superexpression ) . seen_condition block_statement seen_condition_block if_statement2
+    (84) seen_condition -> .
+
+    LBRACKET        reduce using rule 84 (seen_condition -> .)
+
+    seen_condition                 shift and go to state 213
+
+state 205
+
+    (105) arc -> ARC ( superexpression COMMA . superexpression )
+    (33) superexpression -> . expression superexpression2
+    (38) expression -> . numeric_expression compare
+    (48) numeric_expression -> . term seen_term numeric_expression2
+    (54) term -> . factor term2
+    (59) factor -> . cst_expression
+    (60) factor -> . ( seen_lpar superexpression ) seen_rpar
+    (63) cst_expression -> . CSTDOUBLE
+    (64) cst_expression -> . CSTINT
+    (65) cst_expression -> . CSTSTRING
+    (66) cst_expression -> . ID seen_id_or_func cst_expression2
+
+    (               shift and go to state 51
+    CSTDOUBLE       shift and go to state 45
+    CSTINT          shift and go to state 47
+    CSTSTRING       shift and go to state 44
+    ID              shift and go to state 43
+
+    numeric_expression             shift and go to state 46
+    factor                         shift and go to state 41
+    term                           shift and go to state 48
+    cst_expression                 shift and go to state 42
+    superexpression                shift and go to state 214
+    expression                     shift and go to state 50
+
+state 206
+
+    (92) print_statement -> PRINT ( superexpression ) . SEMICOLON
+
+    SEMICOLON       shift and go to state 215
+
+
+state 207
+
+    (32) variable_assignment -> ID = superexpression SEMICOLON .
+
+    ID              reduce using rule 32 (variable_assignment -> ID = superexpression SEMICOLON .)
+    IF              reduce using rule 32 (variable_assignment -> ID = superexpression SEMICOLON .)
+    RETURN          reduce using rule 32 (variable_assignment -> ID = superexpression SEMICOLON .)
+    PRINT           reduce using rule 32 (variable_assignment -> ID = superexpression SEMICOLON .)
+    SCAN            reduce using rule 32 (variable_assignment -> ID = superexpression SEMICOLON .)
+    INT             reduce using rule 32 (variable_assignment -> ID = superexpression SEMICOLON .)
+    DOUBLE          reduce using rule 32 (variable_assignment -> ID = superexpression SEMICOLON .)
+    STRING          reduce using rule 32 (variable_assignment -> ID = superexpression SEMICOLON .)
+    VOID            reduce using rule 32 (variable_assignment -> ID = superexpression SEMICOLON .)
+    FOR             reduce using rule 32 (variable_assignment -> ID = superexpression SEMICOLON .)
+    WHILE           reduce using rule 32 (variable_assignment -> ID = superexpression SEMICOLON .)
+    MOVE            reduce using rule 32 (variable_assignment -> ID = superexpression SEMICOLON .)
+    ROTATE          reduce using rule 32 (variable_assignment -> ID = superexpression SEMICOLON .)
+    ARC             reduce using rule 32 (variable_assignment -> ID = superexpression SEMICOLON .)
+    HOME            reduce using rule 32 (variable_assignment -> ID = superexpression SEMICOLON .)
+    PDOWN           reduce using rule 32 (variable_assignment -> ID = superexpression SEMICOLON .)
+    PUP             reduce using rule 32 (variable_assignment -> ID = superexpression SEMICOLON .)
+    SETP            reduce using rule 32 (variable_assignment -> ID = superexpression SEMICOLON .)
+    PCOLOR          reduce using rule 32 (variable_assignment -> ID = superexpression SEMICOLON .)
+    PSIZE           reduce using rule 32 (variable_assignment -> ID = superexpression SEMICOLON .)
+    PCLEAR          reduce using rule 32 (variable_assignment -> ID = superexpression SEMICOLON .)
+    (               reduce using rule 32 (variable_assignment -> ID = superexpression SEMICOLON .)
+    CSTDOUBLE       reduce using rule 32 (variable_assignment -> ID = superexpression SEMICOLON .)
+    CSTINT          reduce using rule 32 (variable_assignment -> ID = superexpression SEMICOLON .)
+    CSTSTRING       reduce using rule 32 (variable_assignment -> ID = superexpression SEMICOLON .)
+    RBRACKET        reduce using rule 32 (variable_assignment -> ID = superexpression SEMICOLON .)
+    SEMICOLON       reduce using rule 32 (variable_assignment -> ID = superexpression SEMICOLON .)
+    )               reduce using rule 32 (variable_assignment -> ID = superexpression SEMICOLON .)
+
+
+state 208
+
+    (76) loophead -> WHILE ( seen_while_LPAR superexpression . seen_while_exp )
+    (81) seen_while_exp -> .
+
+    )               reduce using rule 81 (seen_while_exp -> .)
+
+    seen_while_exp                 shift and go to state 216
+
+state 209
+
+    (91) read_statement -> SCAN ( ID ) . SEMICOLON
+
+    SEMICOLON       shift and go to state 217
+
+
+state 210
+
+    (110) pcolor -> PCOLOR ( superexpression COMMA superexpression . COMMA superexpression )
+
+    COMMA           shift and go to state 218
+
+
+state 211
+
+    (109) setp -> SETP ( superexpression COMMA superexpression . )
+
+    )               shift and go to state 219
+
+
+state 212
+
+    (75) loophead -> FOR ( variable_assignment seen_assignment1 SEMICOLON . superexpression seen_for_exp SEMICOLON variable_assignment seen_assignment2 )
+    (33) superexpression -> . expression superexpression2
+    (38) expression -> . numeric_expression compare
+    (48) numeric_expression -> . term seen_term numeric_expression2
+    (54) term -> . factor term2
+    (59) factor -> . cst_expression
+    (60) factor -> . ( seen_lpar superexpression ) seen_rpar
+    (63) cst_expression -> . CSTDOUBLE
+    (64) cst_expression -> . CSTINT
+    (65) cst_expression -> . CSTSTRING
+    (66) cst_expression -> . ID seen_id_or_func cst_expression2
+
+    (               shift and go to state 51
+    CSTDOUBLE       shift and go to state 45
+    CSTINT          shift and go to state 47
+    CSTSTRING       shift and go to state 44
+    ID              shift and go to state 43
+
+    numeric_expression             shift and go to state 46
+    factor                         shift and go to state 41
+    term                           shift and go to state 48
+    cst_expression                 shift and go to state 42
+    superexpression                shift and go to state 220
+    expression                     shift and go to state 50
+
+state 213
+
+    (83) if_statement -> IF ( superexpression ) seen_condition . block_statement seen_condition_block if_statement2
+    (88) block_statement -> . LBRACKET block_statement2 RBRACKET
+
+    LBRACKET        shift and go to state 81
+
+    block_statement                shift and go to state 221
+
+state 214
+
+    (105) arc -> ARC ( superexpression COMMA superexpression . )
+
+    )               shift and go to state 222
+
+
+state 215
+
+    (92) print_statement -> PRINT ( superexpression ) SEMICOLON .
+
+    ID              reduce using rule 92 (print_statement -> PRINT ( superexpression ) SEMICOLON .)
+    IF              reduce using rule 92 (print_statement -> PRINT ( superexpression ) SEMICOLON .)
+    RETURN          reduce using rule 92 (print_statement -> PRINT ( superexpression ) SEMICOLON .)
+    PRINT           reduce using rule 92 (print_statement -> PRINT ( superexpression ) SEMICOLON .)
+    SCAN            reduce using rule 92 (print_statement -> PRINT ( superexpression ) SEMICOLON .)
+    INT             reduce using rule 92 (print_statement -> PRINT ( superexpression ) SEMICOLON .)
+    DOUBLE          reduce using rule 92 (print_statement -> PRINT ( superexpression ) SEMICOLON .)
+    STRING          reduce using rule 92 (print_statement -> PRINT ( superexpression ) SEMICOLON .)
+    VOID            reduce using rule 92 (print_statement -> PRINT ( superexpression ) SEMICOLON .)
+    FOR             reduce using rule 92 (print_statement -> PRINT ( superexpression ) SEMICOLON .)
+    WHILE           reduce using rule 92 (print_statement -> PRINT ( superexpression ) SEMICOLON .)
+    MOVE            reduce using rule 92 (print_statement -> PRINT ( superexpression ) SEMICOLON .)
+    ROTATE          reduce using rule 92 (print_statement -> PRINT ( superexpression ) SEMICOLON .)
+    ARC             reduce using rule 92 (print_statement -> PRINT ( superexpression ) SEMICOLON .)
+    HOME            reduce using rule 92 (print_statement -> PRINT ( superexpression ) SEMICOLON .)
+    PDOWN           reduce using rule 92 (print_statement -> PRINT ( superexpression ) SEMICOLON .)
+    PUP             reduce using rule 92 (print_statement -> PRINT ( superexpression ) SEMICOLON .)
+    SETP            reduce using rule 92 (print_statement -> PRINT ( superexpression ) SEMICOLON .)
+    PCOLOR          reduce using rule 92 (print_statement -> PRINT ( superexpression ) SEMICOLON .)
+    PSIZE           reduce using rule 92 (print_statement -> PRINT ( superexpression ) SEMICOLON .)
+    PCLEAR          reduce using rule 92 (print_statement -> PRINT ( superexpression ) SEMICOLON .)
+    (               reduce using rule 92 (print_statement -> PRINT ( superexpression ) SEMICOLON .)
+    CSTDOUBLE       reduce using rule 92 (print_statement -> PRINT ( superexpression ) SEMICOLON .)
+    CSTINT          reduce using rule 92 (print_statement -> PRINT ( superexpression ) SEMICOLON .)
+    CSTSTRING       reduce using rule 92 (print_statement -> PRINT ( superexpression ) SEMICOLON .)
+    RBRACKET        reduce using rule 92 (print_statement -> PRINT ( superexpression ) SEMICOLON .)
+
+
+state 216
+
+    (76) loophead -> WHILE ( seen_while_LPAR superexpression seen_while_exp . )
+
+    )               shift and go to state 223
+
+
+state 217
+
+    (91) read_statement -> SCAN ( ID ) SEMICOLON .
+
+    ID              reduce using rule 91 (read_statement -> SCAN ( ID ) SEMICOLON .)
+    IF              reduce using rule 91 (read_statement -> SCAN ( ID ) SEMICOLON .)
+    RETURN          reduce using rule 91 (read_statement -> SCAN ( ID ) SEMICOLON .)
+    PRINT           reduce using rule 91 (read_statement -> SCAN ( ID ) SEMICOLON .)
+    SCAN            reduce using rule 91 (read_statement -> SCAN ( ID ) SEMICOLON .)
+    INT             reduce using rule 91 (read_statement -> SCAN ( ID ) SEMICOLON .)
+    DOUBLE          reduce using rule 91 (read_statement -> SCAN ( ID ) SEMICOLON .)
+    STRING          reduce using rule 91 (read_statement -> SCAN ( ID ) SEMICOLON .)
+    VOID            reduce using rule 91 (read_statement -> SCAN ( ID ) SEMICOLON .)
+    FOR             reduce using rule 91 (read_statement -> SCAN ( ID ) SEMICOLON .)
+    WHILE           reduce using rule 91 (read_statement -> SCAN ( ID ) SEMICOLON .)
+    MOVE            reduce using rule 91 (read_statement -> SCAN ( ID ) SEMICOLON .)
+    ROTATE          reduce using rule 91 (read_statement -> SCAN ( ID ) SEMICOLON .)
+    ARC             reduce using rule 91 (read_statement -> SCAN ( ID ) SEMICOLON .)
+    HOME            reduce using rule 91 (read_statement -> SCAN ( ID ) SEMICOLON .)
+    PDOWN           reduce using rule 91 (read_statement -> SCAN ( ID ) SEMICOLON .)
+    PUP             reduce using rule 91 (read_statement -> SCAN ( ID ) SEMICOLON .)
+    SETP            reduce using rule 91 (read_statement -> SCAN ( ID ) SEMICOLON .)
+    PCOLOR          reduce using rule 91 (read_statement -> SCAN ( ID ) SEMICOLON .)
+    PSIZE           reduce using rule 91 (read_statement -> SCAN ( ID ) SEMICOLON .)
+    PCLEAR          reduce using rule 91 (read_statement -> SCAN ( ID ) SEMICOLON .)
+    (               reduce using rule 91 (read_statement -> SCAN ( ID ) SEMICOLON .)
+    CSTDOUBLE       reduce using rule 91 (read_statement -> SCAN ( ID ) SEMICOLON .)
+    CSTINT          reduce using rule 91 (read_statement -> SCAN ( ID ) SEMICOLON .)
+    CSTSTRING       reduce using rule 91 (read_statement -> SCAN ( ID ) SEMICOLON .)
+    RBRACKET        reduce using rule 91 (read_statement -> SCAN ( ID ) SEMICOLON .)
+
+
+state 218
+
+    (110) pcolor -> PCOLOR ( superexpression COMMA superexpression COMMA . superexpression )
+    (33) superexpression -> . expression superexpression2
+    (38) expression -> . numeric_expression compare
+    (48) numeric_expression -> . term seen_term numeric_expression2
+    (54) term -> . factor term2
+    (59) factor -> . cst_expression
+    (60) factor -> . ( seen_lpar superexpression ) seen_rpar
+    (63) cst_expression -> . CSTDOUBLE
+    (64) cst_expression -> . CSTINT
+    (65) cst_expression -> . CSTSTRING
+    (66) cst_expression -> . ID seen_id_or_func cst_expression2
+
+    (               shift and go to state 51
+    CSTDOUBLE       shift and go to state 45
+    CSTINT          shift and go to state 47
+    CSTSTRING       shift and go to state 44
+    ID              shift and go to state 43
+
+    numeric_expression             shift and go to state 46
+    factor                         shift and go to state 41
+    term                           shift and go to state 48
+    cst_expression                 shift and go to state 42
+    superexpression                shift and go to state 224
+    expression                     shift and go to state 50
+
+state 219
+
+    (109) setp -> SETP ( superexpression COMMA superexpression ) .
+
+    SEMICOLON       reduce using rule 109 (setp -> SETP ( superexpression COMMA superexpression ) .)
+
+
+state 220
+
+    (75) loophead -> FOR ( variable_assignment seen_assignment1 SEMICOLON superexpression . seen_for_exp SEMICOLON variable_assignment seen_assignment2 )
+    (78) seen_for_exp -> .
+
+    SEMICOLON       reduce using rule 78 (seen_for_exp -> .)
+
+    seen_for_exp                   shift and go to state 225
+
+state 221
+
+    (83) if_statement -> IF ( superexpression ) seen_condition block_statement . seen_condition_block if_statement2
+    (85) seen_condition_block -> .
+
+    ELSE            reduce using rule 85 (seen_condition_block -> .)
+    ID              reduce using rule 85 (seen_condition_block -> .)
+    IF              reduce using rule 85 (seen_condition_block -> .)
+    RETURN          reduce using rule 85 (seen_condition_block -> .)
+    PRINT           reduce using rule 85 (seen_condition_block -> .)
+    SCAN            reduce using rule 85 (seen_condition_block -> .)
+    INT             reduce using rule 85 (seen_condition_block -> .)
+    DOUBLE          reduce using rule 85 (seen_condition_block -> .)
+    STRING          reduce using rule 85 (seen_condition_block -> .)
+    VOID            reduce using rule 85 (seen_condition_block -> .)
+    FOR             reduce using rule 85 (seen_condition_block -> .)
+    WHILE           reduce using rule 85 (seen_condition_block -> .)
+    MOVE            reduce using rule 85 (seen_condition_block -> .)
+    ROTATE          reduce using rule 85 (seen_condition_block -> .)
+    ARC             reduce using rule 85 (seen_condition_block -> .)
+    HOME            reduce using rule 85 (seen_condition_block -> .)
+    PDOWN           reduce using rule 85 (seen_condition_block -> .)
+    PUP             reduce using rule 85 (seen_condition_block -> .)
+    SETP            reduce using rule 85 (seen_condition_block -> .)
+    PCOLOR          reduce using rule 85 (seen_condition_block -> .)
+    PSIZE           reduce using rule 85 (seen_condition_block -> .)
+    PCLEAR          reduce using rule 85 (seen_condition_block -> .)
+    (               reduce using rule 85 (seen_condition_block -> .)
+    CSTDOUBLE       reduce using rule 85 (seen_condition_block -> .)
+    CSTINT          reduce using rule 85 (seen_condition_block -> .)
+    CSTSTRING       reduce using rule 85 (seen_condition_block -> .)
+    RBRACKET        reduce using rule 85 (seen_condition_block -> .)
+
+    seen_condition_block           shift and go to state 226
+
+state 222
+
+    (105) arc -> ARC ( superexpression COMMA superexpression ) .
+
+    SEMICOLON       reduce using rule 105 (arc -> ARC ( superexpression COMMA superexpression ) .)
+
+
+state 223
+
+    (76) loophead -> WHILE ( seen_while_LPAR superexpression seen_while_exp ) .
+
+    LBRACKET        reduce using rule 76 (loophead -> WHILE ( seen_while_LPAR superexpression seen_while_exp ) .)
+
+
+state 224
+
+    (110) pcolor -> PCOLOR ( superexpression COMMA superexpression COMMA superexpression . )
+
+    )               shift and go to state 227
+
+
+state 225
+
+    (75) loophead -> FOR ( variable_assignment seen_assignment1 SEMICOLON superexpression seen_for_exp . SEMICOLON variable_assignment seen_assignment2 )
+
+    SEMICOLON       shift and go to state 228
+
+
+state 226
+
+    (83) if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block . if_statement2
+    (86) if_statement2 -> . ELSE block_statement
+    (87) if_statement2 -> . empty
+    (123) empty -> .
+
+    ELSE            shift and go to state 231
+    ID              reduce using rule 123 (empty -> .)
+    IF              reduce using rule 123 (empty -> .)
+    RETURN          reduce using rule 123 (empty -> .)
+    PRINT           reduce using rule 123 (empty -> .)
+    SCAN            reduce using rule 123 (empty -> .)
+    INT             reduce using rule 123 (empty -> .)
+    DOUBLE          reduce using rule 123 (empty -> .)
+    STRING          reduce using rule 123 (empty -> .)
+    VOID            reduce using rule 123 (empty -> .)
+    FOR             reduce using rule 123 (empty -> .)
+    WHILE           reduce using rule 123 (empty -> .)
+    MOVE            reduce using rule 123 (empty -> .)
+    ROTATE          reduce using rule 123 (empty -> .)
+    ARC             reduce using rule 123 (empty -> .)
+    HOME            reduce using rule 123 (empty -> .)
+    PDOWN           reduce using rule 123 (empty -> .)
+    PUP             reduce using rule 123 (empty -> .)
+    SETP            reduce using rule 123 (empty -> .)
+    PCOLOR          reduce using rule 123 (empty -> .)
+    PSIZE           reduce using rule 123 (empty -> .)
+    PCLEAR          reduce using rule 123 (empty -> .)
+    (               reduce using rule 123 (empty -> .)
+    CSTDOUBLE       reduce using rule 123 (empty -> .)
+    CSTINT          reduce using rule 123 (empty -> .)
+    CSTSTRING       reduce using rule 123 (empty -> .)
+    RBRACKET        reduce using rule 123 (empty -> .)
+
+    if_statement2                  shift and go to state 229
+    empty                          shift and go to state 230
+
+state 227
+
+    (110) pcolor -> PCOLOR ( superexpression COMMA superexpression COMMA superexpression ) .
+
+    SEMICOLON       reduce using rule 110 (pcolor -> PCOLOR ( superexpression COMMA superexpression COMMA superexpression ) .)
+
+
+state 228
+
+    (75) loophead -> FOR ( variable_assignment seen_assignment1 SEMICOLON superexpression seen_for_exp SEMICOLON . variable_assignment seen_assignment2 )
+    (32) variable_assignment -> . ID = superexpression SEMICOLON
+
+    ID              shift and go to state 189
+
+    variable_assignment            shift and go to state 232
+
+state 229
+
+    (83) if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2 .
+
+    ID              reduce using rule 83 (if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2 .)
+    IF              reduce using rule 83 (if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2 .)
+    RETURN          reduce using rule 83 (if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2 .)
+    PRINT           reduce using rule 83 (if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2 .)
+    SCAN            reduce using rule 83 (if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2 .)
+    INT             reduce using rule 83 (if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2 .)
+    DOUBLE          reduce using rule 83 (if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2 .)
+    STRING          reduce using rule 83 (if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2 .)
+    VOID            reduce using rule 83 (if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2 .)
+    FOR             reduce using rule 83 (if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2 .)
+    WHILE           reduce using rule 83 (if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2 .)
+    MOVE            reduce using rule 83 (if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2 .)
+    ROTATE          reduce using rule 83 (if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2 .)
+    ARC             reduce using rule 83 (if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2 .)
+    HOME            reduce using rule 83 (if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2 .)
+    PDOWN           reduce using rule 83 (if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2 .)
+    PUP             reduce using rule 83 (if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2 .)
+    SETP            reduce using rule 83 (if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2 .)
+    PCOLOR          reduce using rule 83 (if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2 .)
+    PSIZE           reduce using rule 83 (if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2 .)
+    PCLEAR          reduce using rule 83 (if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2 .)
+    (               reduce using rule 83 (if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2 .)
+    CSTDOUBLE       reduce using rule 83 (if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2 .)
+    CSTINT          reduce using rule 83 (if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2 .)
+    CSTSTRING       reduce using rule 83 (if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2 .)
+    RBRACKET        reduce using rule 83 (if_statement -> IF ( superexpression ) seen_condition block_statement seen_condition_block if_statement2 .)
+
+
+state 230
+
+    (87) if_statement2 -> empty .
+
+    ID              reduce using rule 87 (if_statement2 -> empty .)
+    IF              reduce using rule 87 (if_statement2 -> empty .)
+    RETURN          reduce using rule 87 (if_statement2 -> empty .)
+    PRINT           reduce using rule 87 (if_statement2 -> empty .)
+    SCAN            reduce using rule 87 (if_statement2 -> empty .)
+    INT             reduce using rule 87 (if_statement2 -> empty .)
+    DOUBLE          reduce using rule 87 (if_statement2 -> empty .)
+    STRING          reduce using rule 87 (if_statement2 -> empty .)
+    VOID            reduce using rule 87 (if_statement2 -> empty .)
+    FOR             reduce using rule 87 (if_statement2 -> empty .)
+    WHILE           reduce using rule 87 (if_statement2 -> empty .)
+    MOVE            reduce using rule 87 (if_statement2 -> empty .)
+    ROTATE          reduce using rule 87 (if_statement2 -> empty .)
+    ARC             reduce using rule 87 (if_statement2 -> empty .)
+    HOME            reduce using rule 87 (if_statement2 -> empty .)
+    PDOWN           reduce using rule 87 (if_statement2 -> empty .)
+    PUP             reduce using rule 87 (if_statement2 -> empty .)
+    SETP            reduce using rule 87 (if_statement2 -> empty .)
+    PCOLOR          reduce using rule 87 (if_statement2 -> empty .)
+    PSIZE           reduce using rule 87 (if_statement2 -> empty .)
+    PCLEAR          reduce using rule 87 (if_statement2 -> empty .)
+    (               reduce using rule 87 (if_statement2 -> empty .)
+    CSTDOUBLE       reduce using rule 87 (if_statement2 -> empty .)
+    CSTINT          reduce using rule 87 (if_statement2 -> empty .)
+    CSTSTRING       reduce using rule 87 (if_statement2 -> empty .)
+    RBRACKET        reduce using rule 87 (if_statement2 -> empty .)
+
+
+state 231
+
+    (86) if_statement2 -> ELSE . block_statement
+    (88) block_statement -> . LBRACKET block_statement2 RBRACKET
+
+    LBRACKET        shift and go to state 81
+
+    block_statement                shift and go to state 233
+
+state 232
+
+    (75) loophead -> FOR ( variable_assignment seen_assignment1 SEMICOLON superexpression seen_for_exp SEMICOLON variable_assignment . seen_assignment2 )
+    (79) seen_assignment2 -> .
+
+    )               reduce using rule 79 (seen_assignment2 -> .)
+
+    seen_assignment2               shift and go to state 234
+
+state 233
+
+    (86) if_statement2 -> ELSE block_statement .
+
+    ID              reduce using rule 86 (if_statement2 -> ELSE block_statement .)
+    IF              reduce using rule 86 (if_statement2 -> ELSE block_statement .)
+    RETURN          reduce using rule 86 (if_statement2 -> ELSE block_statement .)
+    PRINT           reduce using rule 86 (if_statement2 -> ELSE block_statement .)
+    SCAN            reduce using rule 86 (if_statement2 -> ELSE block_statement .)
+    INT             reduce using rule 86 (if_statement2 -> ELSE block_statement .)
+    DOUBLE          reduce using rule 86 (if_statement2 -> ELSE block_statement .)
+    STRING          reduce using rule 86 (if_statement2 -> ELSE block_statement .)
+    VOID            reduce using rule 86 (if_statement2 -> ELSE block_statement .)
+    FOR             reduce using rule 86 (if_statement2 -> ELSE block_statement .)
+    WHILE           reduce using rule 86 (if_statement2 -> ELSE block_statement .)
+    MOVE            reduce using rule 86 (if_statement2 -> ELSE block_statement .)
+    ROTATE          reduce using rule 86 (if_statement2 -> ELSE block_statement .)
+    ARC             reduce using rule 86 (if_statement2 -> ELSE block_statement .)
+    HOME            reduce using rule 86 (if_statement2 -> ELSE block_statement .)
+    PDOWN           reduce using rule 86 (if_statement2 -> ELSE block_statement .)
+    PUP             reduce using rule 86 (if_statement2 -> ELSE block_statement .)
+    SETP            reduce using rule 86 (if_statement2 -> ELSE block_statement .)
+    PCOLOR          reduce using rule 86 (if_statement2 -> ELSE block_statement .)
+    PSIZE           reduce using rule 86 (if_statement2 -> ELSE block_statement .)
+    PCLEAR          reduce using rule 86 (if_statement2 -> ELSE block_statement .)
+    (               reduce using rule 86 (if_statement2 -> ELSE block_statement .)
+    CSTDOUBLE       reduce using rule 86 (if_statement2 -> ELSE block_statement .)
+    CSTINT          reduce using rule 86 (if_statement2 -> ELSE block_statement .)
+    CSTSTRING       reduce using rule 86 (if_statement2 -> ELSE block_statement .)
+    RBRACKET        reduce using rule 86 (if_statement2 -> ELSE block_statement .)
+
+
+state 234
+
+    (75) loophead -> FOR ( variable_assignment seen_assignment1 SEMICOLON superexpression seen_for_exp SEMICOLON variable_assignment seen_assignment2 . )
+
+    )               shift and go to state 235
+
+
+state 235
+
+    (75) loophead -> FOR ( variable_assignment seen_assignment1 SEMICOLON superexpression seen_for_exp SEMICOLON variable_assignment seen_assignment2 ) .
+
+    LBRACKET        reduce using rule 75 (loophead -> FOR ( variable_assignment seen_assignment1 SEMICOLON superexpression seen_for_exp SEMICOLON variable_assignment seen_assignment2 ) .)
+
