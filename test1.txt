@@ -1,0 +1,27 @@
+func void dragonFirst(double overallLength) {
+  if (overallLength <= 1.0) {
+    move(overallLength);
+  }
+  else {
+    overallLength = overallLength / 2.0;
+    dragonFirst(overallLength);
+    rotate(90);
+    dragonSecond(overallLength);
+  }
+}
+
+func void dragonSecond(double overallLength) {
+  if(overallLength <= 1.0) {
+    move(overallLength);
+  }
+  else {
+    overallLength = overallLength / 2.0;
+    dragonFirst(overallLength);
+    rotate(-90);
+    dragonSecond(overallLength);
+  }
+}
+
+main cheese() {
+  dragonFirst(2000.0);
+}

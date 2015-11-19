@@ -1,0 +1,17 @@
+main cheese() {
+  int i;
+  for(i = 0; i < 180; i = i + 1) {
+    move(100);
+    rotate(30);
+    move(20);
+    rotate(-60);
+    move(50);
+    rotate(30);
+
+    pup();
+    setp(0, 0);
+    pdown();
+
+    rotate(2);
+  }
+}
