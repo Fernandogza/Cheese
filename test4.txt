@@ -1,0 +1,18 @@
+func void tree(double size, double angle) {
+  move(size);
+  if (size > 5) {
+    rotate(angle/2);
+    tree(size*0.75, angle);
+    rotate(-1*angle);
+    tree(size*0.75, angle);
+    rotate(angle/2);
+  }
+  move(-1*size);
+}
+
+main cheese() {
+  pup();
+  move(-100);
+  pdown();
+  tree(20, 60);
+}

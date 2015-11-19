@@ -349,7 +349,7 @@ def ROT(op1, op2, result):
     try:
         cheese.rt(op1)
     except:
-        raise TypeError("Type mismatch, expected an integer value")
+        raise TypeError("Type mismatch, expected an integer or double value")
 
 def ARC(op1, op2, result):
     try:

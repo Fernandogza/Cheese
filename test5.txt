@@ -1,0 +1,16 @@
+func void dragon(int level, double size, int angle) {
+  if (level != 0) {
+    rotate(angle);
+    dragon(level - 1, size/1.41421356237, 45);
+    rotate(angle*-2);
+    dragon(level - 1, size/1.41421356237, -45);
+    rotate(angle);
+  }
+  else {
+    move(size);
+  }
+}
+
+main cheese() {
+  dragon(10, 150, 45);
+}

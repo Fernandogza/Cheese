@@ -391,7 +391,7 @@ def p_seen_func_id(p):
     functionDirectory = currentDirectory.get_directory(name)
 
     if not functionDirectory:
-        print ("ERROR: Undeclared function: \"{}\" in line {}".format(name, p.lineno))
+        print ("ERROR: Undeclared function: \"{}\"".format(name))
         raise SystemExit
 
     parameterCounter = 0
@@ -590,11 +590,11 @@ def p_rotate(p):
     '''rotate : ROTATE '(' superexpression ')' '''
     global instructions
     op1 = instructions.popOperand()
-    if op1.Type is int:
+    if op1.Type is int or op1.Type is float:
         instructions.generateQuadruple('ROT', op1, 0, 0)
     else:
         lineNum = p.lineno(1)
-        print ("ERROR: Expected type int, but found {} in line!".format(op1.Type, lineNum))
+        print ("ERROR: Expected type int or double, but found {} in line!".format(op1.Type, lineNum))
         raise SystemExit
 
 def p_arc(p):
