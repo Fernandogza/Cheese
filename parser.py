@@ -12,6 +12,9 @@ instructions = quadrupleGenerator()
 variableStack = []
 seenType = None
 parameterCounter = 0
+parameterCounterInt = 0
+parameterCounterDou = 0
+parameterCounterStr = 0
 Function_Or_Var_Name = []
 
 precedence =    (
@@ -30,10 +33,15 @@ def p_program(p):
 
 def p_main_ahead(p):
     '''main_ahead :'''
-    global instructions
+    global instructions, currentDirectory
     while len(instructions.jumpStack) is not 0:
         pendingJump = instructions.popJumpStack()
         instructions.setQuadrupleResult(pendingJump, instructions.nextInstruction)
+    name = 'main cheese'
+    # print (functionId)
+    currentDirectory.add_directory(name)
+    currentDirectory = currentDirectory.get_directory(name)
+    currentDirectory.Type = 'main'
 
 def p_program2(p):
     '''program2 : variable_declaration program2
@@ -72,6 +80,21 @@ def p_variable_declarator2(p):
 def p_variable_declarator3(p):
     '''variable_declarator3 : '=' superexpression
                             | empty'''
+    global instructions, currentDirectory
+    if p[1]:
+        variable = currentDirectory.get_variable(p[-3])
+        if variable:
+            op1 = instructions.popOperand()
+            result = variable
+            operator = p[1]
+
+            validType = getResultingType(operator, result.Type, op1.Type)
+            if validType:
+                operator = 'EQU'
+                instructions.generateQuadruple(operator, op1, 0, result)
+            else:
+                print ("ERROR: Invalid types! Variable \"{}\" cannot store \"{}\"!".format(currentDirectory.get_variable(result.Name), currentDirectory.get_variable(op1.Name)))
+                raise SystemExit
 
 def p_method_declaration(p):
     '''method_declaration : FUNC type ID seen_function_id '(' method_declaration2 method_declaration3'''
@@ -98,7 +121,7 @@ def p_method_declaration3(p):
 def p_seen_method_start(p):
     '''seen_method_start :'''
     global currentDirectory, instructions
-    currentDirectory.startAddress = instructions.nextInstruction - 1
+    currentDirectory.startAddress = instructions.nextInstruction
 
 def p_parameter_list(p):
     '''parameter_list  : parameter parameter_list2
@@ -125,14 +148,14 @@ def p_type(p):
     seenType = variableTypes[p[1]]
 
 def p_variable_assignment(p):
-    '''variable_assignment : ID '=' superexpression SEMICOLON'''
+    '''variable_assignment : ID '=' superexpression'''
     global instructions, currentDirectory
 
     variable = currentDirectory.get_variable(p[1])
 
     if variable:
-        op1 = variable
-        result = instructions.popOperand()
+        op1 = instructions.popOperand()
+        result = variable
         operator = p[2]
 
         validType = getResultingType(operator, result.Type, op1.Type)
@@ -331,11 +354,11 @@ def p_seen_id_or_func(p):
 
 def p_cst_expression2(p):
     '''cst_expression2 : LSQUARE superexpression RSQUARE
-                       | '(' cst_expression3 ')'
+                       | function_call
                        | empty'''
     global instructions
     name = Function_Or_Var_Name[len(Function_Or_Var_Name)-1]
-    if p[1] == "(":
+    if p[1] and p[1] != "[":
         variable = currentDirectory.get_directory(name).getReturnVariable()
     else:
         variable = currentDirectory.get_variable(name)
@@ -348,13 +371,73 @@ def p_cst_expression2(p):
         print ("ERROR! Variable \"{}\" not found!".format(name))
         raise SystemExit
 
+def p_function_call(p):
+    '''function_call :  seen_func_id '(' args ')' '''
+    global instruction, currentDirectory, functionDirectory, parameterCounter
+    if len(functionDirectory.parameters) == parameterCounter:
+        instructions.generateQuadruple('CAL',0,0,functionDirectory.startAddress)
+    else:
+        print ("ERROR: Function \"{}\" received {} arguments, expected {}!".format(functionDirectory.identifier, parameterCounter,len(functionDirectory.parameters)))
+        raise SystemExit
+    instructions.operatorStack.pop()
+    #Function_Or_Var_Name.pop()
+    p[0] = True
 
-def p_cst_expression3(p):
-   '''cst_expression3 : superexpression cst_expression4'''
+def p_seen_func_id(p):
+    '''seen_func_id : '''
+    global currentDirectory, functionDirectory, parameterCounter, instructions, parameterCounterInt, parameterCounterDou, parameterCounterStr
+    name = Function_Or_Var_Name[len(Function_Or_Var_Name)-1]
+    #Function call as a statement
+    functionDirectory = currentDirectory.get_directory(name)
 
-def p_cst_expression4(p):
-    '''cst_expression4 : COMMA cst_expression3
-                       | empty'''
+    if not functionDirectory:
+        print ("ERROR: Undeclared function: \"{}\" in line {}".format(name, p.lineno))
+        raise SystemExit
+
+    parameterCounter = 0
+    parameterCounterInt = 0
+    parameterCounterDou = 0
+    parameterCounterStr = 0
+    instructions.operatorStack.append("(")
+    instructions.generateQuadruple("ERA", 7050, 0, 0);
+
+def p_args(p):
+    '''args : arg
+            | empty'''
+
+def p_arg(p):
+    '''arg : numeric_expression seen_arg more_args'''
+
+def p_seen_arg(p):
+    '''seen_arg : '''
+    global instructions,currentDirectory,functionDirectory,parameterCounter, parameterCounterInt, parameterCounterDou, parameterCounterStr
+    op1 = instructions.popOperand()
+
+    if parameterCounter < len(functionDirectory.parameters):
+        nextParam = functionDirectory.parameters[parameterCounter]
+        variable = functionDirectory.get_variable(nextParam)
+        compatibleType = getResultingType('=', variable.Type, op1.Type)
+        if variable.Type is compatibleType:
+            if variable.Type is int:
+                instructions.generateQuadruple('EQU', op1, 0, Variable('Param{}'.format(parameterCounter), variable.Type, parameterCounterInt + 10000))
+                parameterCounterInt += 1
+            elif variable.Type is float:
+                instructions.generateQuadruple('EQU', op1, 0, Variable('Param{}'.format(parameterCounter), variable.Type, parameterCounterDou + 11000))
+                parameterCounterDou += 1
+            elif variable.Type is str:
+                instructions.generateQuadruple('EQU', op1, 0, Variable('Param{}'.format(parameterCounter), variable.Type, parameterCounterStr + 12000))
+                parameterCounterStr += 1
+        else:
+            print ("ERROR: Incompatible arguments. Received \"{}\", expected \"{}\"!".format(op1.Type,functionDirectory.get_variable(nextParam)))
+            raise SystemExit
+        parameterCounter += 1
+    else:
+        print ("ERROR: Function \"{}\" received more arguments than expected!".format(functionDirectory.identifier))
+        raise SystemExit
+
+def p_more_args(p):
+    '''more_args : COMMA arg
+                | empty'''
 
 def p_loop_statement(p):
     '''loop_statement : loophead block_statement seen_loop_block'''
@@ -584,7 +667,7 @@ def p_pclear(p):
 
 def p_statement(p):
     '''statement : variable_declaration
-                 | variable_assignment
+                 | variable_assignment SEMICOLON
                  | superexpression SEMICOLON
                  | if_statement
                  | loop_statement
@@ -624,12 +707,12 @@ if __name__ == '__main__':
         s = f.read()
         parser = yacc.yacc()
         parser.parse(s);
-        print (currentDirectory)
-        print (instructions)
+        # print (currentDirectory)
+        # print (instructions)
 
-        # myFile = open("loroCode.vwl", 'w')
-        # myFile.write(str(currentDirectory.getConstantDeclarations()))
-        # myFile.write(str(instructions))
-        # myFile.close()
+        myFile = open("cheeseCode.rekt", 'w')
+        myFile.write(str(currentDirectory.getConstantDeclarations()))
+        myFile.write(str(instructions))
+        myFile.close()
     else:
         print ("Usage syntax: %s filename" %sys.argv[0])

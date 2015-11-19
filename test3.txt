@@ -61,7 +61,6 @@ func void flake(double length, int levels) {
 
 main cheese() {
   int i, a, color;
-  helloWorld();
   double length = 300.0;
   pup();
   move(-1*length/2.0);

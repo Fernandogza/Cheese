@@ -236,7 +236,7 @@ class procedureDirectory:
         for var in self.get_all_variables():
             var = self.get_variable(var)
             if var.Address <= self.nextStringConst:
-                constantDeclarations.append(quadruple("CNT", var, Variable(0), var))
+                constantDeclarations.append(quadruple('CST', var, Variable(0), var))
 
         string = ""
         for const in constantDeclarations:

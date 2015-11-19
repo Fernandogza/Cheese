@@ -484,7 +484,7 @@ if __name__ == '__main__':
         with open(sys.argv[1],'r') as code:
             line = code.readline()
             fields = shlex.split(line)
-            while fields[0] == "CNT":
+            while fields[0] == 'CST':
                 try:
                     op1 = int(fields[1])
                 except:
