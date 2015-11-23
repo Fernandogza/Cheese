@@ -14,7 +14,16 @@ class quadruple:
         elif self.printFormat == "Constants":
             return '{:3s}\t{:8}\t{:8}\t{:8}'.format(str(self.operator), str(self.op1.Name), str(self.op2.Name), str(self.result.Address))
         else:
-            return '{:3s}\t{:8}\t{:8}\t{:8}'.format(str(self.operator), str(self.op1.Address), str(self.op2.Address), str(self.result.Address))
+            try:
+                return '{:3s}\t{:8}\t{:8}\t{:8}'.format(str(self.operator), str(self.op1.Address), str(self.op2.Address), str(self.result.Address))
+            except:
+                try:
+                    return '{:3s}\t{:8}\t{:8}\t{:8}'.format(str(self.operator), str(self.op1), str(self.op2.Address), str(self.result.Address))
+                except:
+                    try:
+                        return '{:3s}\t{:8}\t{:8}\t{:8}'.format(str(self.operator), str(self.op1.Address), str(self.op2), str(self.result.Address))
+                    except:
+                        return '{:3s}\t{:8}\t{:8}\t{:8}'.format(str(self.operator), str(self.op1), str(self.op2), str(self.result.Address))
 
 #End class quadruple
 

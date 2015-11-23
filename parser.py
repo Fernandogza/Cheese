@@ -16,6 +16,7 @@ parameterCounterInt = 0
 parameterCounterDou = 0
 parameterCounterStr = 0
 Function_Or_Var_Name = []
+arrayType = []
 
 precedence =    (
                 ('left', 'AND', 'OR'),
@@ -95,6 +96,9 @@ def p_variable_declarator3(p):
             else:
                 print ("ERROR: Invalid types! Variable \"{}\" cannot store \"{}\"!".format(currentDirectory.get_variable(result.Name), currentDirectory.get_variable(op1.Name)))
                 raise SystemExit
+        else:
+            print("ERROR: Variable \"{}\" not declared in this scope, in line".format(p[-3], p.lineno(1)))
+            raise SystemExit
 
 def p_method_declaration(p):
     '''method_declaration : FUNC type ID seen_function_id '(' method_declaration2 method_declaration3'''
@@ -148,15 +152,19 @@ def p_type(p):
     seenType = variableTypes[p[1]]
 
 def p_variable_assignment(p):
-    '''variable_assignment : ID '=' superexpression'''
+    '''variable_assignment : ID id_or_array'''
+
+def p_id_or_array(p):
+    '''id_or_array : '=' superexpression
+                   | LSQUARE superexpression RSQUARE '=' superexpression'''
     global instructions, currentDirectory
 
-    variable = currentDirectory.get_variable(p[1])
+    variable = currentDirectory.get_variable(p[-1])
 
     if variable:
         op1 = instructions.popOperand()
         result = variable
-        operator = p[2]
+        operator = p[1]
 
         validType = getResultingType(operator, result.Type, op1.Type)
         if validType:
@@ -165,6 +173,9 @@ def p_variable_assignment(p):
         else:
             print ("ERROR: Invalid types! Variable \"{}\" cannot store \"{}\"!".format(currentDirectory.get_variable(result.Name), currentDirectory.get_variable(op1.Name)))
             raise SystemExit
+    else:
+        print("ERROR: Variable \"{}\" not declared in this scope, line {}".format(p[1], p.lineno(1)))
+        raise SystemExit
 
 def p_superexpression(p):
     '''superexpression : expression superexpression2'''
@@ -251,13 +262,42 @@ def p_seen_term(p):
         op2 = instructions.popOperand()
         op1 = instructions.popOperand()
         operator = instructions.popOperator()
+        if op1.Type is 'arr' and op2.Type is 'arr':
+            op2.Type = arrayType.pop()
+            op1.Type = arrayType.pop()
+            resultingType = getResultingType(operator, op1.Type, op2.Type)
+            if resultingType is None:
+                print ("ERROR: Operation {} {} {} has incompatible types".format(op1.Name, operator, op2.Name))
+                raise SystemExit
 
-        resultingType = getResultingType(operator, op1.Type, op2.Type)
-        if resultingType is None:
-            print ("ERROR: Operation {} {} {} has incompatible types".format(op1.Name, operator, op2.Name))
-            raise SystemExit
+            result = currentDirectory.add_temp(resultingType)
+            op1 = '(' + str(op1.Address) + ')'
+            op2 = '(' + str(op2.Address) + ')'
+        elif op1.Type is 'arr':
+            op1.Type = arrayType.pop()
+            resultingType = getResultingType(operator, op1.Type, op2.Type)
+            if resultingType is None:
+                print ("ERROR: Operation {} {} {} has incompatible types".format(op1.Name, operator, op2.Name))
+                raise SystemExit
 
-        result = currentDirectory.add_temp(resultingType)
+            result = currentDirectory.add_temp(resultingType)
+            op1 = '(' + str(op1.Address) + ')'
+        elif op2.Type is 'arr':
+            op2.Type = arrayType.pop()
+            resultingType = getResultingType(operator, op1.Type, op2.Type)
+            if resultingType is None:
+                print ("ERROR: Operation {} {} {} has incompatible types".format(op1.Name, operator, op2.Name))
+                raise SystemExit
+
+            result = currentDirectory.add_temp(resultingType)
+            op2 = '(' + str(op2.Address) + ')'
+        else:
+            resultingType = getResultingType(operator, op1.Type, op2.Type)
+            if resultingType is None:
+                print ("ERROR: Operation {} {} {} has incompatible types".format(op1.Name, operator, op2.Name))
+                raise SystemExit
+
+            result = currentDirectory.add_temp(resultingType)
 
         if result:
             if operator is '+':
@@ -301,13 +341,42 @@ def p_factor(p):
         op1 = instructions.popOperand()
         operator = instructions.popOperator()
 
-        resultingType = getResultingType(operator, op1.Type, op2.Type)
+        if op1.Type is 'arr' and op2.Type is 'arr':
+            op2.Type = arrayType.pop()
+            op1.Type = arrayType.pop()
+            resultingType = getResultingType(operator, op1.Type, op2.Type)
+            if resultingType is None:
+                print ("ERROR: Operation {} {} {} has incompatible types".format(op1.Name, operator, op2.Name))
+                raise SystemExit
 
-        if resultingType is None:
-            print ("ERROR: Operation {} {} {} has incompatible types".format(op1.Name, operator, op2.Name))
-            raise SystemExit
+            result = currentDirectory.add_temp(resultingType)
+            op1 = '(' + str(op1.Address) + ')'
+            op2 = '(' + str(op2.Address) + ')'
+        elif op1.Type is 'arr':
+            op1.Type = arrayType.pop()
+            resultingType = getResultingType(operator, op1.Type, op2.Type)
+            if resultingType is None:
+                print ("ERROR: Operation {} {} {} has incompatible types".format(op1.Name, operator, op2.Name))
+                raise SystemExit
 
-        result = currentDirectory.add_temp(resultingType)
+            result = currentDirectory.add_temp(resultingType)
+            op1 = '(' + str(op1.Address) + ')'
+        elif op2.Type is 'arr':
+            op2.Type = arrayType.pop()
+            resultingType = getResultingType(operator, op1.Type, op2.Type)
+            if resultingType is None:
+                print ("ERROR: Operation {} {} {} has incompatible types".format(op1.Name, operator, op2.Name))
+                raise SystemExit
+
+            result = currentDirectory.add_temp(resultingType)
+            op2 = '(' + str(op2.Address) + ')'
+        else:
+            resultingType = getResultingType(operator, op1.Type, op2.Type)
+            if resultingType is None:
+                print ("ERROR: Operation {} {} {} has incompatible types".format(op1.Name, operator, op2.Name))
+                raise SystemExit
+
+            result = currentDirectory.add_temp(resultingType)
 
         if result:
             if operator is '*':
@@ -341,7 +410,6 @@ def p_cst_expression(p):
             op1 = currentDirectory.add_const(str, p[1])
     else:
         varType = type(p[1])
-        print (varType)
         op1 = currentDirectory.add_const(varType, p[1])
     if op1:
         instructions.pushOperand(op1)
@@ -353,10 +421,10 @@ def p_seen_id_or_func(p):
 
 
 def p_cst_expression2(p):
-    '''cst_expression2 : LSQUARE superexpression RSQUARE
+    '''cst_expression2 : LSQUARE seen_LSQUARE superexpression RSQUARE seen_RSQUARE
                        | function_call
                        | empty'''
-    global instructions
+    global instructions, arrayType
     name = Function_Or_Var_Name[len(Function_Or_Var_Name)-1]
     if p[1] and p[1] != "[":
         variable = currentDirectory.get_directory(name).getReturnVariable()
@@ -365,11 +433,34 @@ def p_cst_expression2(p):
 
     Function_Or_Var_Name.pop()
 
-    if variable:
+    if p[1] == "[" and variable:
+        op2 = variable.Dimension
+        op1 = instructions.popOperand()
+        if op1.Type is int:
+            instructions.generateQuadruple('VER', op1, op2, variable.Address)
+            result = currentDirectory.add_temp(int)
+            result.Type = 'arr'
+            arrayType.append(variable.Type)
+            instructions.generateQuadruple('SUM', variable.Address, op1, result)
+            instructions.pushOperand(result)
+        else:
+            print("ERROR: Array index must be of type int, found {} at line {}!".format(op1.Type, p.lineno(1)))
+            raise SystemExit
+    elif variable:
         instructions.pushOperand(variable)
     else:
         print ("ERROR! Variable \"{}\" not found!".format(name))
         raise SystemExit
+
+def p_seen_LSQUARE(p):
+    '''seen_LSQUARE : '''
+    global instructions
+    instructions.pushOperator('(')
+
+def p_seen_RSQUARE(p):
+    '''seen_RSQUARE : '''
+    global instructions
+    instructions.popOperator()
 
 def p_function_call(p):
     '''function_call :  seen_func_id '(' args ')' '''
@@ -698,7 +789,7 @@ def p_error(p):
        print("Syntax error at '{}' in line {}".format(p.value, p.lineno))
    global instructions, currentDirectory
    # print (currentDirectory)
-   print (instructions)
+   #print (instructions)
 
 #Test routine
 if __name__ == '__main__':

@@ -17,7 +17,7 @@ inferiorLimit = 10000
 returnStack = []
 
 passingParameters = False
-
+passingArray = 0
 globalMemory = list(range(0, 10050))
 methodsMemory = list(range(0,7050600))
 memoryMap = [globalMemory, methodsMemory]
@@ -35,17 +35,92 @@ def EQU(op1, op2, result):
         globalMemory[result] = op1
     print ("RESULT_MOD: ", result)
 
-#   BEGIN ARITHMETIC OPERATIONS
-def ADD(op1, op2, result):
+def SUM(op1, op2, result):
+    op2 = int(op2)
+    op1 = int(op1)
     try:
         if result >= inferiorLimit:
             if passingParameters:
                 result = (result-inferiorLimit) + segmentLength*(stackPointer-1);
             else:
                 result = (result-inferiorLimit) + segmentLength*stackPointer;
-            methodsMemory[result] = op1 + op2
+            if op2 < inferiorLimit:
+                methodsMemory[result] = op1 + globalMemory[(op2 - inferiorLimit) + segmentLength*(stackPointer)]
+            else:
+                methodsMemory[result] = op1 + methodsMemory[(op2 - inferiorLimit) + segmentLength*(stackPointer)]
         elif result < inferiorLimit:
-            globalMemory[result] = op1 + op2
+            if op2 < inferiorLimit:
+                methodsMemory[result] = op1 + globalMemory[(op2 - inferiorLimit) + segmentLength*(stackPointer)]
+            else:
+                methodsMemory[result] = op1 + methodsMemory[(op2 - inferiorLimit) + segmentLength*(stackPointer)]
+    except:
+        raise TypeError("Operation invalid for specified operand types")
+
+def VER(op1, op2, result):
+    if op1 >= op2:
+        print('ERROR: Index out of bounds, cannot access index {} of an array of size {}'.format(op1, op2))
+        raise SystemExit
+    else:
+        if result < inferiorLimit:
+            for i in range(0, op2):
+                globalMemory[i+result] = 0
+        else:
+            for i in range(0, op2):
+                methodsMemory[i+result] = 0
+
+#   BEGIN ARITHMETIC OPERATIONS
+def ADD(op1, op2, result):
+    global passingArray
+    try:
+        if result >= inferiorLimit:
+            if passingParameters:
+                result = (result-inferiorLimit) + segmentLength*(stackPointer-1);
+            else:
+                result = (result-inferiorLimit) + segmentLength*stackPointer;
+            if passingArray == 1:
+                if op1 < inferiorLimit:
+                    methodsMemory[result] = globalMemory[op1] + op2
+                else:
+                    print('MEM: ', methodsMemory[op1])
+                    methodsMemory[result] = methodsMemory[op1] + op2
+            elif passingArray == 2:
+                if op2 < inferiorLimit:
+                    methodsMemory[result] = op1 + globalMemory[op2]
+                else:
+                    methodsMemory[result] = op1 + methodsMemory[op2]
+            elif passingArray == 3:
+                if op1 < inferiorLimit and op2 < inferiorLimit:
+                    methodsMemory[result] = globalMemory[op1] + globalMemory[op2]
+                elif op1 < inferiorLimit:
+                    methodsMemory[result] = globalMemory[op1] + methodsMemory[op2]
+                elif op2 < inferiorLimit:
+                    methodsMemory[result] = methodsMemory[op1] + globalMemory[op2]
+                else:
+                    methodsMemory[result] = methodsMemory[op1] + methodsMemory[op2]
+            else:
+                methodsMemory[result] = op1 + op2
+        elif result < inferiorLimit:
+            if passingArray == 1:
+                if op1 < inferiorLimit:
+                    methodsMemory[result] = globalMemory[op1] + op2
+                else:
+                    methodsMemory[result] = methodsMemory[op1] + op2
+            elif passingArray == 2:
+                if op2 < inferiorLimit:
+                    methodsMemory[result] = op1 + globalMemory[op2]
+                else:
+                    methodsMemory[result] = op1 + methodsMemory[op2]
+            elif passingArray == 3:
+                if op1 < inferiorLimit and op2 < inferiorLimit:
+                    methodsMemory[result] = globalMemory[op1] + globalMemory[op2]
+                elif op1 < inferiorLimit:
+                    methodsMemory[result] = globalMemory[op1] + methodsMemory[op2]
+                elif op2 < inferiorLimit:
+                    methodsMemory[result] = methodsMemory[op1] + globalMemory[op2]
+                else:
+                    methodsMemory[result] = methodsMemory[op1] + methodsMemory[op2]
+            else:
+                methodsMemory[result] = op1 + op2
     except:
         try:
             if result >= inferiorLimit:
@@ -58,34 +133,125 @@ def ADD(op1, op2, result):
                 globalMemory[result] = str(op1) + str(op2)
         except:
             raise TypeError("Operation invalid for specified operand types")
+    passingArray = 0
 
 def SUB(op1, op2, result):
+    global passingArray
     try:
         if result >= inferiorLimit:
             if passingParameters:
                 result = (result-inferiorLimit) + segmentLength*(stackPointer-1);
             else:
                 result = (result-inferiorLimit) + segmentLength*stackPointer;
-            methodsMemory[result] = op1 - op2
+            if passingArray == 1:
+                if op1 < inferiorLimit:
+                    methodsMemory[result] = globalMemory[op1] - op2
+                else:
+                    print('MEM: ', methodsMemory[op1])
+                    methodsMemory[result] = methodsMemory[op1] - op2
+            elif passingArray == 2:
+                if op2 < inferiorLimit:
+                    methodsMemory[result] = op1 - globalMemory[op2]
+                else:
+                    methodsMemory[result] = op1 - methodsMemory[op2]
+            elif passingArray == 3:
+                if op1 < inferiorLimit and op2 < inferiorLimit:
+                    methodsMemory[result] = globalMemory[op1] - globalMemory[op2]
+                elif op1 < inferiorLimit:
+                    methodsMemory[result] = globalMemory[op1] - methodsMemory[op2]
+                elif op2 < inferiorLimit:
+                    methodsMemory[result] = methodsMemory[op1] - globalMemory[op2]
+                else:
+                    methodsMemory[result] = methodsMemory[op1] - methodsMemory[op2]
+            else:
+                methodsMemory[result] = op1 - op2
         elif result < inferiorLimit:
-            globalMemory[result] = op1 - op2
+            if passingArray == 1:
+                if op1 < inferiorLimit:
+                    methodsMemory[result] = globalMemory[op1] - op2
+                else:
+                    print('MEM: ', methodsMemory[op1])
+                    methodsMemory[result] = methodsMemory[op1] - op2
+            elif passingArray == 2:
+                if op2 < inferiorLimit:
+                    methodsMemory[result] = op1 - globalMemory[op2]
+                else:
+                    methodsMemory[result] = op1 - methodsMemory[op2]
+            elif passingArray == 3:
+                if op1 < inferiorLimit and op2 < inferiorLimit:
+                    methodsMemory[result] = globalMemory[op1] - globalMemory[op2]
+                elif op1 < inferiorLimit:
+                    methodsMemory[result] = globalMemory[op1] - methodsMemory[op2]
+                elif op2 < inferiorLimit:
+                    methodsMemory[result] = methodsMemory[op1] - globalMemory[op2]
+                else:
+                    methodsMemory[result] = methodsMemory[op1] - methodsMemory[op2]
+            else:
+                methodsMemory[result] = op1 - op2
     except:
         raise TypeError("Operation invalid for specified operand types")
+    passingArray = 0
 
 def MUL(op1, op2, result):
+    global passingArray
     try:
         if result >= inferiorLimit:
             if passingParameters:
                 result = (result-inferiorLimit) + segmentLength*(stackPointer-1);
             else:
                 result = (result-inferiorLimit) + segmentLength*stackPointer;
-            methodsMemory[result] = op1 * op2
+            if passingArray == 1:
+                if op1 < inferiorLimit:
+                    methodsMemory[result] = globalMemory[op1] * op2
+                else:
+                    print('MEM: ', methodsMemory[op1])
+                    methodsMemory[result] = methodsMemory[op1] * op2
+            elif passingArray == 2:
+                if op2 < inferiorLimit:
+                    methodsMemory[result] = op1 * globalMemory[op2]
+                else:
+                    methodsMemory[result] = op1 * methodsMemory[op2]
+                    print('MEM: ', methodsMemory[op2])
+            elif passingArray == 3:
+                if op1 < inferiorLimit and op2 < inferiorLimit:
+                    methodsMemory[result] = globalMemory[op1] * globalMemory[op2]
+                elif op1 < inferiorLimit:
+                    methodsMemory[result] = globalMemory[op1] * methodsMemory[op2]
+                elif op2 < inferiorLimit:
+                    methodsMemory[result] = methodsMemory[op1] * globalMemory[op2]
+                else:
+                    methodsMemory[result] = methodsMemory[op1] * methodsMemory[op2]
+            else:
+                methodsMemory[result] = op1 * op2
         elif result < inferiorLimit:
-            globalMemory[result] = op1 * op2
+            if passingArray == 1:
+                if op1 < inferiorLimit:
+                    methodsMemory[result] = globalMemory[op1] * op2
+                else:
+                    print('MEM: ', methodsMemory[op1])
+                    methodsMemory[result] = methodsMemory[op1] * op2
+            elif passingArray == 2:
+                if op2 < inferiorLimit:
+                    methodsMemory[result] = op1 * globalMemory[op2]
+                else:
+                    methodsMemory[result] = op1 * methodsMemory[op2]
+            elif passingArray == 3:
+                if op1 < inferiorLimit and op2 < inferiorLimit:
+                    methodsMemory[result] = globalMemory[op1] * globalMemory[op2]
+                elif op1 < inferiorLimit:
+                    methodsMemory[result] = globalMemory[op1] * methodsMemory[op2]
+                elif op2 < inferiorLimit:
+                    methodsMemory[result] = methodsMemory[op1] * globalMemory[op2]
+                else:
+                    methodsMemory[result] = methodsMemory[op1] * methodsMemory[op2]
+            else:
+                methodsMemory[result] = op1 * op2
     except:
         raise TypeError("Operation invalid for specified operand types")
+    passingArray = 0
 
 def DIV(op1, op2, result):
+    global passingArray
     if op2 == 0:
         raise ValueError("Attempting to divide by 0")
     else:
@@ -95,12 +261,54 @@ def DIV(op1, op2, result):
                     result = (result-inferiorLimit) + segmentLength*(stackPointer-1);
                 else:
                     result = (result-inferiorLimit) + segmentLength*stackPointer;
-                methodsMemory[result] = op1 / op2
+                if passingArray == 1:
+                    if op1 < inferiorLimit:
+                        methodsMemory[result] = globalMemory[op1] / op2
+                    else:
+                        print('MEM: ', methodsMemory[op1])
+                        methodsMemory[result] = methodsMemory[op1] / op2
+                elif passingArray == 2:
+                    if op2 < inferiorLimit:
+                        methodsMemory[result] = op1 / globalMemory[op2]
+                    else:
+                        methodsMemory[result] = op1 / methodsMemory[op2]
+                elif passingArray == 3:
+                    if op1 < inferiorLimit and op2 < inferiorLimit:
+                        methodsMemory[result] = globalMemory[op1] / globalMemory[op2]
+                    elif op1 < inferiorLimit:
+                        methodsMemory[result] = globalMemory[op1] / methodsMemory[op2]
+                    elif op2 < inferiorLimit:
+                        methodsMemory[result] = methodsMemory[op1] / globalMemory[op2]
+                    else:
+                        methodsMemory[result] = methodsMemory[op1] / methodsMemory[op2]
+                else:
+                    methodsMemory[result] = op1 / op2
             elif result < inferiorLimit:
-                globalMemory[result] = op1 / op2
+                if passingArray == 1:
+                    if op1 < inferiorLimit:
+                        methodsMemory[result] = globalMemory[op1] / op2
+                    else:
+                        print('MEM: ', methodsMemory[op1])
+                        methodsMemory[result] = methodsMemory[op1] / op2
+                elif passingArray == 2:
+                    if op2 < inferiorLimit:
+                        methodsMemory[result] = op1 / globalMemory[op2]
+                    else:
+                        methodsMemory[result] = op1 / methodsMemory[op2]
+                elif passingArray == 3:
+                    if op1 < inferiorLimit and op2 < inferiorLimit:
+                        methodsMemory[result] = globalMemory[op1] / globalMemory[op2]
+                    elif op1 < inferiorLimit:
+                        methodsMemory[result] = globalMemory[op1] / methodsMemory[op2]
+                    elif op2 < inferiorLimit:
+                        methodsMemory[result] = methodsMemory[op1] / globalMemory[op2]
+                    else:
+                        methodsMemory[result] = methodsMemory[op1] / methodsMemory[op2]
+                else:
+                    methodsMemory[result] = op1 / op2
         except:
             raise TypeError("Operation invalid for specified operand types: {} = {} / {}".format(result, op1, op2))
-
+        passingArray = 0
 #LOGICAL EXP
 
 def CEQ(op1, op2, result):
@@ -396,7 +604,7 @@ def PCL(op1, op2, result):
     cheese.clear()
 
 def runVM():
-    global PC, operator, op1, op2, result
+    global PC, operator, op1, op2, result, passingArray
     PC = 0
     methods = globals().copy()
     methods.update(locals())
@@ -408,51 +616,80 @@ def runVM():
         operator, op1, op2, result = instructionMemory[PC]
         result = int(result)
         #Translate addresses
-        if passingParameters:
-            op2 = int(op2)
-            if op2 >= inferiorLimit:
-                op2 = (op2 - inferiorLimit) + segmentLength*(stackPointer-1)
-                #print "OP2: ", op2
-                op2 = methodsMemory[op2]
-            elif op2 < inferiorLimit:
-                #print "OP2: ", op2
-                op2 = globalMemory[op2]
-            elif op2 == 17000:
-                op2 = returnStack.pop()
+        if operator not in ["SUM"]:
+            if passingParameters:
+                try:
+                    op2 = int(op2)
+                except:
+                    op2 = op2[1:-1]
+                    op2 = int(op2)
+                    passingArray = 2
+                if op2 >= inferiorLimit:
+                    op2 = (op2 - inferiorLimit) + segmentLength*(stackPointer-1)
+                    #print "OP2: ", op2
+                    op2 = methodsMemory[op2]
+                elif op2 < inferiorLimit:
+                    #print "OP2: ", op2
+                    op2 = globalMemory[op2]
+                elif op2 == 17000:
+                    op2 = returnStack.pop()
 
-            op1 = int(op1)
-            if op1 >= inferiorLimit:
-                op1 = (op1 - inferiorLimit) + segmentLength*(stackPointer-1)
-                #print "OP1: ", op1
-                op1 = methodsMemory[op1]
-            elif op1 < inferiorLimit:
-                # print ("OP1: ", op1)
-                op1 = globalMemory[op1]
-            elif op1 == 17000:
-                op1 = returnStack.pop()
+                try:
+                    op1 = int(op1)
+                except:
+                    op1 = op1[1:-1]
+                    op1 = int(op1)
+                    if passingArray == 2:
+                        passingArray = 3
+                    else:
+                        passingArray = 1
+                if op1 >= inferiorLimit:
+                    op1 = (op1 - inferiorLimit) + segmentLength*(stackPointer-1)
+                    #print "OP1: ", op1
+                    op1 = methodsMemory[op1]
+                elif op1 < inferiorLimit:
+                    # print ("OP1: ", op1)
+                    op1 = globalMemory[op1]
+                elif op1 == 17000:
+                    op1 = returnStack.pop()
 
-        else:
-            op2 = int(op2)
-            if op2 >= inferiorLimit:
-                op2 = (op2 - inferiorLimit) + segmentLength*(stackPointer)
-                #print "OP2: ", op2
-                op2 = methodsMemory[op2]
-            elif op2 < inferiorLimit:
-                #print "OP2: ", op2
-                op2 = globalMemory[op2]
-            elif op2 == 17000:
-                op2 = returnStack.pop()
+            else:
+                try:
+                    op2 = int(op2)
+                except:
+                    op2 = op2[1:-1]
+                    op2 = int(op2)
+                    passingArray = 2
+                    print('ARR: ', op2)
+                if op2 >= inferiorLimit:
+                    op2 = (op2 - inferiorLimit) + segmentLength*(stackPointer)
+                    #print "OP2: ", op2
+                    op2 = methodsMemory[op2]
+                elif op2 < inferiorLimit:
+                    #print "OP2: ", op2
+                    op2 = globalMemory[op2]
+                elif op2 == 17000:
+                    op2 = returnStack.pop()
 
-            op1 = int(op1)
-            if op1 >= inferiorLimit:
-                op1 = (op1 - inferiorLimit) + segmentLength*(stackPointer)
-                #print "OP1: ", op1
-                op1 = methodsMemory[op1]
-            elif op1 < inferiorLimit:
-                # print ("OP1: ", op1)
-                op1 = globalMemory[op1]
-            elif op1 == 17000:
-                op1 = returnStack.pop()
+                try:
+                    op1 = int(op1)
+                except:
+                    op1 = op1[1:-1]
+                    op1 = int(op1)
+                    if passingArray == 2:
+                        passingArray = 3
+                    else:
+                        passingArray = 1
+                    print('ARR: ', op1)
+                if op1 >= inferiorLimit:
+                    op1 = (op1 - inferiorLimit) + segmentLength*(stackPointer)
+                    #print "OP1: ", op1
+                    op1 = methodsMemory[op1]
+                elif op1 < inferiorLimit:
+                    # print ("OP1: ", op1)
+                    op1 = globalMemory[op1]
+                elif op1 == 17000:
+                    op1 = returnStack.pop()
 
         #print "PC: ", PC
         #print [operator, op1, op2, result]

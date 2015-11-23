@@ -1,0 +1,7 @@
+main cheese() {
+  double i;
+  int a [10];
+  int main;
+  i = 5 * a[1*2] + 1;
+  print(i);
+}

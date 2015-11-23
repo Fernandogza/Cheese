@@ -251,6 +251,7 @@ def getResultingType(operator, op1, op2):
               '='   : bool
             }
           }
+
     }
     try:
         return semanticCube[op1][op2][operator]
