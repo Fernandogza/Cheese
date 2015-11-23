@@ -5,18 +5,51 @@ literals = ['=','+','-','*','/', '(',')']
 
 # List of token names.
 tokens = [
-    'ID', 'RBRACKET', 'LBRACKET', 'RSQUARE', 'LSQUARE', 'CGT', 'CLT', 'CGE',
-    'CLE', 'CEQ', 'CNE', 'CSTINT', 'CSTDOUBLE', 'CSTSTRING', 'COMMA',
-    'SEMICOLON', 'AND', 'OR']
+    'ID',
+    'RBRACKET',
+    'LBRACKET',
+    'RSQUARE',
+    'LSQUARE',
+    'CGT',
+    'CLT',
+    'CGE',
+    'CLE',
+    'CEQ',
+    'CNE',
+    'CSTINT',
+    'CSTDOUBLE',
+    'CSTSTRING',
+    'COMMA',
+    'SEMICOLON',
+    'AND',
+    'OR']
 
 #List of reserved words.
 reserved = {
-   'main' : 'MAIN', 'cheese' : 'CHEESE', 'int' : 'INT', 'double' : 'DOUBLE',
-   'string' : 'STRING', 'if' : 'IF', 'else' : 'ELSE', 'for' : 'FOR',
-   'while' : 'WHILE', 'scanf' : 'SCAN', 'print' : 'PRINT', 'move' : 'MOVE',
-   'rotate' : 'ROTATE', 'arc' : 'ARC', 'home' : 'HOME', 'pdown' : 'PDOWN',
-   'pup' : 'PUP', 'setp' : 'SETP', 'pcolor' : 'PCOLOR', 'psize' : 'PSIZE',
-   'clear' : 'PCLEAR', 'void' : 'VOID', 'return' : 'RETURN', 'func' : 'FUNC',
+   'main' : 'MAIN',
+   'cheese' : 'CHEESE',
+   'int' : 'INT',
+   'double' : 'DOUBLE',
+   'string' : 'STRING',
+   'if' : 'IF',
+   'else' : 'ELSE',
+   'for' : 'FOR',
+   'while' : 'WHILE',
+   'scanf' : 'SCAN',
+   'print' : 'PRINT',
+   'move' : 'MOVE',
+   'rotate' : 'ROTATE',
+   'arc' : 'ARC',
+   'home' : 'HOME',
+   'pdown' : 'PDOWN',
+   'pup' : 'PUP',
+   'setp' : 'SETP',
+   'pcolor' : 'PCOLOR',
+   'psize' : 'PSIZE',
+   'clear' : 'PCLEAR',
+   'void' : 'VOID',
+   'return' : 'RETURN',
+   'func' : 'FUNC',
 }
 
 #Add the reserved words to the list of tokens
@@ -39,6 +72,11 @@ t_COMMA     = r'\,'
 t_CSTSTRING = r'\".*?\"'
 t_AND       = r'\&\&'
 t_OR        = r'\|\|'
+
+def t_COMMENT(t):
+    r'//.*'
+    pass
+    #No return value. Token discarded
 
 #Rule for ID's, where reserved words are checked.
 def t_ID(t):

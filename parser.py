@@ -786,10 +786,11 @@ def p_empty(p):
 
 def p_error(p):
    if p:
-       print("Syntax error at '{}' in line {}".format(p.value, p.lineno))
-   global instructions, currentDirectory
-   # print (currentDirectory)
-   #print (instructions)
+    if p.type in tokens:
+        print("Syntax error at '{}' in line {}. Cannot use reserved word '{}' as variable!".format(p.value, p.lineno, p.value))
+    else:
+        print("Syntax error at '{}' in line {}".format(p.value, p.lineno))
+    raise SystemExit
 
 #Test routine
 if __name__ == '__main__':
