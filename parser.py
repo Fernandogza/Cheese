@@ -1,6 +1,7 @@
 import sys
 import ply.yacc as yacc
 from lexer import tokens
+from lexer import reserved
 from procedureDirectory import procedureDirectory, Variable
 from quadrupleGenerator import quadrupleGenerator
 from semanticCube import getResultingType
@@ -94,10 +95,10 @@ def p_variable_declarator3(p):
                 operator = 'EQU'
                 instructions.generateQuadruple(operator, op1, 0, result)
             else:
-                print ("ERROR: Invalid types! Variable \"{}\" cannot store \"{}\"!".format(currentDirectory.get_variable(result.Name), currentDirectory.get_variable(op1.Name)))
+                print ("ERROR: Invalid types in line {}. Variable '{}' of type '{}' cannot store '{}'!".format(p.lineno(1), currentDirectory.get_variable(result.Name).Name, currentDirectory.get_variable(result.Name).Type, currentDirectory.get_variable(op1.Name).Name))
                 raise SystemExit
         else:
-            print("ERROR: Variable \"{}\" not declared in this scope, in line".format(p[-3], p.lineno(1)))
+            print("ERROR: Variable '{}' not declared in this scope, in line {}!".format(p[-3], p.lineno(1)))
             raise SystemExit
 
 def p_method_declaration(p):
@@ -171,10 +172,10 @@ def p_id_or_array(p):
             operator = 'EQU'
             instructions.generateQuadruple(operator, op1, 0, result)
         else:
-            print ("ERROR: Invalid types! Variable \"{}\" cannot store \"{}\"!".format(currentDirectory.get_variable(result.Name), currentDirectory.get_variable(op1.Name)))
+            print ("ERROR: Invalid types! Variable '{}' cannot store '{}'!".format(currentDirectory.get_variable(result.Name), currentDirectory.get_variable(op1.Name)))
             raise SystemExit
     else:
-        print("ERROR: Variable \"{}\" not declared in this scope, line {}".format(p[1], p.lineno(1)))
+        print("ERROR: Variable '{}' not declared in this scope, line {}!".format(p[-1], p.lineno(1)))
         raise SystemExit
 
 def p_superexpression(p):
@@ -200,7 +201,7 @@ def p_expression(p):
 
         resultingType = getResultingType(operator, op1.Type, op2.Type)
         if resultingType is None:
-            print ("ERROR: Operation {} {} {} has incompatible types".format(op1.Name, operator, op2.Name))
+            print ("ERROR: Operation '{}' between '{}' and '{}' cannot be performed. Incompatible types!".format(operator, op1.Type, op2.Type))
             raise SystemExit
 
         result = currentDirectory.add_temp(resultingType)
@@ -235,7 +236,7 @@ def p_seen_comp(p):
 
     resultingType = getResultingType(operator, op1.Type, op2.Type)
     if resultingType is None:
-        print ("ERROR: Operation {} {} {} has incompatible types".format(op1.Name, operator, op2.Name))
+        print ("ERROR: Operation '{}' between '{}' and '{}' cannot be performed. Incompatible types!".format(operator, op1.Type, op2.Type))
         raise SystemExit
 
     result = currentDirectory.add_temp(resultingType)
@@ -267,7 +268,7 @@ def p_seen_term(p):
             op1.Type = arrayType.pop()
             resultingType = getResultingType(operator, op1.Type, op2.Type)
             if resultingType is None:
-                print ("ERROR: Operation {} {} {} has incompatible types".format(op1.Name, operator, op2.Name))
+                print ("ERROR: Operation '{}' between '{}' and '{}' cannot be performed. Incompatible types!".format(operator, op1.Type, op2.Type))
                 raise SystemExit
 
             result = currentDirectory.add_temp(resultingType)
@@ -277,7 +278,7 @@ def p_seen_term(p):
             op1.Type = arrayType.pop()
             resultingType = getResultingType(operator, op1.Type, op2.Type)
             if resultingType is None:
-                print ("ERROR: Operation {} {} {} has incompatible types".format(op1.Name, operator, op2.Name))
+                print ("ERROR: Operation '{}' between '{}' and '{}' cannot be performed. Incompatible types!".format(operator, op1.Type, op2.Type))
                 raise SystemExit
 
             result = currentDirectory.add_temp(resultingType)
@@ -286,7 +287,7 @@ def p_seen_term(p):
             op2.Type = arrayType.pop()
             resultingType = getResultingType(operator, op1.Type, op2.Type)
             if resultingType is None:
-                print ("ERROR: Operation {} {} {} has incompatible types".format(op1.Name, operator, op2.Name))
+                print ("ERROR: Operation '{}' between '{}' and '{}' cannot be performed. Incompatible types!".format(operator, op1.Type, op2.Type))
                 raise SystemExit
 
             result = currentDirectory.add_temp(resultingType)
@@ -294,7 +295,7 @@ def p_seen_term(p):
         else:
             resultingType = getResultingType(operator, op1.Type, op2.Type)
             if resultingType is None:
-                print ("ERROR: Operation {} {} {} has incompatible types".format(op1.Name, operator, op2.Name))
+                print ("ERROR: Operation '{}' between '{}' and '{}' cannot be performed. Incompatible types!".format(operator, op1.Type, op2.Type))
                 raise SystemExit
 
             result = currentDirectory.add_temp(resultingType)
@@ -346,7 +347,7 @@ def p_factor(p):
             op1.Type = arrayType.pop()
             resultingType = getResultingType(operator, op1.Type, op2.Type)
             if resultingType is None:
-                print ("ERROR: Operation {} {} {} has incompatible types".format(op1.Name, operator, op2.Name))
+                print ("ERROR: Operation '{}' between '{}' and '{}' cannot be performed. Incompatible types!".format(operator, op1.Type, op2.Type))
                 raise SystemExit
 
             result = currentDirectory.add_temp(resultingType)
@@ -356,7 +357,7 @@ def p_factor(p):
             op1.Type = arrayType.pop()
             resultingType = getResultingType(operator, op1.Type, op2.Type)
             if resultingType is None:
-                print ("ERROR: Operation {} {} {} has incompatible types".format(op1.Name, operator, op2.Name))
+                print ("ERROR: Operation '{}' between '{}' and '{}' cannot be performed. Incompatible types!".format(operator, op1.Type, op2.Type))
                 raise SystemExit
 
             result = currentDirectory.add_temp(resultingType)
@@ -365,7 +366,7 @@ def p_factor(p):
             op2.Type = arrayType.pop()
             resultingType = getResultingType(operator, op1.Type, op2.Type)
             if resultingType is None:
-                print ("ERROR: Operation {} {} {} has incompatible types".format(op1.Name, operator, op2.Name))
+                print ("ERROR: Operation '{}' between '{}' and '{}' cannot be performed. Incompatible types!".format(operator, op1.Type, op2.Type))
                 raise SystemExit
 
             result = currentDirectory.add_temp(resultingType)
@@ -373,7 +374,7 @@ def p_factor(p):
         else:
             resultingType = getResultingType(operator, op1.Type, op2.Type)
             if resultingType is None:
-                print ("ERROR: Operation {} {} {} has incompatible types".format(op1.Name, operator, op2.Name))
+                print ("ERROR: Operation '{}' between '{}' and '{}' cannot be performed. Incompatible types!".format(operator, op1.Type, op2.Type))
                 raise SystemExit
 
             result = currentDirectory.add_temp(resultingType)
@@ -444,12 +445,12 @@ def p_cst_expression2(p):
             instructions.generateQuadruple('SUM', variable.Address, op1, result)
             instructions.pushOperand(result)
         else:
-            print("ERROR: Array index must be of type int, found {} at line {}!".format(op1.Type, p.lineno(1)))
+            print("ERROR: Type error. Array index must be of type int, found {} at line {}!".format(op1.Type, p.lineno(1)))
             raise SystemExit
     elif variable:
         instructions.pushOperand(variable)
     else:
-        print ("ERROR! Variable \"{}\" not found!".format(name))
+        print("ERROR: Variable '{}' not declared in this scope!".format(name))
         raise SystemExit
 
 def p_seen_LSQUARE(p):
@@ -468,7 +469,7 @@ def p_function_call(p):
     if len(functionDirectory.parameters) == parameterCounter:
         instructions.generateQuadruple('CAL',0,0,functionDirectory.startAddress)
     else:
-        print ("ERROR: Function \"{}\" received {} arguments, expected {}!".format(functionDirectory.identifier, parameterCounter,len(functionDirectory.parameters)))
+        print ("ERROR: Function '{}' received {} arguments, expected {} in line {}!".format(functionDirectory.identifier, parameterCounter,len(functionDirectory.parameters), p.lineno(2)))
         raise SystemExit
     instructions.operatorStack.pop()
     #Function_Or_Var_Name.pop()
@@ -482,7 +483,7 @@ def p_seen_func_id(p):
     functionDirectory = currentDirectory.get_directory(name)
 
     if not functionDirectory:
-        print ("ERROR: Undeclared function: \"{}\"".format(name))
+        print ("ERROR: Undeclared function: '{}'!".format(name))
         raise SystemExit
 
     parameterCounter = 0
@@ -519,11 +520,11 @@ def p_seen_arg(p):
                 instructions.generateQuadruple('EQU', op1, 0, Variable('Param{}'.format(parameterCounter), variable.Type, parameterCounterStr + 12000))
                 parameterCounterStr += 1
         else:
-            print ("ERROR: Incompatible arguments. Received \"{}\", expected \"{}\"!".format(op1.Type,functionDirectory.get_variable(nextParam)))
+            print ("ERROR: Incompatible arguments. Received '{}', expected '{}'!".format(op1.Type,functionDirectory.get_variable(nextParam).Type))
             raise SystemExit
         parameterCounter += 1
     else:
-        print ("ERROR: Function \"{}\" received more arguments than expected!".format(functionDirectory.identifier))
+        print ("ERROR: Function '{}' received more arguments than expected!".format(functionDirectory.identifier))
         raise SystemExit
 
 def p_more_args(p):
@@ -563,7 +564,7 @@ def p_seen_for_exp(p):
 
         instructions.pushJumpStack(pendingJump)
     else:
-        print ("ERROR: Expected type bool, but found {}!".format(condition.Type))
+        print ("ERROR: Expected type bool, but found {} in FOR Loop!".format(condition.Type))
         raise SystemExit
 
 def p_seen_assignment2(p):
@@ -593,7 +594,7 @@ def p_seen_while_exp(p):
         instructions.pushJumpStack(instructions.nextInstruction - 1)
         instructions.pushJumpStack(pendingJump)
     else:
-        print ("ERROR: Expected type bool, but found {}!".format(condition.Type))
+        print ("ERROR: Expected type bool, but found {} in WHILE Loop!".format(condition.Type))
         raise SystemExit
 
 def p_seen_loop_block(p):
@@ -617,7 +618,7 @@ def p_seen_condition(p):
         instructions.generateQuadruple("GTF", condition, 0, 0)
         instructions.pushJumpStack(instructions.nextInstruction - 1)
     else:
-        print ("ERROR: Expected conditional, but found {}!".format(condition.Type))
+        print ("ERROR: Expected conditional, but found {} in IF Statement!".format(condition.Type))
         raise SystemExit
 
 def p_seen_condition_block(p):
@@ -643,15 +644,21 @@ def p_read_statement(p):
     name = p[3]
     variable = currentDirectory.get_variable(name);
     if variable:
+        if variable.Type is 'arr':
+            op1.Type = arrayType.pop()
+            op1 = '(' + str(op1.Address) + ')'
         instructions.generateQuadruple('RED', op1, 0, 0);
     else:
-        print ("ERROR: Variable \"{}\" undeclared!".format(name))
+        print ("ERROR: Variable '{}' not declared in this scope, line {}!".format(name, p.lineno(1)))
         raise SystemExit
 
 def p_print_statement(p):
     '''print_statement  : PRINT '(' superexpression ')' SEMICOLON'''
     global instructions
     op1 = instructions.popOperand()
+    if op1.Type is 'arr':
+        op1.Type = arrayType.pop()
+        op1 = '(' + str(op1.Address) + ')'
     instructions.generateQuadruple('PRT', op1, 0, 0);
 
 def p_geometry_statement(p):
@@ -786,10 +793,10 @@ def p_empty(p):
 
 def p_error(p):
    if p:
-    if p.type in tokens:
-        print("Syntax error at '{}' in line {}. Cannot use reserved word '{}' as variable!".format(p.value, p.lineno, p.value))
+    if p.value in reserved:
+        print("ERROR: Syntax error at '{}' in line {}. Cannot use reserved word '{}' as a variable or function!".format(p.value, p.lineno, p.value))
     else:
-        print("Syntax error at '{}' in line {}".format(p.value, p.lineno))
+        print("ERROR: Syntax error at '{}' in line {}!".format(p.value, p.lineno))
     raise SystemExit
 
 #Test routine
@@ -799,11 +806,11 @@ if __name__ == '__main__':
         s = f.read()
         parser = yacc.yacc()
         parser.parse(s);
-        # print (currentDirectory)
+        # print (currentDirectory.parent)
         # print (instructions)
 
         myFile = open("cheeseCode.rekt", 'w')
-        myFile.write(str(currentDirectory.getConstantDeclarations()))
+        myFile.write(str(currentDirectory.parent.getConstantDeclarations()))
         myFile.write(str(instructions))
         myFile.close()
     else:

@@ -92,8 +92,8 @@ class procedureDirectory:
 
     def add_variable(self, identifier, variableType, variableDimensions, variableClass = "variable"):
         if identifier in self.variables:
-            print ("Error! Variable \"{}\" already exists in current scope as \"{}\"!".format(str(identifier), str(self.variables[identifier])))
-            return False
+            print ("ERROR: Variable '{}' already exists in current scope '{}'!".format(str(identifier), str(self.identifier)))
+            raise SystemExit
         else:
             self.variables[identifier] = Variable(identifier, variableType, self.next_address(variableClass, variableType), variableDimensions)
             if(variableDimensions):
@@ -218,8 +218,8 @@ class procedureDirectory:
 
     def add_directory(self, identifier):
         if identifier in self.directories:
-            print ("Error! Directory \"{}\" already exists in scope: \"{}\"!".format(str(identifier), str(self.identifier)))
-            return False
+            print ("ERROR: Function '{}' already exists in scope: '{}'!".format(str(identifier), str(self.identifier)))
+            raise SystemExit
         else:
             self.directories[identifier] = procedureDirectory(identifier, self)
             return True

@@ -158,7 +158,7 @@ def getResultingType(operator, op1, op2):
             '='   : None
           },
           str: {
-            '+'   : None,
+            '+'   : str,
             '-'   : None,
             '*'   : None,
             '/'   : None,

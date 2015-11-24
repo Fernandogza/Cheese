@@ -21,19 +21,17 @@ passingArray = 0
 globalMemory = list(range(0, 10050))
 methodsMemory = list(range(0,7050600))
 memoryMap = [globalMemory, methodsMemory]
-
+returnLocalOn = False
+returnConstOn = False
 PC = 0
 
 def EQU(op1, op2, result):
     if result >= inferiorLimit:
-        # if passingParameters:
-        #     result = (result-inferiorLimit) + segmentLength*(stackPointer-1);
-        # else:
         result = (result-inferiorLimit) + segmentLength*stackPointer
         methodsMemory[result] = op1
     elif result < inferiorLimit:
         globalMemory[result] = op1
-    print ("RESULT_MOD: ", result)
+    # print ("RESULT_MOD: ", result)
 
 def SUM(op1, op2, result):
     op2 = int(op2)
@@ -58,15 +56,8 @@ def SUM(op1, op2, result):
 
 def VER(op1, op2, result):
     if op1 >= op2:
-        print('ERROR: Index out of bounds, cannot access index {} of an array of size {}'.format(op1, op2))
+        print("ERROR: Index out of bounds, cannot access index '{}' of an array of size '{}'!".format(op1, op2))
         raise SystemExit
-    else:
-        if result < inferiorLimit:
-            for i in range(0, op2):
-                globalMemory[i+result] = 0
-        else:
-            for i in range(0, op2):
-                methodsMemory[i+result] = 0
 
 #   BEGIN ARITHMETIC OPERATIONS
 def ADD(op1, op2, result):
@@ -249,11 +240,13 @@ def MUL(op1, op2, result):
     except:
         raise TypeError("Operation invalid for specified operand types")
     passingArray = 0
+    # print ("RESULT_MOD: ", result)
 
 def DIV(op1, op2, result):
     global passingArray
     if op2 == 0:
-        raise ValueError("Attempting to divide by 0")
+        print("ERROR: Attempting to divide by 0!")
+        raise SystemExit
     else:
         try:
             if result >= inferiorLimit:
@@ -331,7 +324,7 @@ def CEQ(op1, op2, result):
                 methodsMemory[result] = False
             elif result < inferiorLimit:
                 globalMemory[result] = False
-        print ("RESULT_MOD: ", result)
+        # print ("RESULT_MOD: ", result)
     except:
         raise TypeError("Operation invalid for specified operand types")
 
@@ -528,10 +521,16 @@ def CAL(op1, op2, result):
 
 
 def RET(op1, op2, result):
-    global stackPointer
+    global stackPointer, returnLocalOn, returnConstOn
     #print op1
     stackPointer-=1
-    returnStack.append(op1)
+    op1 = int(op1)
+    if op1 >= inferiorLimit:
+        returnStack.append(methodsMemory[(op1 - inferiorLimit) + segmentLength*(stackPointer+1)])
+        returnLocalOn = True
+    elif op1 < inferiorLimit:
+        returnStack.append(globalMemory[op1])
+        returnConstOn = True
     result = jumpStack.pop()
     # print("something")
     # print(op1)
@@ -616,7 +615,8 @@ def runVM():
         operator, op1, op2, result = instructionMemory[PC]
         result = int(result)
         #Translate addresses
-        if operator not in ["SUM"]:
+        # print("O: ", (op1, op2))
+        if operator not in ["SUM", "CAL", "RET"]:
             if passingParameters:
                 try:
                     op2 = int(op2)
@@ -624,15 +624,15 @@ def runVM():
                     op2 = op2[1:-1]
                     op2 = int(op2)
                     passingArray = 2
-                if op2 >= inferiorLimit:
+                if op2 == 17000:
+                    op2 = returnStack.pop()
+                elif op2 >= inferiorLimit:
                     op2 = (op2 - inferiorLimit) + segmentLength*(stackPointer-1)
                     #print "OP2: ", op2
                     op2 = methodsMemory[op2]
                 elif op2 < inferiorLimit:
                     #print "OP2: ", op2
                     op2 = globalMemory[op2]
-                elif op2 == 17000:
-                    op2 = returnStack.pop()
 
                 try:
                     op1 = int(op1)
@@ -643,15 +643,15 @@ def runVM():
                         passingArray = 3
                     else:
                         passingArray = 1
-                if op1 >= inferiorLimit:
+                if op1 == 17000:
+                    op1 = returnStack.pop()
+                elif op1 >= inferiorLimit:
                     op1 = (op1 - inferiorLimit) + segmentLength*(stackPointer-1)
                     #print "OP1: ", op1
                     op1 = methodsMemory[op1]
                 elif op1 < inferiorLimit:
                     # print ("OP1: ", op1)
                     op1 = globalMemory[op1]
-                elif op1 == 17000:
-                    op1 = returnStack.pop()
 
             else:
                 try:
@@ -660,16 +660,15 @@ def runVM():
                     op2 = op2[1:-1]
                     op2 = int(op2)
                     passingArray = 2
-                    print('ARR: ', op2)
-                if op2 >= inferiorLimit:
+                if op2 == 17000:
+                    op2 = returnStack.pop()
+                elif op2 >= inferiorLimit:
                     op2 = (op2 - inferiorLimit) + segmentLength*(stackPointer)
                     #print "OP2: ", op2
                     op2 = methodsMemory[op2]
                 elif op2 < inferiorLimit:
                     #print "OP2: ", op2
                     op2 = globalMemory[op2]
-                elif op2 == 17000:
-                    op2 = returnStack.pop()
 
                 try:
                     op1 = int(op1)
@@ -680,34 +679,33 @@ def runVM():
                         passingArray = 3
                     else:
                         passingArray = 1
-                    print('ARR: ', op1)
-                if op1 >= inferiorLimit:
+                if op1 == 17000:
+                    op1 = returnStack.pop()
+                elif op1 >= inferiorLimit:
                     op1 = (op1 - inferiorLimit) + segmentLength*(stackPointer)
-                    #print "OP1: ", op1
                     op1 = methodsMemory[op1]
                 elif op1 < inferiorLimit:
                     # print ("OP1: ", op1)
                     op1 = globalMemory[op1]
-                elif op1 == 17000:
-                    op1 = returnStack.pop()
 
-        #print "PC: ", PC
-        #print [operator, op1, op2, result]
+
         #Execute quadruple
         method = methods.get(str(operator))
         if not method:
-            raise Exception("Method \"{}\" not implemented!".format(str(operator)))
+            raise Exception("ERROR: Method \"{}\" not implemented!".format(str(operator)))
 
-        print("OPERATOR: ", operator)
-        print("OP1: ", op1)
-        print("OP2: ", op2)
-        print("RESULT: ", result)
-        print("Pointer: ", stackPointer)
+        if stackPointer >= 100:
+            raise Exception("ERROR: Stack overflow!")
+        # print("OPERATOR: ", operator)
+        # print("OP1: ", op1)
+        # print("OP2: ", op2)
+        # print("RESULT: ", result)
+        # print("Pointer: ", stackPointer)
         method(op1, op2, result)
 
         #Increment PC to execute next instruction
         PC += 1
-    input("Press any key to exit...")
+    input("Press <ENTER> to exit...")
    #Debugging code
     '''
     for i,n in enumerate(instructionMemory):

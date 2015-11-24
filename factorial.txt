@@ -1,0 +1,43 @@
+//Función que regresa el factorial de un número
+//calculado de forma recursiva
+func int recursiveFactorial(int n) {
+   if(n<0) {
+      return -1;
+   }
+   if(n==0) {
+      return 1;
+   }
+   return n*recursiveFactorial(n - 1);
+}
+
+//Función que regresa el factorial de un número
+//calculado de forma iterativa
+func int iterativeFactorial(int n) {
+   int i;
+   int ans = 1;
+   if(n<0) {
+      return -1;
+   }
+   for(i = 1; i <= n; i = i + 1) {
+      ans = ans * i;
+   }
+   return ans;
+}
+
+//Función que imprime los primeros 'n'
+//valores de la secuencia de fibonacci
+func void fibonacci(int n){
+   int i, a, b;
+   a = 0; b = 1;
+   for(i = 0; i < n; i = i + 1) {
+      print(b);
+      b = a + b;
+      a = b - a;
+   }
+}
+
+main cheese() {
+   print (recursiveFactorial(3));
+   print (iterativeFactorial(10));
+   fibonacci(7);
+}
