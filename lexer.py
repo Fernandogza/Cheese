@@ -46,7 +46,7 @@ reserved = {
    'setp' : 'SETP',
    'pcolor' : 'PCOLOR',
    'psize' : 'PSIZE',
-   'clear' : 'PCLEAR',
+   'pclear' : 'PCLEAR',
    'void' : 'VOID',
    'return' : 'RETURN',
    'func' : 'FUNC',
@@ -61,12 +61,12 @@ t_RBRACKET  = r'\}'
 t_LBRACKET  = r'\{'
 t_LSQUARE   = r'\['
 t_RSQUARE   = r'\]'
-t_CGT   = r'\>'
-t_CLT      = r'\<'
-t_CGE = r'\>\='
-t_CLE    = r'\<\='
-t_CEQ  = r'\=\='
-t_CNE     = r'\!\='
+t_CGT       = r'\>'
+t_CLT       = r'\<'
+t_CGE       = r'\>\='
+t_CLE       = r'\<\='
+t_CEQ       = r'\=\='
+t_CNE       = r'\!\='
 t_SEMICOLON = r'\;'
 t_COMMA     = r'\,'
 t_CSTSTRING = r'\".*?\"'
@@ -86,12 +86,12 @@ def t_ID(t):
     return t
 
 def t_CSTDOUBLE(t):
-    r'[+-]?[0-9]+\.[0-9]+'
+    r'[-]?[0-9]+\.[0-9]+'
     t.value = float(t.value)
     return t
 
 def t_CSTINT(t):
-    r'[+-]?[0-9]+'
+    r'[-]?[0-9]+'
     t.value = int(t.value)
     return t
 

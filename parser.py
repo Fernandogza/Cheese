@@ -104,7 +104,7 @@ def p_variable_declarator3(p):
 def p_method_declaration(p):
     '''method_declaration : FUNC type ID seen_function_id '(' method_declaration2 method_declaration3'''
     global currentDirectory
-    instructions.generateQuadruple("RET",0,0,0)
+    instructions.generateQuadruple('RET',0,0,0)
     currentDirectory = currentDirectory.parent
 
 def p_seen_function_id(p):
