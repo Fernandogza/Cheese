@@ -64,11 +64,7 @@ def p_variable_declaration3(p):
                              | SEMICOLON'''
 
 def p_variable_declarator(p):
-    '''variable_declarator  : ID seen_id variable_declarator2 variable_declarator3'''
-
-
-def p_seen_id(p):
-    '''seen_id :'''
+    '''variable_declarator  : ID variable_declarator2 variable_declarator3'''
 
 def p_variable_declarator2(p):
     '''variable_declarator2 : LSQUARE CSTINT RSQUARE

@@ -1,0 +1,39 @@
+func void flake(double length, int levels) {
+  //smallest case
+  if(levels == 0) {
+    move(length);
+    return 1;
+  }
+  else {
+    length = length / 3.0;
+    //first recursive Call
+    flake(length, levels - 1);
+    rotate(-60);  //counterclockwise
+    //second recursive Call
+    flake(length, levels - 1);
+    rotate(120);  //clockwise
+    //third recursive call
+    flake(length, levels - 1);
+    rotate(-60);
+    //fourth recursive call
+    flake(length, levels - 1);
+  }
+}
+
+
+main cheese() {
+  int i;
+  double length = 300.0;
+  //Move the pen up so that is doesnt paint.
+  pup();
+  move(-1*length/2.0);
+  pdown();
+
+  for(i = 0; i < 3; i = i + 1) {
+    //Call to the method flake
+    flake(length, 3);
+    rotate(120);
+  }
+  pup();
+  home();
+}

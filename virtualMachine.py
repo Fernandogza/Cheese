@@ -896,7 +896,6 @@ def runVM():
             resultIsArray = True
 
         #Translate addresses
-        # print("O: ", (op1, op2))
         if operator not in ["OFF", "CAL", "RET", "INI", "RED"]:
             if passingParameters:
                 try:
@@ -909,10 +908,8 @@ def runVM():
                     op2 = returnStack.pop()
                 elif op2 >= inferiorLimit:
                     op2 = (op2 - inferiorLimit) + segmentLength*(stackPointer-1)
-                    #print "OP2: ", op2
                     op2 = methodsMemory[op2]
                 elif op2 < inferiorLimit:
-                    #print "OP2: ", op2
                     op2 = globalMemory[op2]
 
                 try:
@@ -928,10 +925,8 @@ def runVM():
                     op1 = returnStack.pop()
                 elif op1 >= inferiorLimit:
                     op1 = (op1 - inferiorLimit) + segmentLength*(stackPointer-1)
-                    #print "OP1: ", op1
                     op1 = methodsMemory[op1]
                 elif op1 < inferiorLimit:
-                    # print ("OP1: ", op1)
                     op1 = globalMemory[op1]
 
             else:
@@ -945,10 +940,8 @@ def runVM():
                     op2 = returnStack.pop()
                 elif op2 >= inferiorLimit:
                     op2 = (op2 - inferiorLimit) + segmentLength*(stackPointer)
-                    #print "OP2: ", op2
                     op2 = methodsMemory[op2]
                 elif op2 < inferiorLimit:
-                    #print "OP2: ", op2
                     op2 = globalMemory[op2]
 
                 try:
@@ -966,7 +959,6 @@ def runVM():
                     op1 = (op1 - inferiorLimit) + segmentLength*(stackPointer)
                     op1 = methodsMemory[op1]
                 elif op1 < inferiorLimit:
-                    # print ("OP1: ", op1)
                     op1 = globalMemory[op1]
 
 
@@ -975,7 +967,7 @@ def runVM():
         if not method:
             raise Exception("ERROR: Method \"{}\" not implemented!".format(str(operator)))
 
-        if stackPointer >= 100:
+        if stackPointer >= 1000:
             raise Exception("ERROR: Stack overflow!")
         # print("OPERATOR: ", operator)
         # print("OP1: ", op1)
@@ -1018,7 +1010,6 @@ if __name__ == '__main__':
             for line in code.readlines():
                 instructionMemory.append(line.split())
         #Done loading code. Execute.
-        # print (instructionMemory)
         runVM()
     else:
         print ("Usage syntax: %s filename" %sys.argv[0])
