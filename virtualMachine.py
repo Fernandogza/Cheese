@@ -56,6 +56,23 @@ def EQU(op1, op2, result):
     passingArray = 0
     # print ("RESULT_MOD: ", result)
 
+def INI(op1, op2, result):
+    op2 = int(op2)
+    op1 = int(op1)
+    if op1 >= inferiorLimit:
+        op1 = (op1 - inferiorLimit) + segmentLength*stackPointer
+        for i in range(0, op2):
+            if result == 3:
+                methodsMemory[op1+i] = ""
+            else:
+                methodsMemory[op1+i] = 0
+    elif op1 < inferiorLimit:
+        for i in range(0, op2):
+            if result == 3:
+                globalMemory[op1+i] = ""
+            else:
+                globalMemory[op1+i] = 0
+
 def OFF(op1, op2, result):
     op2 = int(op2)
     op1 = int(op1)
@@ -368,6 +385,31 @@ def DIV(op1, op2, result):
 #LOGICAL EXP
 
 def CEQ(op1, op2, result):
+    global passingArray
+    if passingArray == 1:
+        if op1 < inferiorLimit:
+            op1 = globalMemory[op1]
+        else:
+            op1 = methodsMemory[(op1 - inferiorLimit) + segmentLength*stackPointer]
+    elif passingArray == 2:
+        if op2 < inferiorLimit:
+            op2 = globalMemory[op2]
+        else:
+            op2 = methodsMemory[(op2 - inferiorLimit) + segmentLength*stackPointer]
+    elif passingArray == 3:
+        if op1 < inferiorLimit and op2 < inferiorLimit:
+            op1 = globalMemory[op1]
+            op2 = globalMemory[op2]
+        elif op1 < inferiorLimit:
+            op2 = methodsMemory[(op2 - inferiorLimit) + segmentLength*stackPointer]
+            op1 = globalMemory[op1]
+        elif op2 < inferiorLimit:
+            op1 = methodsMemory[(op1 - inferiorLimit) + segmentLength*stackPointer]
+            op2 = globalMemory[op2]
+        else:
+            op1 = methodsMemory[(op1 - inferiorLimit) + segmentLength*stackPointer]
+            op2 = methodsMemory[(op2 - inferiorLimit) + segmentLength*stackPointer]
+    passingArray = 0
     try:
         if op1 == op2:
             if result >= inferiorLimit:
@@ -392,6 +434,31 @@ def CEQ(op1, op2, result):
         raise TypeError("Operation invalid for specified operand types")
 
 def CNE(op1, op2, result):
+    global passingArray
+    if passingArray == 1:
+        if op1 < inferiorLimit:
+            op1 = globalMemory[op1]
+        else:
+            op1 = methodsMemory[(op1 - inferiorLimit) + segmentLength*stackPointer]
+    elif passingArray == 2:
+        if op2 < inferiorLimit:
+            op2 = globalMemory[op2]
+        else:
+            op2 = methodsMemory[(op2 - inferiorLimit) + segmentLength*stackPointer]
+    elif passingArray == 3:
+        if op1 < inferiorLimit and op2 < inferiorLimit:
+            op1 = globalMemory[op1]
+            op2 = globalMemory[op2]
+        elif op1 < inferiorLimit:
+            op2 = methodsMemory[(op2 - inferiorLimit) + segmentLength*stackPointer]
+            op1 = globalMemory[op1]
+        elif op2 < inferiorLimit:
+            op1 = methodsMemory[(op1 - inferiorLimit) + segmentLength*stackPointer]
+            op2 = globalMemory[op2]
+        else:
+            op1 = methodsMemory[(op1 - inferiorLimit) + segmentLength*stackPointer]
+            op2 = methodsMemory[(op2 - inferiorLimit) + segmentLength*stackPointer]
+    passingArray = 0
     try:
         if op1 != op2:
             if result >= inferiorLimit:
@@ -415,6 +482,31 @@ def CNE(op1, op2, result):
         raise TypeError("Operation invalid for specified operand types")
 
 def CLT(op1, op2, result):
+    global passingArray
+    if passingArray == 1:
+        if op1 < inferiorLimit:
+            op1 = globalMemory[op1]
+        else:
+            op1 = methodsMemory[(op1 - inferiorLimit) + segmentLength*stackPointer]
+    elif passingArray == 2:
+        if op2 < inferiorLimit:
+            op2 = globalMemory[op2]
+        else:
+            op2 = methodsMemory[(op2 - inferiorLimit) + segmentLength*stackPointer]
+    elif passingArray == 3:
+        if op1 < inferiorLimit and op2 < inferiorLimit:
+            op1 = globalMemory[op1]
+            op2 = globalMemory[op2]
+        elif op1 < inferiorLimit:
+            op2 = methodsMemory[(op2 - inferiorLimit) + segmentLength*stackPointer]
+            op1 = globalMemory[op1]
+        elif op2 < inferiorLimit:
+            op1 = methodsMemory[(op1 - inferiorLimit) + segmentLength*stackPointer]
+            op2 = globalMemory[op2]
+        else:
+            op1 = methodsMemory[(op1 - inferiorLimit) + segmentLength*stackPointer]
+            op2 = methodsMemory[(op2 - inferiorLimit) + segmentLength*stackPointer]
+    passingArray = 0
     try:
         if op1 < op2:
             if result >= inferiorLimit:
@@ -438,6 +530,31 @@ def CLT(op1, op2, result):
         raise TypeError("Operation invalid for specified operand types")
 
 def CGT(op1, op2, result):
+    global passingArray
+    if passingArray == 1:
+        if op1 < inferiorLimit:
+            op1 = globalMemory[op1]
+        else:
+            op1 = methodsMemory[(op1 - inferiorLimit) + segmentLength*stackPointer]
+    elif passingArray == 2:
+        if op2 < inferiorLimit:
+            op2 = globalMemory[op2]
+        else:
+            op2 = methodsMemory[(op2 - inferiorLimit) + segmentLength*stackPointer]
+    elif passingArray == 3:
+        if op1 < inferiorLimit and op2 < inferiorLimit:
+            op1 = globalMemory[op1]
+            op2 = globalMemory[op2]
+        elif op1 < inferiorLimit:
+            op2 = methodsMemory[(op2 - inferiorLimit) + segmentLength*stackPointer]
+            op1 = globalMemory[op1]
+        elif op2 < inferiorLimit:
+            op1 = methodsMemory[(op1 - inferiorLimit) + segmentLength*stackPointer]
+            op2 = globalMemory[op2]
+        else:
+            op1 = methodsMemory[(op1 - inferiorLimit) + segmentLength*stackPointer]
+            op2 = methodsMemory[(op2 - inferiorLimit) + segmentLength*stackPointer]
+    passingArray = 0
     try:
         if op1 > op2:
             if result >= inferiorLimit:
@@ -461,6 +578,31 @@ def CGT(op1, op2, result):
         raise TypeError("Operation invalid for specified operand types")
 
 def CLE(op1, op2, result):
+    global passingArray
+    if passingArray == 1:
+        if op1 < inferiorLimit:
+            op1 = globalMemory[op1]
+        else:
+            op1 = methodsMemory[(op1 - inferiorLimit) + segmentLength*stackPointer]
+    elif passingArray == 2:
+        if op2 < inferiorLimit:
+            op2 = globalMemory[op2]
+        else:
+            op2 = methodsMemory[(op2 - inferiorLimit) + segmentLength*stackPointer]
+    elif passingArray == 3:
+        if op1 < inferiorLimit and op2 < inferiorLimit:
+            op1 = globalMemory[op1]
+            op2 = globalMemory[op2]
+        elif op1 < inferiorLimit:
+            op2 = methodsMemory[(op2 - inferiorLimit) + segmentLength*stackPointer]
+            op1 = globalMemory[op1]
+        elif op2 < inferiorLimit:
+            op1 = methodsMemory[(op1 - inferiorLimit) + segmentLength*stackPointer]
+            op2 = globalMemory[op2]
+        else:
+            op1 = methodsMemory[(op1 - inferiorLimit) + segmentLength*stackPointer]
+            op2 = methodsMemory[(op2 - inferiorLimit) + segmentLength*stackPointer]
+    passingArray = 0
     try:
         if op1 <= op2:
             if result >= inferiorLimit:
@@ -484,6 +626,31 @@ def CLE(op1, op2, result):
         raise TypeError("Operation invalid for specified operand types")
 
 def CGE(op1, op2, result):
+    global passingArray
+    if passingArray == 1:
+        if op1 < inferiorLimit:
+            op1 = globalMemory[op1]
+        else:
+            op1 = methodsMemory[(op1 - inferiorLimit) + segmentLength*stackPointer]
+    elif passingArray == 2:
+        if op2 < inferiorLimit:
+            op2 = globalMemory[op2]
+        else:
+            op2 = methodsMemory[(op2 - inferiorLimit) + segmentLength*stackPointer]
+    elif passingArray == 3:
+        if op1 < inferiorLimit and op2 < inferiorLimit:
+            op1 = globalMemory[op1]
+            op2 = globalMemory[op2]
+        elif op1 < inferiorLimit:
+            op2 = methodsMemory[(op2 - inferiorLimit) + segmentLength*stackPointer]
+            op1 = globalMemory[op1]
+        elif op2 < inferiorLimit:
+            op1 = methodsMemory[(op1 - inferiorLimit) + segmentLength*stackPointer]
+            op2 = globalMemory[op2]
+        else:
+            op1 = methodsMemory[(op1 - inferiorLimit) + segmentLength*stackPointer]
+            op2 = methodsMemory[(op2 - inferiorLimit) + segmentLength*stackPointer]
+    passingArray = 0
     try:
         if op1 >= op2:
             if result >= inferiorLimit:
@@ -595,11 +762,6 @@ def RET(op1, op2, result):
         returnStack.append(globalMemory[op1])
         returnConstOn = True
     result = jumpStack.pop()
-    # print("something")
-    # print(op1)
-    # print(result)
-    # wait = input("PRESS ENTER TO CONTINUE.")
-    # print("something")
     GTO(op1, op2, result+1)
 #   END JUMP AND FUNCTION OPERATIONS
 
@@ -616,13 +778,49 @@ def PRT(op1, op2, result):
     except:
         raise TypeError("Operation invalid for specified operand type!")
 
+def RED(op1, op2, result):
+    op1 = int(op1)
+    op2 = int(op2)
+    try:
+        if op1 < inferiorLimit:
+            if op2 == 1:
+                globalMemory[op1] = int(input('Enter your input: '))
+            elif op2 == 2:
+                globalMemory[op1] = float(input('Enter your input: '))
+            elif op2 == 3:
+                globalMemory[op1] = str(input('Enter your input: '))
+        else:
+            op1 = (op1 - inferiorLimit) + segmentLength*stackPointer
+            if op2 == 1:
+                methodsMemory[op1] = int(input('Enter your input: '))
+            elif op2 == 2:
+                methodsMemory[op1] = float(input('Enter your input: '))
+            elif op2 == 3:
+                methodsMemory[op1] = str(input('Enter your input: '))
+    except:
+        raise TypeError("Operation invalid for specified operand type!")
+
 def MVT(op1, op2, result):
+    global passingArray
+    if passingArray == 1:
+        if op1 < inferiorLimit:
+            op1 = globalMemory[op1]
+        else:
+            op1 = methodsMemory[(op1 - inferiorLimit) + segmentLength*stackPointer]
+        passingArray = 0
     try:
         cheese.fd(op1)
     except:
         raise TypeError("Type mismatch, expected an integer or double value!")
 
 def ROT(op1, op2, result):
+    global passingArray
+    if passingArray == 1:
+        if op1 < inferiorLimit:
+            op1 = globalMemory[op1]
+        else:
+            op1 = methodsMemory[(op1 - inferiorLimit) + segmentLength*stackPointer]
+        passingArray = 0
     try:
         cheese.rt(op1)
     except:
@@ -664,6 +862,13 @@ def PCO(op1, op2, result):
         raise TypeError("Type mismatch, expected an integer or double value!")
 
 def PSZ(op1, op2, result):
+    global passingArray
+    if passingArray == 1:
+        if op1 < inferiorLimit:
+            op1 = globalMemory[op1]
+        else:
+            op1 = methodsMemory[(op1 - inferiorLimit) + segmentLength*stackPointer]
+        passingArray = 0
     try:
         cheese.pensize(op1)
     except:
@@ -692,7 +897,7 @@ def runVM():
 
         #Translate addresses
         # print("O: ", (op1, op2))
-        if operator not in ["OFF", "CAL", "RET"]:
+        if operator not in ["OFF", "CAL", "RET", "INI", "RED"]:
             if passingParameters:
                 try:
                     op2 = int(op2)

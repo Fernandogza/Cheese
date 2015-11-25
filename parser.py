@@ -73,9 +73,16 @@ def p_seen_id(p):
 def p_variable_declarator2(p):
     '''variable_declarator2 : LSQUARE CSTINT RSQUARE
                             | empty'''
-    global currentDirectory
+    global currentDirectory, instructions
     if p[1]:
         currentDirectory.add_variable(p[-2], seenType, p[2])
+        variable = currentDirectory.get_variable(p[-2])
+        if variable.Type is int:
+            instructions.generateQuadruple('INI', variable.Address, variable.Dimension, 1)
+        elif variable.Type is float:
+            instructions.generateQuadruple('INI', variable.Address, variable.Dimension, 2)
+        elif variable.Type is str:
+            instructions.generateQuadruple('INI', variable.Address, variable.Dimension, 3)
     else:
         currentDirectory.add_variable(p[-2], seenType, 0)
 
@@ -85,7 +92,7 @@ def p_variable_declarator3(p):
     global instructions, currentDirectory
     if p[1]:
         variable = currentDirectory.get_variable(p[-3])
-        if variable:
+        if variable and variable.Dimesion == 0:
             op1 = instructions.popOperand()
             result = variable
             operator = p[1]
@@ -98,8 +105,11 @@ def p_variable_declarator3(p):
                 print ("ERROR: Invalid types in line {}. Variable '{}' of type '{}' cannot store '{}'!".format(p.lineno(1), currentDirectory.get_variable(result.Name).Name, currentDirectory.get_variable(result.Name).Type, currentDirectory.get_variable(op1.Name).Name))
                 raise SystemExit
         else:
-            print("ERROR: Variable '{}' not declared in this scope, in line {}!".format(p[-3], p.lineno(1)))
-            raise SystemExit
+            if variable.Dimesion == 0:
+                print("ERROR: Variable '{}' cannot be initialized since it is an array, in line {}!".format(p[-3], p.lineno(1)))
+            else:
+                print("ERROR: Variable '{}' not declared in this scope, in line {}!".format(p[-3], p.lineno(1)))
+                raise SystemExit
 
 def p_method_declaration(p):
     '''method_declaration : FUNC type ID seen_function_id '(' method_declaration2 method_declaration3'''
@@ -292,12 +302,42 @@ def p_seen_comp(p):
     op1 = instructions.popOperand()
     operator = instructions.popOperator()
 
-    resultingType = getResultingType(operator, op1.Type, op2.Type)
-    if resultingType is None:
-        print ("ERROR: Operation '{}' between '{}' and '{}' cannot be performed. Incompatible types!".format(operator, op1.Type, op2.Type))
-        raise SystemExit
+    if op1.Type is 'arr' and op2.Type is 'arr':
+        op2.Type = arrayType.pop()
+        op1.Type = arrayType.pop()
+        resultingType = getResultingType(operator, op1.Type, op2.Type)
+        if resultingType is None:
+            print ("ERROR: Operation '{}' between '{}' and '{}' cannot be performed. Incompatible types!".format(operator, op1.Type, op2.Type))
+            raise SystemExit
 
-    result = currentDirectory.add_temp(resultingType)
+        result = currentDirectory.add_temp(resultingType)
+        op1 = '(' + str(op1.Address) + ')'
+        op2 = '(' + str(op2.Address) + ')'
+    elif op1.Type is 'arr':
+        op1.Type = arrayType.pop()
+        resultingType = getResultingType(operator, op1.Type, op2.Type)
+        if resultingType is None:
+            print ("ERROR: Operation '{}' between '{}' and '{}' cannot be performed. Incompatible types!".format(operator, op1.Type, op2.Type))
+            raise SystemExit
+
+        result = currentDirectory.add_temp(resultingType)
+        op1 = '(' + str(op1.Address) + ')'
+    elif op2.Type is 'arr':
+        op2.Type = arrayType.pop()
+        resultingType = getResultingType(operator, op1.Type, op2.Type)
+        if resultingType is None:
+            print ("ERROR: Operation '{}' between '{}' and '{}' cannot be performed. Incompatible types!".format(operator, op1.Type, op2.Type))
+            raise SystemExit
+
+        result = currentDirectory.add_temp(resultingType)
+        op2 = '(' + str(op2.Address) + ')'
+    else:
+        resultingType = getResultingType(operator, op1.Type, op2.Type)
+        if resultingType is None:
+            print ("ERROR: Operation '{}' between '{}' and '{}' cannot be performed. Incompatible types!".format(operator, op1.Type, op2.Type))
+            raise SystemExit
+
+        result = currentDirectory.add_temp(resultingType)
 
     if result:
         operator = {"==" : "CEQ",
@@ -310,6 +350,7 @@ def p_seen_comp(p):
         instructions.pushOperand(result)
     else:
         print ("SEEN_COMPARISON ERROR")
+
 
 def p_numeric_expression(p):
     '''numeric_expression  : term seen_term numeric_expression2'''
@@ -702,10 +743,12 @@ def p_read_statement(p):
     name = p[3]
     variable = currentDirectory.get_variable(name);
     if variable:
-        if variable.Type is 'arr':
-            op1.Type = arrayType.pop()
-            op1 = '(' + str(op1.Address) + ')'
-        instructions.generateQuadruple('RED', op1, 0, 0);
+        if variable.Type is int:
+            instructions.generateQuadruple('RED', variable, 1, 0);
+        elif variable.Type is float:
+            instructions.generateQuadruple('RED', variable, 2, 0);
+        elif variable.Type is str:
+            instructions.generateQuadruple('RED', variable, 3, 0);
     else:
         print ("ERROR: Variable '{}' not declared in this scope, line {}!".format(name, p.lineno(1)))
         raise SystemExit
@@ -735,7 +778,10 @@ def p_move(p):
     '''move : MOVE '(' superexpression ')' '''
     global instructions
     op1 = instructions.popOperand()
+    if op1.Type is 'arr':
+        op1.Type = arrayType.pop()
     if op1.Type is int or op1.Type is float:
+        op1 = '(' + str(op1.Address) + ')'
         instructions.generateQuadruple('MVT', op1, 0, 0)
     else:
         lineNum = p.lineno(1)
@@ -746,7 +792,10 @@ def p_rotate(p):
     '''rotate : ROTATE '(' superexpression ')' '''
     global instructions
     op1 = instructions.popOperand()
+    if op1.Type is 'arr':
+        op1.Type = arrayType.pop()
     if op1.Type is int or op1.Type is float:
+        op1 = '(' + str(op1.Address) + ')'
         instructions.generateQuadruple('ROT', op1, 0, 0)
     else:
         lineNum = p.lineno(1)
@@ -758,7 +807,13 @@ def p_arc(p):
     global instructions
     op2 = instructions.popOperand()
     op1 = instructions.popOperand()
+    if op2.Type is 'arr':
+        op2.Type = arrayType.pop()
+    if op1.Type is 'arr':
+        op1.Type = arrayType.pop()
     if op1.Type is int and op2.Type is int:
+        op1 = '(' + str(op1.Address) + ')'
+        op2 = '(' + str(op2.Address) + ')'
         instructions.generateQuadruple('ARC', op1, op2, 0)
     else:
         lineNum = p.lineno(1)
@@ -785,7 +840,13 @@ def p_setp(p):
     global instructions
     op2 = instructions.popOperand()
     op1 = instructions.popOperand()
+    if op2.Type is 'arr':
+        op2.Type = arrayType.pop()
+    if op1.Type is 'arr':
+        op1.Type = arrayType.pop()
     if op1.Type is int and op2.Type is int or op1.Type is int and op2.Type is float or op1.Type is float and op2.Type is int or op1.Type is float and op2.Type is float:
+        op1 = '(' + str(op1.Address) + ')'
+        op2 = '(' + str(op2.Address) + ')'
         instructions.generateQuadruple('SET', op1, op2, 0)
     else:
         lineNum = p.lineno(1)
@@ -809,7 +870,10 @@ def p_psize(p):
     '''psize : PSIZE '(' superexpression ')' '''
     global instructions
     op1 = instructions.popOperand()
+    if op1.Type is 'arr':
+        op1.Type = arrayType.pop()
     if op1.Type is int:
+        op1 = '(' + str(op1.Address) + ')'
         instructions.generateQuadruple('PSZ', op1, 0, 0)
     else:
         lineNum = p.lineno(1)

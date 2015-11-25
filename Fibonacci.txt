@@ -1,4 +1,4 @@
-//Función que imprime los primeros 'n'
+//Funcion que imprime los primeros 'n'
 //valores de la secuencia de fibonacci
 func void fibonacci(int n){
    int i, a, b;
