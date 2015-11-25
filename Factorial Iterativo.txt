@@ -1,0 +1,16 @@
+//Funcion que regresa el factorial de un numero
+//calculado de forma iterativa.
+func int iterativeFactorial(int n) {
+   int i;
+   int ans = 1;
+   if(n<0) {
+      return -1;
+   }
+   for(i = 1; i <= n; i = i + 1) {
+      ans = ans * i;
+   }
+   return ans;
+}
+main cheese() {
+   print (iterativeFactorial(7));
+}

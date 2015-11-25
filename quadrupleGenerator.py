@@ -23,7 +23,19 @@ class quadruple:
                     try:
                         return '{:3s}\t{:8}\t{:8}\t{:8}'.format(str(self.operator), str(self.op1.Address), str(self.op2), str(self.result.Address))
                     except:
-                        return '{:3s}\t{:8}\t{:8}\t{:8}'.format(str(self.operator), str(self.op1), str(self.op2), str(self.result.Address))
+                        try:
+                            return '{:3s}\t{:8}\t{:8}\t{:8}'.format(str(self.operator), str(self.op1.Address), str(self.op2.Address), str(self.result))
+                        except:
+                            try:
+                                return '{:3s}\t{:8}\t{:8}\t{:8}'.format(str(self.operator), str(self.op1), str(self.op2), str(self.result.Address))
+                            except:
+                                try:
+                                    return '{:3s}\t{:8}\t{:8}\t{:8}'.format(str(self.operator), str(self.op1.Address), str(self.op2), str(self.result))
+                                except:
+                                    try:
+                                        return '{:3s}\t{:8}\t{:8}\t{:8}'.format(str(self.operator), str(self.op1), str(self.op2.Address), str(self.result))
+                                    except:
+                                        return '{:3s}\t{:8}\t{:8}\t{:8}'.format(str(self.operator), str(self.op1), str(self.op2), str(self.result))
 
 #End class quadruple
 
@@ -87,7 +99,6 @@ class quadrupleGenerator:
     def popOperator(self):
         return self.operatorStack.pop()
 
-    #TODO:  warning - verify that the program operates correctly when operatorStack is empty
     def topOperatorEquals(self, operator):
         index = len(self.operatorStack) - 1
         if index >= 0:

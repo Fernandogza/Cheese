@@ -157,23 +157,81 @@ def p_variable_assignment(p):
 
 def p_id_or_array(p):
     '''id_or_array : '=' superexpression
-                   | LSQUARE superexpression RSQUARE '=' superexpression'''
+                   | LSQUARE seen_LSQUARE superexpression RSQUARE seen_RSQUARE '=' superexpression'''
     global instructions, currentDirectory
 
     variable = currentDirectory.get_variable(p[-1])
 
     if variable:
-        op1 = instructions.popOperand()
-        result = variable
-        operator = p[1]
+        if variable.Dimension > 0 and p[1] == '[':
+            operator = p[6]
+            op2 = variable.Dimension
+            tempOp1 = instructions.popOperand()   #value to be assigned.
+            op1 = instructions.popOperand()       #index of the array.
+            if op1.Type is int:
+                instructions.generateQuadruple('VER', op1, op2, variable.Address)
+                result = currentDirectory.add_temp(int)
+                result.Type = 'arr'
+                arrayType.append(variable.Type)
+                instructions.generateQuadruple('OFF', variable.Address, op1, result)
+                instructions.pushOperand(result)
+                op1 = tempOp1
+                result = instructions.popOperand()
+                if op1.Type is 'arr' and result.Type is 'arr':
+                    result.Type = arrayType.pop()
+                    op1.Type = arrayType.pop()
+                    validType = getResultingType(operator, result.Type, op1.Type)
+                    if validType:
+                        op1 = '(' + str(op1.Address) + ')'
+                        result = '(' + str(result.Address) + ')'
+                        operator = 'EQU'
+                        instructions.generateQuadruple(operator, op1, 0, result)
+                    else:
+                        print ("ERROR: Invalid types! Variable '{}' cannot store '{}'!".format(currentDirectory.get_variable(result.Name), currentDirectory.get_variable(op1.Name)))
+                        raise SystemExit
+                else:
+                    result.Type = arrayType.pop()
+                    validType = getResultingType(operator, result.Type, op1.Type)
+                    if validType:
+                        result = '(' + str(result.Address) + ')'
+                        operator = 'EQU'
+                        instructions.generateQuadruple(operator, op1, 0, result)
+                    else:
+                        print ("ERROR: Invalid types! Variable '{}' cannot store '{}'!".format(currentDirectory.get_variable(result.Name), currentDirectory.get_variable(op1.Name)))
+                        raise SystemExit
+            else:
+                print("ERROR: Type error. Array index must be of type int, found {} at line {}!".format(op1.Type, p.lineno(1)))
+                raise SystemExit
+        elif p[1] == '=' and variable.Dimension == 0:
+            op1 = instructions.popOperand()
+            result = variable
+            operator = p[1]
 
-        validType = getResultingType(operator, result.Type, op1.Type)
-        if validType:
-            operator = 'EQU'
-            instructions.generateQuadruple(operator, op1, 0, result)
+            if op1.Type is 'arr':
+                op1.Type = arrayType.pop()
+                validType = getResultingType(operator, result.Type, op1.Type)
+                if validType:
+                    op1 = '(' + str(op1.Address) + ')'
+                    operator = 'EQU'
+                    instructions.generateQuadruple(operator, op1, 0, result)
+                else:
+                    print ("ERROR: Invalid types! Variable '{}' cannot store '{}'!".format(currentDirectory.get_variable(result.Name), currentDirectory.get_variable(op1.Name)))
+                    raise SystemExit
+            else:
+                validType = getResultingType(operator, result.Type, op1.Type)
+                if validType:
+                    operator = 'EQU'
+                    instructions.generateQuadruple(operator, op1, 0, result)
+                else:
+                    print ("ERROR: Invalid types! Variable '{}' cannot store '{}'!".format(currentDirectory.get_variable(result.Name), currentDirectory.get_variable(op1.Name)))
+                    raise SystemExit
         else:
-            print ("ERROR: Invalid types! Variable '{}' cannot store '{}'!".format(currentDirectory.get_variable(result.Name), currentDirectory.get_variable(op1.Name)))
-            raise SystemExit
+            if p[1] == '=':
+                print("ERROR: Variable '{}' is of type Array, must be accessed through an index, line {}!".format(p[-1], p.lineno(1)))
+                raise SystemExit
+            elif p[1] == '[':
+                print("ERROR: Variable '{}' is not of type Array, line {}!".format(p[-1], p.lineno(1)))
+                raise SystemExit
     else:
         print("ERROR: Variable '{}' not declared in this scope, line {}!".format(p[-1], p.lineno(1)))
         raise SystemExit
@@ -442,7 +500,7 @@ def p_cst_expression2(p):
             result = currentDirectory.add_temp(int)
             result.Type = 'arr'
             arrayType.append(variable.Type)
-            instructions.generateQuadruple('SUM', variable.Address, op1, result)
+            instructions.generateQuadruple('OFF', variable.Address, op1, result)
             instructions.pushOperand(result)
         else:
             print("ERROR: Type error. Array index must be of type int, found {} at line {}!".format(op1.Type, p.lineno(1)))

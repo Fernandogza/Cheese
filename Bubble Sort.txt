@@ -1,0 +1,34 @@
+int myArr [100];
+
+//función que ordena los primeros 'n' números
+//de un arreglo de enteros GLOBAL
+//empezando desde la posición 'k'
+//llamado myArr, de menor a mayor
+func void sort(int k, int n){
+   int i, j, tmp;
+   for(i = k; i < (k+n-1); i = i + 1) {
+      for(j = i+1; j < (k+n); j = j + 1) {
+         if(myArr[j]<myArr[i]){
+            tmp = myArr[i];
+            myArr[i] = myArr[j];
+            myArr[j]=tmp;
+         }
+      }
+   }
+}
+
+main cheese() {
+   int i;
+   //preparar el arreglo con los numeros descendiendo de 99 a 0
+   for(i = 0; i < 100; i = i + 1) {
+      myArr[99-i]=i; 
+      // 99 98 97 96 95 94 93 92 91 90...
+   }
+   sort(0, 6); 
+   //94 95 96 97 98 99 93 92 91 90...
+   sort(4, 6);
+   //94 95 96 97 90 91 92 93 98 99
+   for(i = 0; i < 100; i = i + 1) {
+      print(myArr[i]);
+   }
+}

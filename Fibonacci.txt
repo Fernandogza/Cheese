@@ -1,0 +1,15 @@
+//Función que imprime los primeros 'n'
+//valores de la secuencia de fibonacci
+func void fibonacci(int n){
+   int i, a, b;
+   a = 0; b = 1;
+   for(i = 0; i < n; i = i + 1) {
+      print(b);
+      b = a + b;
+      a = b - a;
+   }
+}
+
+main cheese() {
+   fibonacci(7);
+}

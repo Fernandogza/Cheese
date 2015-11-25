@@ -181,8 +181,8 @@ def getResultingType(operator, op1, op2):
             '<='  : None,
             '>'   : None,
             '>='  : None,
-            '=='  : bool,
-            '!='  : bool,
+            '=='  : None,
+            '!='  : None,
             '&&'  : None,
             '||'  : None,
             '='   : None
