@@ -1,8 +1,0 @@
-main cheese() {
-  int a;
-  scanf(a);
-  int b[2];
-  b[2] = a;
-  move(b[0]);
-  print(a);
-}

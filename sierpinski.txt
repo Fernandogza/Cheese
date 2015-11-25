@@ -23,7 +23,7 @@ func void sierpinski (double length, int depth) {
 
 main cheese() {
   pup();
-  move(-50);
+  move(-100);
   pdown();
   sierpinski(300, 4);
 }

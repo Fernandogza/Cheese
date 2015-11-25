@@ -92,7 +92,7 @@ def p_variable_declarator3(p):
     global instructions, currentDirectory
     if p[1]:
         variable = currentDirectory.get_variable(p[-3])
-        if variable and variable.Dimesion == 0:
+        if variable and variable.Dimension == 0:
             op1 = instructions.popOperand()
             result = variable
             operator = p[1]
@@ -105,7 +105,7 @@ def p_variable_declarator3(p):
                 print ("ERROR: Invalid types in line {}. Variable '{}' of type '{}' cannot store '{}'!".format(p.lineno(1), currentDirectory.get_variable(result.Name).Name, currentDirectory.get_variable(result.Name).Type, currentDirectory.get_variable(op1.Name).Name))
                 raise SystemExit
         else:
-            if variable.Dimesion == 0:
+            if variable.Dimension > 0:
                 print("ERROR: Variable '{}' cannot be initialized since it is an array, in line {}!".format(p[-3], p.lineno(1)))
             else:
                 print("ERROR: Variable '{}' not declared in this scope, in line {}!".format(p[-3], p.lineno(1)))
@@ -778,10 +778,7 @@ def p_move(p):
     '''move : MOVE '(' superexpression ')' '''
     global instructions
     op1 = instructions.popOperand()
-    if op1.Type is 'arr':
-        op1.Type = arrayType.pop()
     if op1.Type is int or op1.Type is float:
-        op1 = '(' + str(op1.Address) + ')'
         instructions.generateQuadruple('MVT', op1, 0, 0)
     else:
         lineNum = p.lineno(1)
@@ -792,10 +789,8 @@ def p_rotate(p):
     '''rotate : ROTATE '(' superexpression ')' '''
     global instructions
     op1 = instructions.popOperand()
-    if op1.Type is 'arr':
-        op1.Type = arrayType.pop()
+
     if op1.Type is int or op1.Type is float:
-        op1 = '(' + str(op1.Address) + ')'
         instructions.generateQuadruple('ROT', op1, 0, 0)
     else:
         lineNum = p.lineno(1)
@@ -807,13 +802,8 @@ def p_arc(p):
     global instructions
     op2 = instructions.popOperand()
     op1 = instructions.popOperand()
-    if op2.Type is 'arr':
-        op2.Type = arrayType.pop()
-    if op1.Type is 'arr':
-        op1.Type = arrayType.pop()
+
     if op1.Type is int and op2.Type is int:
-        op1 = '(' + str(op1.Address) + ')'
-        op2 = '(' + str(op2.Address) + ')'
         instructions.generateQuadruple('ARC', op1, op2, 0)
     else:
         lineNum = p.lineno(1)
@@ -840,13 +830,8 @@ def p_setp(p):
     global instructions
     op2 = instructions.popOperand()
     op1 = instructions.popOperand()
-    if op2.Type is 'arr':
-        op2.Type = arrayType.pop()
-    if op1.Type is 'arr':
-        op1.Type = arrayType.pop()
+
     if op1.Type is int and op2.Type is int or op1.Type is int and op2.Type is float or op1.Type is float and op2.Type is int or op1.Type is float and op2.Type is float:
-        op1 = '(' + str(op1.Address) + ')'
-        op2 = '(' + str(op2.Address) + ')'
         instructions.generateQuadruple('SET', op1, op2, 0)
     else:
         lineNum = p.lineno(1)
@@ -870,10 +855,8 @@ def p_psize(p):
     '''psize : PSIZE '(' superexpression ')' '''
     global instructions
     op1 = instructions.popOperand()
-    if op1.Type is 'arr':
-        op1.Type = arrayType.pop()
+
     if op1.Type is int:
-        op1 = '(' + str(op1.Address) + ')'
         instructions.generateQuadruple('PSZ', op1, 0, 0)
     else:
         lineNum = p.lineno(1)
